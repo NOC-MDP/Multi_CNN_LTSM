@@ -1,0 +1,33 @@
+/home/users/thopri/.local/lib/python3.12/site-packages/torch/utils/data/dataloader.py:627: UserWarning: This DataLoader will create 4 worker processes in total. Our suggested max number of worker in current system is 1, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(
+/home/users/thopri/.local/lib/python3.12/site-packages/torch/utils/data/dataloader.py:627: UserWarning: This DataLoader will create 4 worker processes in total. Our suggested max number of worker in current system is 1, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(
+Device: cuda
+
+── Generating synthetic recordings ──
+───────────────────────────────────────────────────────
+  Dataset summary  (20000 recordings)
+───────────────────────────────────────────────────────
+  Classes   : null=10000  positive=10000
+  Splits    : train=14000  val=3000  test=3000
+  Bif types : {'BifurcationType.HOPF': 2500, 'BifurcationType.VARIANCE': 2500, 'BifurcationType.CASCADE': 2500, 'BifurcationType.MEAN_SHIFT': 2500}
+  Severity  : min=0.317  mean=0.602  max=0.873
+  Data shape: (4, 75, 512)  (P×D×T)
+───────────────────────────────────────────────────────
+
+  Train recordings : 14000
+  Val   recordings : 3000
+  Test  recordings : 3000
+── Building window datasets ──
+── Training ──
+  Trainable parameters: 2,741,699
+
+Epoch 001/50  | train loss=0.0442  det=0.0286  reg=0.0078  acc=0.823  t_mae=0.1211  || val loss=0.0223  det=0.0094  acc=0.990  t_mae=0.1074  lr=1.20e-05
+Epoch 002/50  | train loss=0.0124  det=0.0020  reg=0.0052  acc=0.996  t_mae=0.0907  || val loss=0.0251  det=0.0200  acc=0.955  t_mae=0.0574  lr=1.20e-05
+Epoch 003/50  | train loss=0.0070  det=0.0007  reg=0.0032  acc=0.999  t_mae=0.0647  || val loss=0.0379  det=0.0334  acc=0.922  t_mae=0.0535  lr=1.20e-05
+Epoch 004/50  | train loss=0.0056  det=0.0005  reg=0.0026  acc=0.999  t_mae=0.0567  || val loss=0.0273  det=0.0233  acc=0.944  t_mae=0.0501  lr=1.20e-05
+Epoch 005/50  | train loss=0.0047  det=0.0003  reg=0.0022  acc=1.000  t_mae=0.0516  || val loss=0.0137  det=0.0093  acc=0.979  t_mae=0.0533  lr=1.20e-05
+Epoch 006/50  | train loss=0.0040  det=0.0002  reg=0.0019  acc=1.000  t_mae=0.0479  || val loss=0.0207  det=0.0169  acc=0.963  t_mae=0.0489  lr=1.20e-05
+Epoch 007/50  | train loss=0.0036  det=0.0002  reg=0.0017  acc=1.000  t_mae=0.0453  || val loss=0.0163  det=0.0132  acc=0.969  t_mae=0.0440  lr=1.20e-05
+Epoch 008/50  | train loss=0.0032  det=0.0002  reg=0.0015  acc=1.000  t_mae=0.0426  || val loss=0.0083  det=0.0058  acc=0.991  t_mae=0.0389  lr=1.20e-05
+[2026-06-04T10:38:05.002] error: *** JOB 29312285 ON gpuhost015 CANCELLED AT 2026-06-04T10:38:05 DUE to SIGNAL Terminated ***

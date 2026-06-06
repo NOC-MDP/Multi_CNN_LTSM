@@ -1,0 +1,119 @@
+/home/users/thopri/.local/lib/python3.12/site-packages/torch/utils/data/dataloader.py:627: UserWarning: This DataLoader will create 4 worker processes in total. Our suggested max number of worker in current system is 1, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(
+/home/users/thopri/.local/lib/python3.12/site-packages/torch/utils/data/dataloader.py:627: UserWarning: This DataLoader will create 4 worker processes in total. Our suggested max number of worker in current system is 1, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(
+Device: cuda
+
+── Generating synthetic recordings ──
+───────────────────────────────────────────────────────
+  Dataset summary  (6000 recordings)
+───────────────────────────────────────────────────────
+  Classes   : null=3000  positive=3000
+  Splits    : train=4200  val=900  test=900
+  Bif types : {'BifurcationType.MEAN_SHIFT': 750, 'BifurcationType.HOPF': 750, 'BifurcationType.VARIANCE': 750, 'BifurcationType.CASCADE': 750}
+  Severity  : min=0.142  mean=0.291  max=0.422
+  Data shape: (4, 75, 512)  (P×D×T)
+───────────────────────────────────────────────────────
+
+  Train recordings : 4200
+  Val   recordings : 900
+  Test  recordings : 900
+── Building window datasets ──
+── Training ──
+  Trainable parameters: 2,741,699
+
+Epoch 001/50  | train loss=0.0854  det=0.0708  reg=0.0073  acc=0.499  t_mae=0.1133  || val loss=0.0699  det=0.0586  acc=0.508  t_mae=0.0954  lr=1.20e-05
+  ✓ Saved checkpoint (val_loss=0.0699)
+Epoch 002/50  | train loss=0.0596  det=0.0462  reg=0.0067  acc=0.730  t_mae=0.1067  || val loss=0.0449  det=0.0331  acc=0.842  t_mae=0.0972  lr=1.20e-05
+  ✓ Saved checkpoint (val_loss=0.0449)
+Epoch 003/50  | train loss=0.0422  det=0.0301  reg=0.0061  acc=0.881  t_mae=0.1002  || val loss=0.0345  det=0.0250  acc=0.883  t_mae=0.0846  lr=1.21e-05
+  ✓ Saved checkpoint (val_loss=0.0345)
+Epoch 004/50  | train loss=0.0337  det=0.0231  reg=0.0053  acc=0.909  t_mae=0.0905  || val loss=0.0274  det=0.0194  acc=0.907  t_mae=0.0758  lr=1.21e-05
+  ✓ Saved checkpoint (val_loss=0.0274)
+Epoch 005/50  | train loss=0.0265  det=0.0175  reg=0.0045  acc=0.937  t_mae=0.0806  || val loss=0.0246  det=0.0175  acc=0.913  t_mae=0.0702  lr=1.22e-05
+  ✓ Saved checkpoint (val_loss=0.0246)
+Epoch 006/50  | train loss=0.0205  det=0.0129  reg=0.0038  acc=0.955  t_mae=0.0740  || val loss=0.0194  det=0.0122  acc=0.944  t_mae=0.0725  lr=1.22e-05
+  ✓ Saved checkpoint (val_loss=0.0194)
+Epoch 007/50  | train loss=0.0183  det=0.0107  reg=0.0038  acc=0.962  t_mae=0.0730  || val loss=0.0163  det=0.0101  acc=0.951  t_mae=0.0638  lr=1.23e-05
+  ✓ Saved checkpoint (val_loss=0.0163)
+Epoch 008/50  | train loss=0.0161  det=0.0089  reg=0.0036  acc=0.969  t_mae=0.0696  || val loss=0.0139  det=0.0073  acc=0.969  t_mae=0.0688  lr=1.24e-05
+  ✓ Saved checkpoint (val_loss=0.0139)
+Epoch 009/50  | train loss=0.0143  det=0.0078  reg=0.0032  acc=0.971  t_mae=0.0653  || val loss=0.0128  det=0.0062  acc=0.974  t_mae=0.0685  lr=1.25e-05
+  ✓ Saved checkpoint (val_loss=0.0128)
+Epoch 010/50  | train loss=0.0130  det=0.0067  reg=0.0031  acc=0.977  t_mae=0.0640  || val loss=0.0119  det=0.0060  acc=0.976  t_mae=0.0626  lr=1.27e-05
+  ✓ Saved checkpoint (val_loss=0.0119)
+Epoch 011/50  | train loss=0.0126  det=0.0063  reg=0.0031  acc=0.976  t_mae=0.0640  || val loss=0.0114  det=0.0054  acc=0.977  t_mae=0.0646  lr=1.28e-05
+  ✓ Saved checkpoint (val_loss=0.0114)
+Epoch 012/50  | train loss=0.0116  det=0.0059  reg=0.0028  acc=0.981  t_mae=0.0602  || val loss=0.0113  det=0.0059  acc=0.978  t_mae=0.0587  lr=1.29e-05
+  ✓ Saved checkpoint (val_loss=0.0113)
+Epoch 013/50  | train loss=0.0108  det=0.0053  reg=0.0028  acc=0.980  t_mae=0.0589  || val loss=0.0092  det=0.0042  acc=0.981  t_mae=0.0557  lr=1.31e-05
+  ✓ Saved checkpoint (val_loss=0.0092)
+Epoch 014/50  | train loss=0.0103  det=0.0050  reg=0.0027  acc=0.983  t_mae=0.0565  || val loss=0.0094  det=0.0046  acc=0.979  t_mae=0.0561  lr=1.33e-05
+Epoch 015/50  | train loss=0.0102  det=0.0049  reg=0.0027  acc=0.984  t_mae=0.0577  || val loss=0.0085  det=0.0036  acc=0.982  t_mae=0.0566  lr=1.35e-05
+  ✓ Saved checkpoint (val_loss=0.0085)
+Epoch 016/50  | train loss=0.0096  det=0.0044  reg=0.0026  acc=0.985  t_mae=0.0564  || val loss=0.0094  det=0.0039  acc=0.984  t_mae=0.0615  lr=1.37e-05
+Epoch 017/50  | train loss=0.0092  det=0.0044  reg=0.0024  acc=0.984  t_mae=0.0540  || val loss=0.0095  det=0.0042  acc=0.981  t_mae=0.0608  lr=1.39e-05
+Epoch 018/50  | train loss=0.0093  det=0.0045  reg=0.0024  acc=0.983  t_mae=0.0538  || val loss=0.0082  det=0.0041  acc=0.978  t_mae=0.0513  lr=1.41e-05
+  ✓ Saved checkpoint (val_loss=0.0082)
+Epoch 019/50  | train loss=0.0093  det=0.0046  reg=0.0024  acc=0.985  t_mae=0.0535  || val loss=0.0080  det=0.0030  acc=0.988  t_mae=0.0593  lr=1.44e-05
+  ✓ Saved checkpoint (val_loss=0.0080)
+Epoch 020/50  | train loss=0.0087  det=0.0043  reg=0.0022  acc=0.985  t_mae=0.0505  || val loss=0.0069  det=0.0028  acc=0.989  t_mae=0.0522  lr=1.46e-05
+  ✓ Saved checkpoint (val_loss=0.0069)
+Epoch 021/50  | train loss=0.0083  det=0.0041  reg=0.0021  acc=0.986  t_mae=0.0498  || val loss=0.0073  det=0.0035  acc=0.986  t_mae=0.0475  lr=1.49e-05
+Epoch 022/50  | train loss=0.0080  det=0.0040  reg=0.0020  acc=0.986  t_mae=0.0490  || val loss=0.0066  det=0.0031  acc=0.984  t_mae=0.0463  lr=1.52e-05
+  ✓ Saved checkpoint (val_loss=0.0066)
+Epoch 023/50  | train loss=0.0083  det=0.0041  reg=0.0021  acc=0.988  t_mae=0.0502  || val loss=0.0069  det=0.0035  acc=0.983  t_mae=0.0447  lr=1.55e-05
+Epoch 024/50  | train loss=0.0077  det=0.0036  reg=0.0020  acc=0.986  t_mae=0.0484  || val loss=0.0066  det=0.0027  acc=0.991  t_mae=0.0481  lr=1.58e-05
+  ✓ Saved checkpoint (val_loss=0.0066)
+Epoch 025/50  | train loss=0.0072  det=0.0032  reg=0.0020  acc=0.990  t_mae=0.0480  || val loss=0.0060  det=0.0027  acc=0.988  t_mae=0.0443  lr=1.61e-05
+  ✓ Saved checkpoint (val_loss=0.0060)
+Epoch 026/50  | train loss=0.0083  det=0.0046  reg=0.0019  acc=0.985  t_mae=0.0469  || val loss=0.0062  det=0.0028  acc=0.990  t_mae=0.0465  lr=1.64e-05
+Epoch 027/50  | train loss=0.0074  det=0.0036  reg=0.0019  acc=0.988  t_mae=0.0470  || val loss=0.0056  det=0.0022  acc=0.992  t_mae=0.0452  lr=1.68e-05
+  ✓ Saved checkpoint (val_loss=0.0056)
+Epoch 028/50  | train loss=0.0070  det=0.0033  reg=0.0018  acc=0.988  t_mae=0.0458  || val loss=0.0057  det=0.0026  acc=0.989  t_mae=0.0436  lr=1.71e-05
+Epoch 029/50  | train loss=0.0069  det=0.0033  reg=0.0018  acc=0.988  t_mae=0.0453  || val loss=0.0062  det=0.0028  acc=0.987  t_mae=0.0445  lr=1.75e-05
+Epoch 030/50  | train loss=0.0064  det=0.0029  reg=0.0017  acc=0.989  t_mae=0.0448  || val loss=0.0058  det=0.0027  acc=0.990  t_mae=0.0429  lr=1.79e-05
+Epoch 031/50  | train loss=0.0068  det=0.0032  reg=0.0018  acc=0.987  t_mae=0.0450  || val loss=0.0059  det=0.0025  acc=0.990  t_mae=0.0460  lr=1.83e-05
+Epoch 032/50  | train loss=0.0065  det=0.0030  reg=0.0017  acc=0.990  t_mae=0.0449  || val loss=0.0049  det=0.0020  acc=0.993  t_mae=0.0407  lr=1.87e-05
+  ✓ Saved checkpoint (val_loss=0.0049)
+Epoch 033/50  | train loss=0.0060  det=0.0028  reg=0.0016  acc=0.991  t_mae=0.0428  || val loss=0.0049  det=0.0020  acc=0.992  t_mae=0.0407  lr=1.91e-05
+  ✓ Saved checkpoint (val_loss=0.0049)
+Epoch 034/50  | train loss=0.0062  det=0.0030  reg=0.0016  acc=0.989  t_mae=0.0428  || val loss=0.0054  det=0.0024  acc=0.989  t_mae=0.0414  lr=1.95e-05
+Epoch 035/50  | train loss=0.0065  det=0.0033  reg=0.0016  acc=0.989  t_mae=0.0429  || val loss=0.0049  det=0.0022  acc=0.992  t_mae=0.0403  lr=2.00e-05
+Epoch 036/50  | train loss=0.0061  det=0.0029  reg=0.0016  acc=0.990  t_mae=0.0419  || val loss=0.0052  det=0.0021  acc=0.990  t_mae=0.0439  lr=2.04e-05
+Epoch 037/50  | train loss=0.0055  det=0.0024  reg=0.0015  acc=0.991  t_mae=0.0412  || val loss=0.0047  det=0.0019  acc=0.992  t_mae=0.0408  lr=2.09e-05
+  ✓ Saved checkpoint (val_loss=0.0047)
+Epoch 038/50  | train loss=0.0055  det=0.0026  reg=0.0014  acc=0.990  t_mae=0.0400  || val loss=0.0057  det=0.0029  acc=0.988  t_mae=0.0420  lr=2.14e-05
+Epoch 039/50  | train loss=0.0058  det=0.0028  reg=0.0015  acc=0.991  t_mae=0.0413  || val loss=0.0045  det=0.0019  acc=0.992  t_mae=0.0388  lr=2.19e-05
+  ✓ Saved checkpoint (val_loss=0.0045)
+Epoch 040/50  | train loss=0.0056  det=0.0025  reg=0.0016  acc=0.991  t_mae=0.0418  || val loss=0.0042  det=0.0016  acc=0.994  t_mae=0.0378  lr=2.24e-05
+  ✓ Saved checkpoint (val_loss=0.0042)
+Epoch 041/50  | train loss=0.0055  det=0.0025  reg=0.0015  acc=0.992  t_mae=0.0413  || val loss=0.0043  det=0.0016  acc=0.996  t_mae=0.0402  lr=2.29e-05
+Epoch 042/50  | train loss=0.0051  det=0.0023  reg=0.0014  acc=0.990  t_mae=0.0387  || val loss=0.0047  det=0.0018  acc=0.994  t_mae=0.0420  lr=2.34e-05
+Epoch 043/50  | train loss=0.0047  det=0.0020  reg=0.0014  acc=0.993  t_mae=0.0387  || val loss=0.0039  det=0.0016  acc=0.994  t_mae=0.0360  lr=2.40e-05
+  ✓ Saved checkpoint (val_loss=0.0039)
+Epoch 044/50  | train loss=0.0049  det=0.0023  reg=0.0013  acc=0.992  t_mae=0.0378  || val loss=0.0037  det=0.0017  acc=0.992  t_mae=0.0332  lr=2.45e-05
+  ✓ Saved checkpoint (val_loss=0.0037)
+Epoch 045/50  | train loss=0.0049  det=0.0023  reg=0.0013  acc=0.992  t_mae=0.0378  || val loss=0.0045  det=0.0017  acc=0.994  t_mae=0.0417  lr=2.51e-05
+Epoch 046/50  | train loss=0.0055  det=0.0029  reg=0.0013  acc=0.991  t_mae=0.0383  || val loss=0.0038  det=0.0016  acc=0.996  t_mae=0.0354  lr=2.57e-05
+Epoch 047/50  | train loss=0.0050  det=0.0024  reg=0.0013  acc=0.992  t_mae=0.0378  || val loss=0.0037  det=0.0014  acc=0.993  t_mae=0.0376  lr=2.63e-05
+Epoch 048/50  | train loss=0.0048  det=0.0022  reg=0.0013  acc=0.993  t_mae=0.0383  || val loss=0.0037  det=0.0015  acc=0.996  t_mae=0.0359  lr=2.69e-05
+  ✓ Saved checkpoint (val_loss=0.0037)
+Epoch 049/50  | train loss=0.0046  det=0.0022  reg=0.0012  acc=0.992  t_mae=0.0367  || val loss=0.0036  det=0.0017  acc=0.997  t_mae=0.0325  lr=2.75e-05
+  ✓ Saved checkpoint (val_loss=0.0036)
+/home/users/thopri/PROMOTE/Multi_CNN_LTSM/bi_plot.py:329: UserWarning: Tight layout not applied. The bottom and top margins cannot be made large enough to accommodate all Axes decorations.
+  plt.tight_layout()
+Epoch 050/50  | train loss=0.0051  det=0.0027  reg=0.0012  acc=0.990  t_mae=0.0365  || val loss=0.0036  det=0.0016  acc=0.996  t_mae=0.0338  lr=2.81e-05
+  ✓ Loaded best checkpoint
+
+── Test set evaluation ──
+  test loss=0.0042  det_acc=0.993  timing_mae=0.0306 (normalised)
+  timing_mae in timesteps ≈ 2.0 / 64
+
+── Streaming demo ──
+  Streaming recording 'pos_1170'  (true bifurcation at t=389, total T=512)
+  🚨 ALERT  t=  96  p=0.635  predicted_t=70  lead=26 steps AFTER
+Highlight: pos_1170
+  Actual bifurcation    : t=389
+  Prediction bifurcation  : t=70
+  Saved → bifurcation_plot.png

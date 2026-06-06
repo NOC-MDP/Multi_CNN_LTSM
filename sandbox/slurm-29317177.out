@@ -1,0 +1,49 @@
+/home/users/thopri/.local/lib/python3.12/site-packages/torch/utils/data/dataloader.py:627: UserWarning: This DataLoader will create 4 worker processes in total. Our suggested max number of worker in current system is 1, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(
+/home/users/thopri/.local/lib/python3.12/site-packages/torch/utils/data/dataloader.py:627: UserWarning: This DataLoader will create 4 worker processes in total. Our suggested max number of worker in current system is 1, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(
+Device: cuda
+
+── Generating synthetic recordings ──
+───────────────────────────────────────────────────────
+  Dataset summary  (6000 recordings)
+───────────────────────────────────────────────────────
+  Classes   : null=3000  positive=3000
+  Splits    : train=4200  val=900  test=900
+  Bif types : {'BifurcationType.HOPF': 750, 'BifurcationType.VARIANCE': 750, 'BifurcationType.MEAN_SHIFT': 750, 'BifurcationType.CASCADE': 750}
+  Severity  : min=0.146  mean=0.290  max=0.425
+  Data shape: (4, 75, 512)  (P×D×T)
+───────────────────────────────────────────────────────
+
+  Train recordings : 4200
+  Val   recordings : 900
+  Test  recordings : 900
+── Building window datasets ──
+── Training ──
+  Trainable parameters: 2,741,699
+
+Epoch 001/50  | train loss=0.0873  det=0.0724  reg=0.0075  acc=0.500  t_mae=0.1145  || val loss=0.0777  det=0.0671  acc=0.500  t_mae=0.0917  lr=1.20e-05
+Epoch 002/50  | train loss=0.0760  det=0.0638  reg=0.0061  acc=0.545  t_mae=0.1006  || val loss=0.0592  det=0.0488  acc=0.843  t_mae=0.0909  lr=1.20e-05
+Epoch 003/50  | train loss=0.0555  det=0.0449  reg=0.0053  acc=0.746  t_mae=0.0929  || val loss=0.0903  det=0.0811  acc=0.717  t_mae=0.0849  lr=1.21e-05
+Epoch 004/50  | train loss=0.0403  det=0.0308  reg=0.0048  acc=0.870  t_mae=0.0870  || val loss=0.1297  det=0.1209  acc=0.568  t_mae=0.0819  lr=1.21e-05
+Epoch 005/50  | train loss=0.0280  det=0.0190  reg=0.0045  acc=0.925  t_mae=0.0842  || val loss=0.2068  det=0.1985  acc=0.501  t_mae=0.0796  lr=1.22e-05
+Epoch 006/50  | train loss=0.0212  det=0.0123  reg=0.0044  acc=0.953  t_mae=0.0835  || val loss=0.2433  det=0.2353  acc=0.500  t_mae=0.0781  lr=1.22e-05
+Epoch 007/50  | train loss=0.0168  det=0.0081  reg=0.0043  acc=0.971  t_mae=0.0823  || val loss=0.2573  det=0.2493  acc=0.500  t_mae=0.0775  lr=1.23e-05
+Epoch 008/50  | train loss=0.0137  det=0.0053  reg=0.0042  acc=0.983  t_mae=0.0807  || val loss=0.2965  det=0.2887  acc=0.501  t_mae=0.0769  lr=1.24e-05
+Epoch 009/50  | train loss=0.0118  det=0.0037  reg=0.0041  acc=0.988  t_mae=0.0791  || val loss=0.3052  det=0.2976  acc=0.502  t_mae=0.0750  lr=1.25e-05
+Epoch 010/50  | train loss=0.0110  det=0.0030  reg=0.0040  acc=0.990  t_mae=0.0780  || val loss=0.3128  det=0.3057  acc=0.506  t_mae=0.0724  lr=1.27e-05
+Epoch 011/50  | train loss=0.0100  det=0.0026  reg=0.0037  acc=0.992  t_mae=0.0745  || val loss=0.2656  det=0.2594  acc=0.513  t_mae=0.0671  lr=1.28e-05
+Epoch 012/50  | train loss=0.0097  det=0.0028  reg=0.0035  acc=0.991  t_mae=0.0712  || val loss=0.3688  det=0.3620  acc=0.504  t_mae=0.0695  lr=1.29e-05
+  Early stop at epoch 12
+
+── Test set evaluation ──
+  test loss=0.3640  det_acc=0.502  timing_mae=0.0713 (normalised)
+  timing_mae in timesteps ≈ 4.6 / 64
+
+── Streaming demo ──
+  Streaming recording 'pos_2052'  (true bifurcation at t=334, total T=512)
+  🚨 ALERT  t=  96  p=0.670  predicted_t=66  lead=30 steps AFTER
+Highlight: pos_2052
+  Actual bifurcation    : t=334
+  Prediction bifurcation  : t=66
+  Saved → bifurcation_plot.png
