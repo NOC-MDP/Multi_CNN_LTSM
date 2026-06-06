@@ -5,7 +5,7 @@ from torch.utils.data import Dataset, DataLoader, random_split
 import numpy as np
 import torch.nn.functional as F
 import pickle
-from sklearn.metrics import precision_score, recall_score, f1_score
+from sklearn.metrics import precision_score, recall_score, f1_score, auc
 from dataclasses import dataclass, field
 from enum import Enum, auto
 from typing import Optional,Tuple
@@ -538,14 +538,6 @@ class PositionalEncoding(nn.Module):
         x = x + self.pe[:, :x.size(1), :]
         return x
 
-class Chomp1d(nn.Module):
-    """Trims the future timesteps introduced by asymmetric padding to ensure causality."""
-    def __init__(self, chomp_size):
-        super().__init__()
-        self.chomp_size = chomp_size
-    def forward(self, x):
-        return x[:, :, :-self.chomp_size].contiguous()
-
 class BifurcationNet(nn.Module):
     def __init__(self, num_params: int = 5, d_model: int = 64, dropout: float = 0.2):
         super().__init__()
@@ -615,7 +607,7 @@ class BifurcationNet(nn.Module):
         
         # 6. Extract predictions from your dual heads
         p_bif_pred = self.detection_head(context).squeeze(-1)  # 🔄 (B, 1) -> (B,)
-        t_bif_pred = self.timing_head(context).squeeze(-1)     # 🔄 (B, 1) -> (B,)
+        t_bif_pred = self.timing_head(context.detach()).squeeze(-1)     # 🔄 (B, 1) -> (B,)
         
         return p_bif_pred, t_bif_pred
 
@@ -697,13 +689,18 @@ def train_epoch(model, dataloader, optimizer, device):
     acc = correct / len(dataloader.dataset)
     return total_loss/N, total_bce/N, total_time/N, acc
 
+
 @torch.no_grad()
-def evaluate(model, dataloader, device):
+def evaluate(model, dataloader, device, threshold=0.7):
+    """
+    Adapted evaluation loop that outputs explicit stable/bifurcation probabilities
+    and allows tuning the classification threshold to suppress null-series false positives.
+    """
     model.eval()
     total_loss, total_bce, total_time = 0, 0, 0
     
-    # Lists to store aggregated results
-    all_preds = []
+    all_bif_probs = []
+    all_stable_probs = []
     all_targets = []
     time_errors = []
     
@@ -711,36 +708,47 @@ def evaluate(model, dataloader, device):
         x, y_cls, y_time, pad_mask = x.to(device), y_cls.to(device), y_time.to(device), pad_mask.to(device)
         p_bif_pred, t_bif_pred = model(x, pad_mask)
         
-        # Calculate losses
         loss, bce, time_loss = compute_loss(p_bif_pred, t_bif_pred, y_cls, y_time)
         
         total_loss += loss.item()
         total_bce += bce.item()
         total_time += time_loss.item()
         
-        # Convert Logits -> Binary Predictions (Threshold 0.0 for BCEWithLogits)
-        preds = (p_bif_pred >= 0.0).float()
+        # 1. Convert logits to explicit probabilities
+        bif_prob = torch.sigmoid(p_bif_pred)
+        stable_prob = 1.0 - bif_prob  # 👈 Your explicit "Stable Probability"
         
-        # Aggregate for metrics (move to CPU)
-        all_preds.extend(preds.cpu().numpy())
+        all_bif_probs.extend(bif_prob.cpu().numpy())
+        all_stable_probs.extend(stable_prob.cpu().numpy())
         all_targets.extend(y_cls.cpu().numpy())
         
-        # Track timing errors
+        # Track timing errors ONLY for true positives
         mask = (y_cls == 1.0)
         if mask.sum() > 0:
             err = torch.abs(t_bif_pred[mask] - y_time[mask])
             time_errors.extend(err.cpu().tolist())
             
-    # Compute Metrics using sklearn
+    all_targets = np.array(all_targets)
+    all_bif_probs = np.array(all_bif_probs)
+    
+    # 2. Apply the custom threshold (e.g., 0.7 instead of 0.5 to suppress false alarms)
+    all_preds = (all_bif_probs >= threshold).astype(float)
+    
+    # 3. Compute robust metrics
     precision = precision_score(all_targets, all_preds, zero_division=0)
     recall = recall_score(all_targets, all_preds, zero_division=0)
     f1 = f1_score(all_targets, all_preds, zero_division=0)
     
+    # Calculate AUPRC to see how well the model separates nulls from bifurcations
+    prec_curve, rec_curve, _ = precision_recall_curve(all_targets, all_bif_probs)
+    auprc = auc(rec_curve, prec_curve)
+    
     N = len(dataloader)
     mean_time_err = np.mean(time_errors) if time_errors else 0.0
     
-    # Return additional metrics
-    return total_loss/N, total_bce/N, total_time/N, precision, recall, f1, mean_time_err
+    print(f"Mean Stable Prob on Null Series: {np.mean([p for p, t in zip(all_stable_probs, all_targets) if t == 0]):.4f}")
+    
+    return total_loss/N, total_bce/N, total_time/N, precision, recall, f1, auprc, mean_time_err
 
 
 def variable_length_collate_fn(batch):
@@ -974,7 +982,7 @@ if __name__ == "__main__":
     
     scaler = ChannelWiseScaler()
     scaler.fit(train_recs)
-    scaler.save("synthetic_channel_scaler3.pkl")
+    scaler.save("synthetic_channel_scaler.pkl")
     # # ──────────────────────────────────────────────────────────────────────
     # # DIAGNOSTIC: EXPOSE SCALER TRAINING ORDER
     # # ──────────────────────────────────────────────────────────────────────
@@ -1018,19 +1026,20 @@ if __name__ == "__main__":
         
         # Unpack the 7 return values from the new evaluate signature
         val_res = evaluate(model, val_loader, device)
-        v_loss, _, _, v_prec, v_rec, v_f1, _ = val_res
+        v_loss, val_bce, val_time, v_prec, v_rec, v_f1, v_auprc, val_time_err = val_res
         # Store metrics
         history['train_loss'].append(tr_loss)
         history['val_loss'].append(v_loss)
         history['f1'].append(v_f1)
         history['prec'].append(v_prec)
         history['rec'].append(v_rec)
-        print(f"Epoch {epoch+1:02d} | Val Loss: {v_loss:.4f} | F1: {v_f1:.3f} | Prec: {v_prec:.2f} | Rec: {v_rec:.2f}")
-        
-        # Save best model logic:
-        if v_loss < best_val_loss:
-            best_val_loss = v_loss
-            torch.save(model.state_dict(), "best_bifurcation_model3.pth")
+        print(f"Epoch {epoch+1:02d} | Val Loss: {v_loss:.4f} | F1: {v_f1:.3f} | Prec: {v_prec:.2f} | Rec: {v_rec:.2f} | AUPRC: {v_auprc}")
+        best_auprc = 0.0
+        # Save checkpoint based on AUPRC instead of loss
+        if v_auprc > best_auprc:
+            best_auprc = v_auprc
+            torch.save(model.state_dict(), 'best_bifurcation_model.pth')
+            print(f" New best model saved with AUPRC: {v_auprc:.4f}")
             patience_counter = 0  # reset
         else:
             patience_counter += 1
@@ -1040,7 +1049,7 @@ if __name__ == "__main__":
 
     # 8. Final Test
     print("\nTesting on hold-out set...")
-    model.load_state_dict(torch.load("best_bifurcation_model3.pth"))
+    model.load_state_dict(torch.load("best_bifurcation_model.pth"))
     test_res = evaluate(model, test_loader, device)
     _, _, _, t_prec, t_rec, t_f1, t_time_err = test_res
     
