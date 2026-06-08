@@ -13,6 +13,7 @@ import pickle
 import pandas as pd
 import math
 from scipy.stats import linregress
+import json
 # ──────────────────────────────────────────────────────────────────────────────
 # Data structures
 # ──────────────────────────────────────────────────────────────────────────────
@@ -37,13 +38,14 @@ class HardNegativeType(Enum):
     EDDY = auto()          # temporary mean shift
     SEASONAL = auto()      # slow drift
     OSCILLATOR = auto()    # temporary oscillation
+    NEAR_MISS = auto() #CSD tthat approaches but recovers
 
 @dataclass
 class DatasetConfig:
     n_recordings: int = 800
     num_params: int = 5
     base_time_len: int = 2048
-    window_sizes: list[int] = field(default_factory=lambda: [64,128, 256, 512])
+    window_sizes: list[int] = field(default_factory=lambda: [64,128, 192,256])
     dt: float = 0.1
     seed: int = 42
     sde_constants: dict = None
@@ -52,7 +54,7 @@ import pandas as pd
 import numpy as np
 from scipy.signal import detrend
 
-def causal_smooth(raw_data, smooth_window=6):
+def causal_smooth(raw_data, smooth_window=128):
     """
     Applies pure causal (trailing) smoothing to preserve variance shifts
     and mean step-changes while dampening high-frequency observational noise.
@@ -61,24 +63,15 @@ def causal_smooth(raw_data, smooth_window=6):
     - raw_data: numpy array of shape (num_channels, total_timesteps)
     - smooth_window: Number of months for the trailing moving average
     """
-    num_channels, total_timesteps = raw_data.shape
-    smoothed_data = np.zeros_like(raw_data)
-    
-    for i in range(num_channels):
-        series = raw_data[i, :]
-        smoothed_series = np.zeros_like(series)
-        
-        for t in range(total_timesteps):
-            if t < smooth_window - 1:
-                # Not enough history yet: average available window
-                smoothed_series[t] = np.mean(series[:t+1])
-            else:
-                # Trailing average: looks only at current and past data
-                smoothed_series[t] = np.mean(series[t - smooth_window + 1 : t + 1])
-                
-        smoothed_data[i, :] = smoothed_series
-        
-    return smoothed_data
+    smoothed = np.empty_like(raw_data)
+    for i in range(raw_data.shape[0]):
+        smoothed[i] = (
+            pd.Series(raw_data[i])
+            .rolling(window=smooth_window, min_periods=1)
+            .mean()
+            .values
+        )
+    return smoothed
 # ==============================================================================
 # 1. CORE MATH SDE EXTRACTOR FUNCTIONS
 # ==============================================================================
@@ -262,6 +255,16 @@ class OceanStateGenerator:
                 distractor[1, :] = np.linspace(-0.5, 0.5, T) # Slow drift
             elif null_type == HardNegativeType.OSCILLATOR:
                 distractor[0, event_t:event_t+100] = 0.3 * np.sin(np.arange(100) * 0.5)
+        # --- Pre-compute near-miss ramp BEFORE the SDE loop ---
+        near_miss_ramp = np.zeros(T)
+        if not is_positive and null_type == HardNegativeType.NEAR_MISS:
+            approach_c = int(T * self.rng.uniform(0.25, 0.45))
+            recovery_c = int(T * self.rng.uniform(0.55, 0.75))
+            near_miss_ramp = (
+                1 / (1 + np.exp(-(t_axis - approach_c) / 20.0)) -
+                1 / (1 + np.exp(-(t_axis - recovery_c) / 20.0))
+            )
+            near_miss_ramp = np.clip(near_miss_ramp, 0, 1)
 
         # Evolve coupled SDEs
         for t in range(1, T):
@@ -270,6 +273,10 @@ class OceanStateGenerator:
             if is_positive and bif_type == BifurcationType.VARIANCE:
                 theta_t = theta0 * (1 - ramp[t])
                 theta_t = max(theta_t, 1e-3) # Cap to avoid strict division by zero
+            elif not is_positive and null_type == HardNegativeType.NEAR_MISS:
+                # Decays to 30% of theta0 maximum — never actually crosses
+                decay_factor = near_miss_ramp[t] * 0.70
+                theta_t = max(theta0 * (1 - decay_factor), theta0 * 0.30)
                 
             # Dynamic Hopf Oscillator
             if is_positive and bif_type == BifurcationType.HOPF:
@@ -361,8 +368,10 @@ class OceanStateGenerator:
         # ──────────────────────────────────────────────────────────────────────
         # NEW: Isolate velocity anomalies to neutralize absolute baseline shifts
         # ──────────────────────────────────────────────────────────────────────
-        u_anom = u - np.mean(u)
-        v_anom = v - np.mean(v)
+        u_series = pd.Series(u)
+        u_anom = (u_series - u_series.rolling(window=36, min_periods=1).mean()).values
+        v_series = pd.Series(v)
+        v_anom = (v_series - v_series.rolling(window=36, min_periods=1).mean()).values
         # ──────────────────────────────────────────────────────────────────────
         # Center around mean T/S for better scaling
         rho = rho0 * (1 - alpha * (temp - np.mean(temp)) + beta * (salt - np.mean(salt)))
@@ -382,7 +391,7 @@ class OceanStateGenerator:
         # Calculating a rolling window variability as a proxy for potential regime shifts
         # (Using a simple 12-month rolling window)
         window = 12
-        ssh_variability = pd.Series(ssh).rolling(window=window, center=True).std().bfill().ffill().values
+        ssh_variability = pd.Series(ssh).rolling(window=window, min_periods=3).std().fillna(0).values
         
         # Stack vertically -> shape (5, T)
         features = np.vstack((rho, ke, ssh_anom, speed, ssh_variability))
@@ -408,7 +417,8 @@ class OceanStateGenerator:
 
     def build_recording(self, rec_id: str, is_positive: bool,baselines,scales) -> Recording:
         bif_type = self.rng.choice(list(BifurcationType)) if is_positive else None
-        null_type = self.rng.choice(list(HardNegativeType)) if not is_positive else None
+        null_weights = [0.15, 0.15, 0.15, 0.15, 0.40]  # NEAR_MISS gets 40%
+        null_type = self.rng.choice(list(HardNegativeType), p=null_weights) if not is_positive else None
         
         # 1. Generate full baseline (T=2048)
         z, absolute_bif_center = self.generate_latent_system(
@@ -424,7 +434,7 @@ class OceanStateGenerator:
         # Transpose to (2048, 5) for the processing function, then back to (5, 2048)
         processed_data_full = causal_smooth(
             data_full, 
-            smooth_window=6
+            smooth_window=128
         )
         # ──────────────────────────────────────────────────────────────────────
         
@@ -537,7 +547,17 @@ class PositionalEncoding(nn.Module):
         # Add the positional encoding to the input embeddings
         x = x + self.pe[:, :x.size(1), :]
         return x
+        
+class FocalLoss(nn.Module):
+    def __init__(self, gamma: float = 2.0):
+        super().__init__()
+        self.gamma = gamma
 
+    def forward(self, logits: torch.Tensor, targets: torch.Tensor) -> torch.Tensor:
+        bce = F.binary_cross_entropy_with_logits(logits, targets, reduction='none')
+        p_t = torch.exp(-bce)
+        return ((1 - p_t) ** self.gamma * bce).mean()
+        
 class Chomp1d(nn.Module):
     """Trims the future timesteps introduced by asymmetric padding to ensure causality."""
     def __init__(self, chomp_size):
@@ -547,7 +567,7 @@ class Chomp1d(nn.Module):
         return x[:, :, :-self.chomp_size].contiguous()
 
 class BifurcationNet(nn.Module):
-    def __init__(self, num_params: int = 5, d_model: int = 64, dropout: float = 0.2):
+    def __init__(self, num_params: int = 5, d_model: int = 96, dropout: float = 0.2):
         super().__init__()
         
         # 1. Causal Projection: Pad on the left by (kernel_size - 1)
@@ -564,6 +584,8 @@ class BifurcationNet(nn.Module):
             ResidualTCNBlock(d_model, dilation=2),
             nn.Dropout(dropout),
             ResidualTCNBlock(d_model, dilation=4),
+            nn.Dropout(dropout),
+            ResidualTCNBlock(d_model, dilation=8),   # new
         ])
         
         # 3. Normalization bridge before the Transformer
@@ -619,7 +641,56 @@ class BifurcationNet(nn.Module):
         
         return p_bif_pred, t_bif_pred
 
+    def mc_forward(
+        self, x: torch.Tensor, pad_mask: torch.Tensor = None, n_samples: int = 30
+    ) -> Tuple[torch.Tensor, torch.Tensor]:
+        """
+        Monte Carlo Dropout inference. Returns mean probability and
+        epistemic uncertainty (std) across n_samples stochastic passes.
+        """
+        self.train()  # activates Dropout layers
+        with torch.no_grad():
+            logit_samples = torch.stack(
+                [self.forward(x, pad_mask)[0] for _ in range(n_samples)]
+            )  # shape: (n_samples, B)
+        self.eval()
+        probs = torch.sigmoid(logit_samples)
+        return probs.mean(dim=0), probs.std(dim=0)  # (B,), (B,)
 
+class TemperatureScaler(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.temperature = nn.Parameter(torch.ones(1) * 1.5)  # init slightly > 1
+
+    def fit(self, model, val_loader, device) -> "TemperatureScaler":
+        model.eval()
+        all_logits, all_labels = [], []
+        with torch.no_grad():
+            for x, y_cls, _, pad_mask in val_loader:
+                x, pad_mask = x.to(device), pad_mask.to(device)
+                logits, _ = model(x, pad_mask)
+                all_logits.append(logits.cpu())
+                all_labels.append(y_cls)
+        logits_cat = torch.cat(all_logits)
+        labels_cat = torch.cat(all_labels)
+
+        nll = nn.BCEWithLogitsLoss()
+        opt = optim.LBFGS([self.temperature], lr=0.01, max_iter=200)
+
+        def step():
+            opt.zero_grad()
+            loss = nll(logits_cat / self.temperature, labels_cat)
+            loss.backward()
+            return loss
+
+        opt.step(step)
+        print(f"Calibrated T = {self.temperature.item():.4f}")
+        return self
+
+    def scale(self, logits: torch.Tensor) -> torch.Tensor:
+        return logits / self.temperature.to(logits.device)
+
+    
 # ──────────────────────────────────────────────────────────────────────────────
 # 1. PyTorch Dataset Wrapper
 # ──────────────────────────────────────────────────────────────────────────────
@@ -655,7 +726,7 @@ class OceanBifurcationDataset(Dataset):
 # ──────────────────────────────────────────────────────────────────────────────
 # 2. Custom Loss Function
 # ──────────────────────────────────────────────────────────────────────────────
-def compute_loss(p_bif_pred, t_bif_pred, y_cls, y_time):
+def compute_loss(p_bif_pred, t_bif_pred, y_cls, y_time,criterion_cls):
     loss_cls = criterion_cls(p_bif_pred, y_cls)
     
     # Only compute timing loss on positive samples
@@ -670,7 +741,7 @@ def compute_loss(p_bif_pred, t_bif_pred, y_cls, y_time):
 # ──────────────────────────────────────────────────────────────────────────────
 # 3. Training and Evaluation Loops
 # ──────────────────────────────────────────────────────────────────────────────
-def train_epoch(model, dataloader, optimizer, device):
+def train_epoch(model, dataloader, optimizer, device,criterion_cls):
     model.train()
     total_loss, total_bce, total_time = 0, 0, 0
     correct = 0
@@ -681,7 +752,7 @@ def train_epoch(model, dataloader, optimizer, device):
         optimizer.zero_grad()
         p_bif_pred, t_bif_pred = model(x, pad_mask)
         
-        loss, bce, time_loss = compute_loss(p_bif_pred, t_bif_pred, y_cls, y_time)
+        loss, bce, time_loss = compute_loss(p_bif_pred, t_bif_pred, y_cls, y_time,criterion_cls)
         loss.backward()
         torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
         optimizer.step()       
@@ -698,7 +769,7 @@ def train_epoch(model, dataloader, optimizer, device):
     return total_loss/N, total_bce/N, total_time/N, acc
 
 @torch.no_grad()
-def evaluate(model, dataloader, device):
+def evaluate(model, dataloader, device,criterion_cls):
     model.eval()
     total_loss, total_bce, total_time = 0, 0, 0
     
@@ -712,7 +783,7 @@ def evaluate(model, dataloader, device):
         p_bif_pred, t_bif_pred = model(x, pad_mask)
         
         # Calculate losses
-        loss, bce, time_loss = compute_loss(p_bif_pred, t_bif_pred, y_cls, y_time)
+        loss, bce, time_loss = compute_loss(p_bif_pred, t_bif_pred, y_cls, y_time,criterion_cls)
         
         total_loss += loss.item()
         total_bce += bce.item()
@@ -780,7 +851,7 @@ def variable_length_collate_fn(batch):
 
 import matplotlib.pyplot as plt
 
-def plot_training_curves(history):
+def plot_training_curves(history,plot_path:str):
     epochs = range(1, len(history['train_loss']) + 1)
     
     # Find the epoch with the lowest validation loss
@@ -810,7 +881,7 @@ def plot_training_curves(history):
     ax2.grid(True, alpha=0.3)
 
     plt.tight_layout()
-    plt.savefig("training_curves.png")
+    plt.savefig(plot_path)
     plt.show()
 
 
@@ -819,7 +890,7 @@ import torch
 import matplotlib.pyplot as plt
 from sklearn.metrics import roc_curve, roc_auc_score, precision_recall_curve, f1_score, classification_report
 
-def evaluate_and_plot_curves(model, data_loader, device):
+def evaluate_and_plot_curves(model, data_loader, device, scaler:TemperatureScaler,plot_path:str):
     """
     Extracts true labels and model probabilities, plots ROC and PR curves,
     and calculates optimal decision thresholds.
@@ -837,6 +908,7 @@ def evaluate_and_plot_curves(model, data_loader, device):
             
             # FIX 3: Unpack the tuple (p_bifurcation, t_bifurcation) returned by your model
             logits, _ = model(batch_x, pad_mask)
+            logits = scaler.scale(logits) 
             probs = torch.sigmoid(logits) # Convert logits to probabilities [0, 1]
             
             all_probs.extend(probs.cpu().numpy())
@@ -860,6 +932,17 @@ def evaluate_and_plot_curves(model, data_loader, device):
     best_f1_idx = np.argmax(f1_scores)
     best_threshold_f1 = pr_thresholds[best_f1_idx]
     max_f1 = f1_scores[best_f1_idx]
+
+    # Find threshold where FPR <= target_fpr (e.g. 5%)
+    target_fpr = 0.05
+    valid_idx = np.where(fpr <= target_fpr)[0]
+    if len(valid_idx) > 0:
+        best_precision_idx = valid_idx[np.argmax(tpr[valid_idx])]
+        best_threshold_precision = roc_thresholds[best_precision_idx]
+        print(f"Recommended Threshold (FPR ≤ {target_fpr*100:.0f}%): "
+              f"{best_threshold_precision:.4f} "
+              f"→ TPR: {tpr[best_precision_idx]:.3f}, "
+              f"FPR: {fpr[best_precision_idx]:.3f}")
 
     # ---------------------------------------------------------
     # PLOTTING CODES
@@ -893,7 +976,7 @@ def evaluate_and_plot_curves(model, data_loader, device):
     plt.grid(True, linestyle='--', alpha=0.5)
     
     plt.tight_layout()
-    plt.savefig("roc_curve.png")
+    plt.savefig(plot_path)
     plt.show()
     
     # ---------------------------------------------------------
@@ -915,137 +998,264 @@ def evaluate_and_plot_curves(model, data_loader, device):
     print(f"\nClassification Report using optimized F1 threshold ({best_threshold_f1:.3f}):")
     preds_opt = (all_probs >= best_threshold_f1).astype(int)
     print(classification_report(all_targets, preds_opt, digits=3))
+
+    print(f"\nClassification Report using minimised FPR threshold ({best_threshold_precision:.4f}):")
     print("=" * 60)
     
     return best_threshold_f1
 
+def persistence_gate(
+    prob_series: np.ndarray,
+    threshold: float = 0.5,
+    min_sustained: int = 12   # timesteps; ~12 months if monthly resolution
+) -> np.ndarray:
+    """
+    Causal: only fires once probability has exceeded threshold for
+    min_sustained consecutive steps. Resets immediately on any drop.
+    """
+    alerts = np.zeros(len(prob_series), dtype=bool)
+    run = 0
+    for t, p in enumerate(prob_series):
+        run = run + 1 if p >= threshold else 0
+        alerts[t] = run >= min_sustained
+    return alerts
+
+def uncertain_alert(model, x, pad_mask, device,
+                    prob_threshold=0.5, uncertainty_ceiling=0.15):
+    x, pad_mask = x.to(device), pad_mask.to(device)
+    mean_p, std_p = model.mc_forward(x, pad_mask)
+    alert = (mean_p >= prob_threshold) & (std_p <= uncertainty_ceiling)
+    return alert, mean_p, std_p
+    
+def run_inference_on_series(
+    model: BifurcationNet,
+    ts: TemperatureScaler,
+    scaler: ChannelWiseScaler,
+    raw_series: np.ndarray,          # shape (5, T_full) — unscaled physical features
+    window_size: int = 256,
+    step: int = 1,                   # stride between windows (months)
+    prob_threshold: float = 0.5,
+    uncertainty_ceiling: float = 0.15,
+    min_sustained: int = 12,
+    device: torch.device = torch.device("cpu"),
+    mc_samples: int = 30,
+) -> dict:
+    """
+    Slides a window across a full time series and returns per-timestep
+    calibrated probabilities, epistemic uncertainty, and gated alerts.
+    """
+    model.eval()
+    T_full = raw_series.shape[1]
+    n_windows = (T_full - window_size) // step + 1
+
+    mean_probs    = np.full(T_full, np.nan)
+    uncertainties = np.full(T_full, np.nan)
+
+    for w in range(n_windows):
+        start = w * step
+        end   = start + window_size
+        window = scaler.transform(raw_series[:, start:end])          # (5, W)
+
+        x        = torch.tensor(window, dtype=torch.float32).unsqueeze(0).to(device)  # (1,5,W)
+        pad_mask = torch.zeros(1, window_size, dtype=torch.bool).to(device)
+
+        mean_p, std_p = model.mc_forward(x, pad_mask, n_samples=mc_samples)
+
+        # Apply temperature calibration
+        # Note: mc_forward returns probs directly, so we calibrate the logit equivalent
+        # Re-run a single calibrated forward for the point estimate
+        with torch.no_grad():
+            logit, _ = model(x, pad_mask)
+            cal_prob  = torch.sigmoid(ts.scale(logit)).item()
+            mc_std    = std_p.item()
+
+        # Assign to the last timestep of the window (causal: decision made at t=end-1)
+        t_out = end - 1
+        mean_probs[t_out]    = cal_prob
+        uncertainties[t_out] = mc_std
+
+    # Forward-fill NaNs at the start (warm-up period)
+    valid = ~np.isnan(mean_probs)
+    mean_probs[~valid]    = 0.0
+    uncertainties[~valid] = 1.0   # high uncertainty during warm-up
+
+    # Gate on uncertainty then persistence
+    credible   = uncertainties <= uncertainty_ceiling
+    gated_prob = np.where(credible, mean_probs, 0.0)
+    alerts     = persistence_gate(gated_prob, threshold=prob_threshold,
+                                  min_sustained=min_sustained)
+
+    return {
+        "prob":          mean_probs,
+        "uncertainty":   uncertainties,
+        "credible_mask": credible,
+        "alert":         alerts,
+    }
 # ──────────────────────────────────────────────────────────────────────────────
 # 4. Main Execution
 # ──────────────────────────────────────────────────────────────────────────────
 if __name__ == "__main__":
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    
-    # 1. Read Regional Data Frame
-    df = pd.read_csv("CANARI_HIST2_LON_-49.101_LAT_55.939.csv")
+    ensemble_st = 1
+    ensemble_end = 40
+    best_thresholds = {}
+    null_alerts = {}
 
-    # 2. Run Calibrations
-    sde_constants = calculate_sde_parameters(df)
-    baselines, scales = calculate_observation_mappings(df, baseline_years=10)
-    
-    # 3. Print Configuration Profiles
-    print("=" * 60)
-    print("DYNAMIC CALIBRATION REPORT FOR TARGET REGION")
-    print("=" * 60)
-    print("A. LATENT SDE SYSTEM CONFIG:")
-    print(f"   sigma (Noise Intensity)        : {sde_constants['sigma']:.5f}")
-    print(f"   strat_decay (Damping factor)   : {sde_constants['strat_decay']:.5f}")
-    print(f"   meso_decay (Dissipation rate)  : {sde_constants['meso_decay']:.5f}")
-    print("-" * 60)
-    print("B. OBSERVATION BASELINES & SWINGS:")
-    for var in baselines.keys():
-        print(f"   {var:<8} -> Baseline Mean: {baselines[var]:8.3f} | Physical Swing (±1σ): {scales[var]:.4f}")
-    print("=" * 60)
-
-    # --- Configuration ---
-    cfg = DatasetConfig(n_recordings=5000, num_params=5,sde_constants=sde_constants) 
-    rng = np.random.default_rng(cfg.seed)
-    batch_size = 64
-    epochs = 50
-    
-    # 1. Generate Dataset
-    print("Generating synthetic dataset...")
-    gen = OceanStateGenerator(cfg, rng)
-    recordings = [gen.build_recording(f"rec_{i:04d}", is_positive=(i % 2 == 0),baselines=baselines,scales=scales) 
-                  for i in range(cfg.n_recordings)]
-
-    # 2. Split Data (using Subsets)
-    full_dataset = OceanBifurcationDataset(recordings)
-    train_set, val_set, test_set = random_split(
-        full_dataset, 
-        [0.7, 0.15, 0.15],
-        generator=torch.Generator().manual_seed(cfg.seed)
-    )
-
-    # 3. Fit Scaler ONLY on Training Subset Indices
-    print("Fitting scaler on training subset...")
-    # Access the specific recordings that belong to the training split
-    train_recs = [recordings[i] for i in train_set.indices]
-    
-    scaler = ChannelWiseScaler()
-    scaler.fit(train_recs)
-    scaler.save("synthetic_channel_scaler3.pkl")
-    # # ──────────────────────────────────────────────────────────────────────
-    # # DIAGNOSTIC: EXPOSE SCALER TRAINING ORDER
-    # # ──────────────────────────────────────────────────────────────────────
-    # print("🔮 [SCALER] Internal Means Shape:", scaler.means.shape)
-    # print("🔮 [SCALER] Trained Mean Values:\n", scaler.means)
-    # # ──────────────────────────────────────────────────────────────
-
-    # 4. Transform ALL data using the Train-fitted scaler
-    # Note: We do this after splitting to keep the original split indices valid
-    for rec in recordings:
-        rec.data = scaler.transform(rec.data)
-
-    # 5. Initialize Loaders
-    train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True, collate_fn=variable_length_collate_fn)
-    val_loader = DataLoader(val_set, batch_size=batch_size, shuffle=False, collate_fn=variable_length_collate_fn)
-    test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=False, collate_fn=variable_length_collate_fn)
-
-    # 6. Initialize Model & Optimizer
-    model = BifurcationNet(num_params=cfg.num_params).to(device)
-    optimizer = optim.AdamW(model.parameters(), lr=2e-4, weight_decay=1e-3)
-    scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=epochs,eta_min=1e-6)
-    criterion_cls = nn.BCEWithLogitsLoss()
-
-    # 7. Training Loop
-    print("\nStarting Training...")
-    history = {
-        'train_loss': [],
-        'val_loss': [],
-        'f1': [],
-        'prec': [],
-        'rec': []
-    }
-    best_val_loss = float('inf')
-    # Define your patience here:
-    patience = 10
-    patience_counter = 0
-    
-    for epoch in range(epochs):
-        tr_loss, tr_bce, tr_time, tr_acc = train_epoch(model, train_loader, optimizer, device)
-        scheduler.step()
+    for i in range(ensemble_st-1,ensemble_end,1):
+        # 1. Read Regional Data Frame
+        input_file = f"ensembles/CANARI_HIST2_{i+1}_LON_-56.506_LAT_60.819.csv"
+        try:
+            df = pd.read_csv(input_file)
+        except FileNotFoundError:
+            print(f"input_file not found for ensemble {i+1}, skipping training")
+            continue
+        # 2. Run Calibrations
+        sde_constants = calculate_sde_parameters(df)
+        baselines, scales = calculate_observation_mappings(df, baseline_years=10)
         
-        # Unpack the 7 return values from the new evaluate signature
-        val_res = evaluate(model, val_loader, device)
-        v_loss, _, _, v_prec, v_rec, v_f1, _ = val_res
-        # Store metrics
-        history['train_loss'].append(tr_loss)
-        history['val_loss'].append(v_loss)
-        history['f1'].append(v_f1)
-        history['prec'].append(v_prec)
-        history['rec'].append(v_rec)
-        print(f"Epoch {epoch+1:02d} | Val Loss: {v_loss:.4f} | F1: {v_f1:.3f} | Prec: {v_prec:.2f} | Rec: {v_rec:.2f}")
-        
-        # Save best model logic:
-        if v_loss < best_val_loss:
-            best_val_loss = v_loss
-            torch.save(model.state_dict(), "best_bifurcation_model3.pth")
-            patience_counter = 0  # reset
-        else:
-            patience_counter += 1
-            if patience_counter >= patience:
-                print(f"\nEarly stopping triggered at epoch {epoch+1}")
-                break
-
-    # 8. Final Test
-    print("\nTesting on hold-out set...")
-    model.load_state_dict(torch.load("best_bifurcation_model3.pth"))
-    test_res = evaluate(model, test_loader, device)
-    _, _, _, t_prec, t_rec, t_f1, t_time_err = test_res
+        # 3. Print Configuration Profiles
+        print("=" * 60)
+        print("DYNAMIC CALIBRATION REPORT FOR TARGET REGION")
+        print("=" * 60)
+        print("A. LATENT SDE SYSTEM CONFIG:")
+        print(f"   sigma (Noise Intensity)        : {sde_constants['sigma']:.5f}")
+        print(f"   strat_decay (Damping factor)   : {sde_constants['strat_decay']:.5f}")
+        print(f"   meso_decay (Dissipation rate)  : {sde_constants['meso_decay']:.5f}")
+        print("-" * 60)
+        print("B. OBSERVATION BASELINES & SWINGS:")
+        for var in baselines.keys():
+            print(f"   {var:<8} -> Baseline Mean: {baselines[var]:8.3f} | Physical Swing (±1σ): {scales[var]:.4f}")
+        print("=" * 60)
     
-    print(f"Final Test -> F1: {t_f1:.3f} | Precision: {t_prec:.2f} | Recall: {t_rec:.2f}")
-    plot_training_curves(history)
+        # --- Configuration ---
+        cfg = DatasetConfig(n_recordings=5000, num_params=5,sde_constants=sde_constants) 
+        rng = np.random.default_rng(cfg.seed)
+        batch_size = 64
+        epochs = 50
+        
+        # 1. Generate Dataset
+        print("Generating synthetic dataset...")
+        gen = OceanStateGenerator(cfg, rng)
+        recordings = [gen.build_recording(f"rec_{i:04d}", is_positive=(i % 2 == 0),baselines=baselines,scales=scales) 
+                      for i in range(cfg.n_recordings)]
+    
+        # 2. Split Data (using Subsets)
+        full_dataset = OceanBifurcationDataset(recordings)
+        train_set, val_set, test_set = random_split(
+            full_dataset, 
+            [0.7, 0.15, 0.15],
+            generator=torch.Generator().manual_seed(cfg.seed)
+        )
+    
+        # 3. Fit Scaler ONLY on Training Subset Indices
+        print("Fitting scaler on training subset...")
+        # Access the specific recordings that belong to the training split
+        train_recs = [recordings[i] for i in train_set.indices]
+        
+        scaler = ChannelWiseScaler()
+        scaler.fit(train_recs)
+        scaler.save(f"scalers/synthetic_channel_scaler_{i+1}.pkl")
+        # # ──────────────────────────────────────────────────────────────────────
+        # # DIAGNOSTIC: EXPOSE SCALER TRAINING ORDER
+        # # ──────────────────────────────────────────────────────────────────────
+        # print("🔮 [SCALER] Internal Means Shape:", scaler.means.shape)
+        # print("🔮 [SCALER] Trained Mean Values:\n", scaler.means)
+        # # ──────────────────────────────────────────────────────────────
+    
+        # 4. Transform ALL data using the Train-fitted scaler
+        # Note: We do this after splitting to keep the original split indices valid
+        for rec in recordings:
+            rec.data = scaler.transform(rec.data)
+    
+        # 5. Initialize Loaders
+        train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True, collate_fn=variable_length_collate_fn)
+        val_loader = DataLoader(val_set, batch_size=batch_size, shuffle=False, collate_fn=variable_length_collate_fn)
+        test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=False, collate_fn=variable_length_collate_fn)
+    
+        # 6. Initialize Model & Optimizer
+        model = BifurcationNet(num_params=cfg.num_params).to(device)
+        optimizer = optim.AdamW(model.parameters(), lr=2e-4, weight_decay=1e-3)
+        scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=epochs,eta_min=1e-6)
+        criterion_cls = FocalLoss(gamma=2.0)
+    
+        # 7. Training Loop
+        print("\nStarting Training...")
+        history = {
+            'train_loss': [],
+            'val_loss': [],
+            'f1': [],
+            'prec': [],
+            'rec': []
+        }
+        best_val_loss = float('inf')
+        # Define your patience here:
+        patience = 10
+        patience_counter = 0
+        
+        for epoch in range(epochs):
+            tr_loss, tr_bce, tr_time, tr_acc = train_epoch(model, train_loader, optimizer, device,criterion_cls)
+            scheduler.step()
+            
+            # Unpack the 7 return values from the new evaluate signature
+            val_res = evaluate(model, val_loader, device,criterion_cls)
+            v_loss, _, _, v_prec, v_rec, v_f1, _ = val_res
+            # Store metrics
+            history['train_loss'].append(tr_loss)
+            history['val_loss'].append(v_loss)
+            history['f1'].append(v_f1)
+            history['prec'].append(v_prec)
+            history['rec'].append(v_rec)
+            print(f"Epoch {epoch+1:02d} | Val Loss: {v_loss:.4f} | F1: {v_f1:.3f} | Prec: {v_prec:.2f} | Rec: {v_rec:.2f}")
+            
+            # Save best model logic:
+            if v_loss < best_val_loss:
+                best_val_loss = v_loss
+                torch.save(model.state_dict(), f"models/best_bifurcation_model_{i+1}.pth")
+                patience_counter = 0  # reset
+            else:
+                patience_counter += 1
+                if patience_counter >= patience:
+                    print(f"\nEarly stopping triggered at epoch {epoch+1}")
+                    break
+    
+        # 8. Final Test
+        print("\nTesting on hold-out set...")
+        try:
+            model.load_state_dict(torch.load(f"models/best_bifurcation_model_{i+1}.pth",weights_only=True))
+        except FileNotFoundError as e: 
+            print(f"[Errno 2] No such file or directory: '{e}'")
+            print("ml model not found, skipping this hold out test")
+            continue
 
-    best_thresh = evaluate_and_plot_curves(model, test_loader, device)
-    print(f"Best threshold -> {best_thresh}")
+        ts = TemperatureScaler().fit(model, val_loader, device)
+        torch.save({'temperature': ts.temperature.item()}, f"scalers/temperature_scaler_{i+1}.pt")
+        test_res = evaluate(model, test_loader, device,criterion_cls)
+        _, _, _, t_prec, t_rec, t_f1, t_time_err = test_res
+        
+        print(f"Final Test -> F1: {t_f1:.3f} | Precision: {t_prec:.2f} | Recall: {t_rec:.2f}")
+        plot_training_curves(history,plot_path=f"curves/training_curves_{i+1}.png")
+    
+        best_thresh = evaluate_and_plot_curves(model, test_loader, device,scaler=ts, plot_path=f"curves/roc_curve_{i+1}.png")
+        print(f"Best Threshold -> {best_thresh}")
+        best_thresholds[f"ensemble_{i+1}"] = float(best_thresh)
+    
+        # Verify on the historical input — should produce no sustained alerts
+        hist_features = gen.engineer_ocean_features(
+            df['temperature'].values, df['salinity'].values,
+            df['ssh'].values, df['u_velocity'].values, df['v_velocity'].values
+        )  # shape (5, T_hist)
+        
+        inference_result = run_inference_on_series(
+            model, ts, scaler, hist_features,
+            window_size=128, step=1, device=device
+        )
+        n_alerts = inference_result["alert"].sum()
+        print(f"Historical false-positive alert timesteps: {n_alerts} / {hist_features.shape[1]}")
+        null_alerts[f"ensemble_{i+1}"] = int(n_alerts)
+
+        with open('best_thresholds.json', 'w') as fp:
+            json.dump(best_thresholds, fp)
+    
+        with open('null_alerts.json', 'w') as fp:
+            json.dump(null_alerts, fp)

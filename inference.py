@@ -3,15 +3,16 @@ import torch
 import numpy as np
 import pandas as pd
 # ─── 1. IMPORT YOUR MODEL ARCHITECTURE ───────────────────────────────────────
-from pipeline import BifurcationNet, DatasetConfig, ChannelWiseScaler
+from pipeline import BifurcationNet, DatasetConfig, ChannelWiseScaler, TemperatureScaler
 # ─────────────────────────────────────────────────────────────────────────────
 import ruptures as rpt
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import pickle
 from scipy.stats import linregress
+import json
 
-def causal_smooth(raw_data, smooth_window=6):
+def causal_smooth(raw_data, smooth_window=128):
     """
     Applies pure causal (trailing) smoothing to preserve variance shifts
     and mean step-changes while dampening high-frequency observational noise.
@@ -20,24 +21,15 @@ def causal_smooth(raw_data, smooth_window=6):
     - raw_data: numpy array of shape (num_channels, total_timesteps)
     - smooth_window: Number of months for the trailing moving average
     """
-    num_channels, total_timesteps = raw_data.shape
-    smoothed_data = np.zeros_like(raw_data)
-    
-    for i in range(num_channels):
-        series = raw_data[i, :]
-        smoothed_series = np.zeros_like(series)
-        
-        for t in range(total_timesteps):
-            if t < smooth_window - 1:
-                # Not enough history yet: average available window
-                smoothed_series[t] = np.mean(series[:t+1])
-            else:
-                # Trailing average: looks only at current and past data
-                smoothed_series[t] = np.mean(series[t - smooth_window + 1 : t + 1])
-                
-        smoothed_data[i, :] = smoothed_series
-        
-    return smoothed_data
+    smoothed = np.empty_like(raw_data)
+    for i in range(raw_data.shape[0]):
+        smoothed[i] = (
+            pd.Series(raw_data[i])
+            .rolling(window=smooth_window, min_periods=1)
+            .mean()
+            .values
+        )
+    return smoothed
 
 
 def load_and_preprocess_csv(csv_path: str) -> tuple:
@@ -79,10 +71,9 @@ def load_and_preprocess_csv(csv_path: str) -> tuple:
             raw_stream[channel][mask] = np.interp(x, xp, fp) # Also fix in raw
 
     # 3. Process (Detrend/Smooth)
-    processed_stream = causal_smooth(data_stream,smooth_window=6)
+    processed_stream = causal_smooth(data_stream,smooth_window=128)
     
     return raw_stream, processed_stream
-
 
 
 def engineer_ocean_features(temp: np.ndarray, salt: np.ndarray, 
@@ -99,8 +90,10 @@ def engineer_ocean_features(temp: np.ndarray, salt: np.ndarray,
     # ──────────────────────────────────────────────────────────────────────
     # NEW: Isolate velocity anomalies to neutralize absolute baseline shifts
     # ──────────────────────────────────────────────────────────────────────
-    u_anom = u - np.mean(u)
-    v_anom = v - np.mean(v)
+    u_series = pd.Series(u)
+    u_anom = (u_series - u_series.rolling(window=36, min_periods=1).mean()).values
+    v_series = pd.Series(v)
+    v_anom = (v_series - v_series.rolling(window=36, min_periods=1).mean()).values
     # ──────────────────────────────────────────────────────────────────────
     # Center around mean T/S for better scaling
     rho = rho0 * (1 - alpha * (temp - np.mean(temp)) + beta * (salt - np.mean(salt)))
@@ -120,13 +113,12 @@ def engineer_ocean_features(temp: np.ndarray, salt: np.ndarray,
     # Calculating a rolling window variability as a proxy for potential regime shifts
     # (Using a simple 12-month rolling window)
     window = 12
-    ssh_variability = pd.Series(ssh).rolling(window=window, center=True).std().bfill().ffill().values
+    ssh_variability = pd.Series(ssh).rolling(window=window, min_periods=3).std().fillna(0).values
     
     # Stack vertically -> shape (5, T)
     features = np.vstack((rho, ke, ssh_anom, speed, ssh_variability))
     
     return features
-
 
 
 def run_changepoint_analysis(raw_stream, n_breakpoints=1, model_type="rbf"):
@@ -184,7 +176,7 @@ def run_changepoint_analysis(raw_stream, n_breakpoints=1, model_type="rbf"):
     }
 
 
-def _plot_inference_result(raw_stream, processed_stream, event, cpa_result, channel_names, window_size):
+def _plot_inference_result(raw_stream, processed_stream, event, cpa_result, channel_names, window_size,ensemble:int):
     n_channels, T = processed_stream.shape
     t_axis = np.arange(T)
 
@@ -242,16 +234,16 @@ def _plot_inference_result(raw_stream, processed_stream, event, cpa_result, chan
 
     axes[-1].set_xlabel("Timestep", fontsize=10)
     plt.tight_layout()
-    plt.savefig("bifurcation_inference.png", dpi=150, bbox_inches='tight')
+    plt.savefig(f"results/bifurcation_inference_{ensemble}.png", dpi=150, bbox_inches='tight')
     plt.show()
     print("Plot saved to bifurcation_inference.png")
 
 
-def run_real_world_inference(model, raw_stream, processed_stream, window_size=128, stride=6, 
+def run_real_world_inference(model, raw_stream, processed_stream,ensemble, ts,window_size=128, stride=6, 
                              prob_threshold=0.85, channel_names=None):
     
     if channel_names is None:
-        channel_names = ['Density (rho)', 'Kinetic Energy', 'SSH Anomaly', 'Speed', 'SSH Variability']
+        channel_names = ['Density (rho)', 'Kinetic Energy', 'SSH Anomaly', 'Speed', 'SSH Variability', 'Density Lag-1 AC (CSD)']
 
     model.eval()
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -262,7 +254,7 @@ def run_real_world_inference(model, raw_stream, processed_stream, window_size=12
     
     last_trigger_t = -1 
     cooldown_period = window_size 
-    
+    all_probs = []
     print(f"Deploying model... (Threshold: {prob_threshold})")
     
     with torch.no_grad():
@@ -272,8 +264,8 @@ def run_real_world_inference(model, raw_stream, processed_stream, window_size=12
             x_tensor = torch.tensor(window_slice, dtype=torch.float32).unsqueeze(0).to(device)
             
             logits, pred_time = model(x_tensor, pad_mask=None)
-            prob = torch.sigmoid(logits).item()
-            
+            prob = torch.sigmoid(ts.scale(logits)).item()
+            all_probs.append((start_t, prob))
             if prob > prob_threshold:
                 if start_t > last_trigger_t + cooldown_period:
                     relative_frame = int(pred_time.item() * window_size)
@@ -290,73 +282,121 @@ def run_real_world_inference(model, raw_stream, processed_stream, window_size=12
                     last_trigger_t = start_t 
 
     # 1. Run Changepoint Analysis (Independent of inference)
-    cpa_result = run_changepoint_analysis(processed_stream)
+    cpa_result = run_changepoint_analysis(raw_stream)
     
     # 2. Get the first event for plotting
     first_event = results[0] if results else None
     
     # 3. Plotting
-    _plot_inference_result(raw_stream, processed_stream, first_event, cpa_result, channel_names, window_size)
+    _plot_inference_result(raw_stream, processed_stream, first_event, cpa_result, channel_names, window_size,ensemble)
+    
+    # After the loop, print the probability profile:
+    all_probs = np.array(all_probs)
+    print(f"Max probability seen  : {all_probs[:,1].max():.4f} at t={int(all_probs[all_probs[:,1].argmax(), 0])}")
+    print(f"Mean probability      : {all_probs[:,1].mean():.4f}")
+    print(f"% windows above 0.45  : {(all_probs[:,1] > 0.45).mean()*100:.1f}%")
+    print(f"% windows above 0.50  : {(all_probs[:,1] > 0.50).mean()*100:.1f}%")
+    print(f"% windows above thresh: {(all_probs[:,1] > prob_threshold).mean()*100:.1f}%")
+
+    plt.figure(figsize=(14, 3))
+    plt.plot(all_probs[:, 0], all_probs[:, 1], lw=0.8)
+    plt.axhline(prob_threshold, color='red', linestyle='--', label=f'threshold={prob_threshold}')
+    plt.axhline(0.5, color='orange', linestyle=':', label='p=0.5')
+    plt.xlabel('Timestep'); plt.ylabel('P(bifurcation)')
+    plt.title('Probability profile — SSP370 series')
+    plt.legend(); plt.tight_layout()
+    plt.savefig(f"results/prob_profile_{ensemble}.png", dpi=150)
     
     return results # Return full list for logging
     
 if __name__ == "__main__":
-    # --- Paths Configurations ---
-    CSV_INPUT_PATH = "CANARI_SSP370_LON_-49.101_LAT_55.939.csv"
-    MODEL_WEIGHTS_PATH = "best_bifurcation_model3.pth"
-    
-    if not os.path.exists(MODEL_WEIGHTS_PATH):
-        raise FileNotFoundError(f"Could not locate model weights at '{MODEL_WEIGHTS_PATH}'.")
+    ensemble_st = 1
+    ensemble_end = 40
+    for i in range(ensemble_st-1,ensemble_end,1):
+        # --- Paths Configurations ---
+        CSV_INPUT_PATH = f"ensembles/CANARI_SSP370_{i+1}_LON_-56.506_LAT_60.819.csv"
+        MODEL_WEIGHTS_PATH = f"models/best_bifurcation_model_{i+1}.pth"
+        THRESHOLDS_PATH = "best_thresholds.json"
+        NULL_ALERTS_PATH = "null_alerts.json"
+        with open(NULL_ALERTS_PATH, 'r') as fp:
+            null_alerts = json.load(fp)
+        try:
+            if null_alerts[f"ensemble_{i+1}"] > 0:
+                print(f"null alerts raised during training, skipping inference for ensemble {i+1}")
+                continue
+        except KeyError as e:
+            print(e)
+            
+        if not os.path.exists(MODEL_WEIGHTS_PATH):
+            print(f"Could not locate model weights at '{MODEL_WEIGHTS_PATH}', skipping inference")
+            continue
+            
+        # --- 2. INITIALIZE ARCHITECTURE & LOAD WEIGHTS ---
+        print("Initializing model topology...")
+        # Instantiate your exact BifurcationNet. (num_params=6 matching physical measurements)
+        model = BifurcationNet(num_params=5) 
         
-    # --- 2. INITIALIZE ARCHITECTURE & LOAD WEIGHTS ---
-    print("Initializing model topology...")
-    # Instantiate your exact BifurcationNet. (num_params=5 matching physical measurements)
-    model = BifurcationNet(num_params=5) 
+        # Loading the trained dictionary parameters
+        device_map = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        checkpoint = torch.load(MODEL_WEIGHTS_PATH)
+        model.load_state_dict(checkpoint)
+        print("Trained model weights successfully loaded into memory.")
     
-    # Loading the trained dictionary parameters
-    device_map = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    checkpoint = torch.load(MODEL_WEIGHTS_PATH)
-    model.load_state_dict(checkpoint)
-    print("Trained model weights successfully loaded into memory.")
-    
-    # --- 3. LOAD DATA STREAM ---
+        ts_data = torch.load(f"scalers/temperature_scaler_{i+1}.pt", weights_only=True)
+        ts = TemperatureScaler()
+        ts.temperature = torch.nn.Parameter(torch.tensor([ts_data['temperature']]))
+        ts.eval()
 
-    raw_ocean, processed_ocean = load_and_preprocess_csv(CSV_INPUT_PATH)
-
-    # =====================================================================
-    # 1. LOAD THE SCALER
-    # =====================================================================
-    scaler_path = "synthetic_channel_scaler3.pkl" 
-    
-    scaler = ChannelWiseScaler.load(scaler_path)
-
-    # # ──────────────────────────────────────────────────────────────────────
-    # # DIAGNOSTIC: EXPOSE SCALER TRAINING ORDER
-    # # ──────────────────────────────────────────────────────────────────────
-    # print("🔮 [SCALER] Internal Means Shape:", scaler.means.shape)
-    # print("🔮 [SCALER] Trained Mean Values:\n", scaler.means)
-    # # ──────────────────────────────────────────────────────────────────────
-
-    scaled_raw_ocean = scaler.transform(raw_ocean)
-    scaled_processed_ocean = scaler.transform(processed_ocean)
+        with open(THRESHOLDS_PATH, 'r') as fp:
+            best_thresholds = json.load(fp)
         
-    # --- 4. EXECUTE WINDOW SLIDING INFERENCE ---
-    # Adjust window_size to match one of your trained context windows (128, 256, or 512)
-    # Lower stride value means higher temporal resolution, but higher compute cost
-    # Pass your required arguments explicitly using keyword arguments
-    results = run_real_world_inference(
-        model=model, 
-        raw_stream=scaled_raw_ocean,
-        processed_stream=scaled_processed_ocean,
-        window_size=64,
-        prob_threshold=0.35
-    )
+        # --- 3. LOAD DATA STREAM ---
+        try:
+            raw_ocean, processed_ocean = load_and_preprocess_csv(CSV_INPUT_PATH)
+        except FileNotFoundError as e:
+            print(e)
+            continue
     
-    # --- 5. EXPORT INFERENCE REPORT ---
-    print("\n----------------────────────────────────")
-    print(f"INFERENCE COMPLETE. Total Triggers: {len(results)}")
-    print("----------------────────────────────────")
-    if results:
-        results_df = pd.DataFrame(results)
-        results_df.to_csv("detected_ocean_bifurcations3.csv", index=False)
-        print("Detailed logs saved to 'detected_ocean_bifurcations3.csv'.")
+        # =====================================================================
+        # 1. LOAD THE SCALER
+        # =====================================================================
+        scaler_path = f"scalers/synthetic_channel_scaler_{i+1}.pkl" 
+        
+        scaler = ChannelWiseScaler.load(scaler_path)
+    
+        # # ──────────────────────────────────────────────────────────────────────
+        # # DIAGNOSTIC: EXPOSE SCALER TRAINING ORDER
+        # # ──────────────────────────────────────────────────────────────────────
+        # print("🔮 [SCALER] Internal Means Shape:", scaler.means.shape)
+        # print("🔮 [SCALER] Trained Mean Values:\n", scaler.means)
+        # # ──────────────────────────────────────────────────────────────────────
+    
+        scaled_raw_ocean = scaler.transform(raw_ocean)
+        scaled_processed_ocean = scaler.transform(processed_ocean)
+            
+        # --- 4. EXECUTE WINDOW SLIDING INFERENCE ---
+        # Adjust window_size to match one of your trained context windows (128, 256, or 512)
+        # Lower stride value means higher temporal resolution, but higher compute cost
+        # Pass your required arguments explicitly using keyword arguments
+        try:
+            results = run_real_world_inference(
+                model=model, 
+                raw_stream=scaled_raw_ocean,
+                processed_stream=scaled_processed_ocean,
+                ts=ts,
+                window_size=128,
+                prob_threshold=best_thresholds[f"ensemble_{i+1}"],
+                ensemble=i+1
+            )
+        except KeyError as e:
+            print(e)
+            continue
+        
+        # --- 5. EXPORT INFERENCE REPORT ---
+        print("\n----------------────────────────────────")
+        print(f"INFERENCE COMPLETE. Total Triggers: {len(results)}")
+        print("----------------────────────────────────")
+        if results:
+            results_df = pd.DataFrame(results)
+            results_df.to_csv(f"results/detected_ocean_bifurcations_{i+1}.csv", index=False)
+            print(f"Detailed logs saved to 'detected_ocean_bifurcations_{i+1}.csv'.")

@@ -1,0 +1,875 @@
+/home/users/thopri/PROMOTE/LatentTCN/inference.py:236: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/users/thopri/PROMOTE/LatentTCN/inference.py:237: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
+  plt.savefig(f"results/bifurcation_inference_{ensemble}.png", dpi=150, bbox_inches='tight')
+/home/users/thopri/PROMOTE/LatentTCN/inference.py:236: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/users/thopri/PROMOTE/LatentTCN/inference.py:237: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
+  plt.savefig(f"results/bifurcation_inference_{ensemble}.png", dpi=150, bbox_inches='tight')
+/home/users/thopri/PROMOTE/LatentTCN/inference.py:183: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`). Consider using `matplotlib.pyplot.close()`.
+  fig, axes = plt.subplots(n_channels, 1, figsize=(14, 2.5 * n_channels), sharex=True)
+/home/users/thopri/PROMOTE/LatentTCN/inference.py:236: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/users/thopri/PROMOTE/LatentTCN/inference.py:237: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
+  plt.savefig(f"results/bifurcation_inference_{ensemble}.png", dpi=150, bbox_inches='tight')
+Initializing model topology...
+Trained model weights successfully loaded into memory.
+Loading telemetry data from: ensembles/CANARI_SSP370_1_LON_-56.506_LAT_60.819.csv
+Deploying model... (Threshold: 0.45123735070228577)
+⚠️ Bifurcation Found! Window: [888:1016] | Prob: 0.4515
+📊 Changepoint Analysis Complete
+    Method          : Binary Segmentation (rbf)
+    Breakpoint at   : timestep 550
+    Confidence score: 0.055  (between/total variance ratio)
+Plot saved to bifurcation_inference.png
+Max probability seen  : 0.4515 at t=888
+Mean probability      : 0.4234
+% windows above 0.45  : 1.3%
+% windows above 0.50  : 0.0%
+% windows above thresh: 0.7%
+
+----------------────────────────────────
+INFERENCE COMPLETE. Total Triggers: 1
+----------------────────────────────────
+Detailed logs saved to 'detected_ocean_bifurcations_1.csv'.
+Initializing model topology...
+Trained model weights successfully loaded into memory.
+Loading telemetry data from: ensembles/CANARI_SSP370_2_LON_-56.506_LAT_60.819.csv
+Deploying model... (Threshold: 0.46722573041915894)
+⚠️ Bifurcation Found! Window: [756:884] | Prob: 0.4707
+⚠️ Bifurcation Found! Window: [888:1016] | Prob: 0.4977
+📊 Changepoint Analysis Complete
+    Method          : Binary Segmentation (rbf)
+    Breakpoint at   : timestep 515
+    Confidence score: 0.042  (between/total variance ratio)
+Plot saved to bifurcation_inference.png
+Max probability seen  : 0.4984 at t=876
+Mean probability      : 0.4378
+% windows above 0.45  : 19.5%
+% windows above 0.50  : 0.0%
+% windows above thresh: 15.4%
+
+----------------────────────────────────
+INFERENCE COMPLETE. Total Triggers: 2
+----------------────────────────────────
+Detailed logs saved to 'detected_ocean_bifurcations_2.csv'.
+Initializing model topology...
+Trained model weights successfully loaded into memory.
+Loading telemetry data from: ensembles/CANARI_SSP370_3_LON_-56.506_LAT_60.819.csv
+Deploying model... (Threshold: 0.47128060460090637)
+⚠️ Bifurcation Found! Window: [180:308] | Prob: 0.4744
+⚠️ Bifurcation Found! Window: [312:440] | Prob: 0.5128
+⚠️ Bifurcation Found! Window: [444:572] | Prob: 0.5168
+⚠️ Bifurcation Found! Window: [576:704] | Prob: 0.5127
+⚠️ Bifurcation Found! Window: [708:836] | Prob: 0.5198
+⚠️ Bifurcation Found! Window: [840:968] | Prob: 0.5173
+📊 Changepoint Analysis Complete
+    Method          : Binary Segmentation (rbf)
+    Breakpoint at   : timestep 585
+    Confidence score: 0.043  (between/total variance ratio)
+Plot saved to bifurcation_inference.png
+Max probability seen  : 0.5305 at t=666
+Mean probability      : 0.4988
+% windows above 0.45  : 85.9%
+% windows above 0.50  : 74.5%
+% windows above thresh: 79.9%
+
+----------------────────────────────────
+INFERENCE COMPLETE. Total Triggers: 6
+----------------────────────────────────
+Detailed logs saved to 'detected_ocean_bifurcations_3.csv'.
+Initializing model topology...
+Trained model weights successfully loaded into memory.
+Loading telemetry data from: ensembles/CANARI_SSP370_4_LON_-56.506_LAT_60.819.csv
+Deploying model... (Threshold: 0.46103352308273315)
+⚠️ Bifurcation Found! Window: [864:992] | Prob: 0.4617
+📊 Changepoint Analysis Complete
+    Method          : Binary Segmentation (rbf)
+    Breakpoint at   : timestep 895
+    Confidence score: 0.045  (between/total variance ratio)
+Plot saved to bifurcation_inference.png
+Max probability seen  : 0.4659 at t=888
+Mean probability      : 0.4339
+% windows above 0.45  : 10.1%
+% windows above 0.50  : 0.0%
+% windows above thresh: 3.4%
+
+----------------────────────────────────
+INFERENCE COMPLETE. Total Triggers: 1
+----------------────────────────────────
+Detailed logs saved to 'detected_ocean_bifurcations_4.csv'.
+Initializing model topology...
+Trained model weights successfully loaded into memory.
+Loading telemetry data from: ensembles/CANARI_SSP370_5_LON_-56.506_LAT_60.819.csv
+Deploying model... (Threshold: 0.44129589200019836)
+⚠️ Bifurcation Found! Window: [408:536] | Prob: 0.4420
+⚠️ Bifurcation Found! Window: [540:668] | Prob: 0.4639
+⚠️ Bifurcation Found! Window: [672:800] | Prob: 0.4554
+⚠️ Bifurcation Found! Window: [804:932] | Prob: 0.5223
+📊 Changepoint Analysis Complete
+    Method          : Binary Segmentation (rbf)
+    Breakpoint at   : timestep 680
+    Confidence score: 0.057  (between/total variance ratio)
+Plot saved to bifurcation_inference.png
+Max probability seen  : 0.5318 at t=834
+Mean probability      : 0.4548
+% windows above 0.45  : 45.6%
+% windows above 0.50  : 14.1%
+% windows above thresh: 54.4%
+
+----------------────────────────────────
+INFERENCE COMPLETE. Total Triggers: 4
+----------------────────────────────────
+Detailed logs saved to 'detected_ocean_bifurcations_5.csv'.
+Could not locate model weights at 'models/best_bifurcation_model_6.pth', skipping inference
+Initializing model topology...
+Trained model weights successfully loaded into memory.
+Loading telemetry data from: ensembles/CANARI_SSP370_7_LON_-56.506_LAT_60.819.csv
+Deploying model... (Threshold: 0.44014978408813477)
+⚠️ Bifurcation Found! Window: [300:428] | Prob: 0.4404
+⚠️ Bifurcation Found! Window: [432:560] | Prob: 0.4703
+⚠️ Bifurcation Found! Window: [564:692] | Prob: 0.4963
+⚠️ Bifurcation Found! Window: [696:824] | Prob: 0.5543
+⚠️ Bifurcation Found! Window: [828:956] | Prob: 0.5272
+📊 Changepoint Analysis Complete
+    Method          : Binary Segmentation (rbf)
+    Breakpoint at   : timestep 530
+    Confidence score: 0.039  (between/total variance ratio)
+Plot saved to bifurcation_inference.png
+Max probability seen  : 0.5671 at t=660
+Mean probability      : 0.4540
+% windows above 0.45  : 63.8%
+% windows above 0.50  : 36.2%
+% windows above thresh: 66.4%
+
+----------------────────────────────────
+INFERENCE COMPLETE. Total Triggers: 5
+----------------────────────────────────
+Detailed logs saved to 'detected_ocean_bifurcations_7.csv'.
+Initializing model topology...
+Trained model weights successfully loaded into memory.
+Loading telemetry data from: ensembles/CANARI_SSP370_8_LON_-56.506_LAT_60.819.csv
+Deploying model... (Threshold: 0.47312551736831665)
+⚠️ Bifurcation Found! Window: [720:848] | Prob: 0.4734
+⚠️ Bifurcation Found! Window: [852:980] | Prob: 0.4955
+📊 Changepoint Analysis Complete
+    Method          : Binary Segmentation (rbf)
+    Breakpoint at   : timestep 715
+    Confidence score: 0.026  (between/total variance ratio)
+Plot saved to bifurcation_inference.png
+Max probability seen  : 0.5044 at t=888
+Mean probability      : 0.4423
+% windows above 0.45  : 53.0%
+% windows above 0.50  : 2.7%
+% windows above thresh: 19.5%
+
+----------------────────────────────────
+INFERENCE COMPLETE. Total Triggers: 2
+----------------────────────────────────
+Detailed logs saved to 'detected_ocean_bifurcations_8.csv'.
+Initializing model topology...
+Trained model weights successfully loaded into memory.
+Loading telemetry data from: ensembles/CANARI_SSP370_9_LON_-56.506_LAT_60.819.csv
+Deploying model... (Threshold: 0.45568200945854187)
+⚠️ Bifurcation Found! Window: [474:602] | Prob: 0.4562
+⚠️ Bifurcation Found! Window: [606:734] | Prob: 0.5156
+⚠️ Bifurcation Found! Window: [738:866] | Prob: 0.4638
+⚠️ Bifurcation Found! Window: [870:998] | Prob: 0.4855
+📊 Changepoint Analysis Complete
+    Method          : Binary Segmentation (rbf)
+    Breakpoint at   : timestep 535
+    Confidence score: 0.051  (between/total variance ratio)
+Plot saved to bifurcation_inference.png
+Max probability seen  : 0.5169 at t=612
+Mean probability      : 0.4606
+% windows above 0.45  : 67.8%
+% windows above 0.50  : 10.1%
+% windows above thresh: 47.0%
+
+----------------────────────────────────
+INFERENCE COMPLETE. Total Triggers: 4
+----------------────────────────────────
+Detailed logs saved to 'detected_ocean_bifurcations_9.csv'.
+Initializing model topology...
+Trained model weights successfully loaded into memory.
+Loading telemetry data from: ensembles/CANARI_SSP370_10_LON_-56.506_LAT_60.819.csv
+Deploying model... (Threshold: 0.46507346630096436)
+⚠️ Bifurcation Found! Window: [528:656] | Prob: 0.4698
+⚠️ Bifurcation Found! Window: [684:812] | Prob: 0.4725
+⚠️ Bifurcation Found! Window: [816:944] | Prob: 0.4957
+📊 Changepoint Analysis Complete
+    Method          : Binary Segmentation (rbf)
+    Breakpoint at   : timestep 655
+    Confidence score: 0.069  (between/total variance ratio)
+Plot saved to bifurcation_inference.png
+Max probability seen  : 0.5115 at t=888
+Mean probability      : 0.3583
+% windows above 0.45  : 32.9%
+% windows above 0.50  : 8.1%
+% windows above thresh: 28.2%
+
+----------------────────────────────────
+INFERENCE COMPLETE. Total Triggers: 3
+----------------────────────────────────
+Detailed logs saved to 'detected_ocean_bifurcations_10.csv'.
+Initializing model topology...
+Trained model weights successfully loaded into memory.
+Loading telemetry data from: ensembles/CANARI_SSP370_11_LON_-56.506_LAT_60.819.csv
+Deploying model... (Threshold: 0.4639216959476471)
+⚠️ Bifurcation Found! Window: [672:800] | Prob: 0.4648
+⚠️ Bifurcation Found! Window: [804:932] | Prob: 0.5037
+📊 Changepoint Analysis Complete
+    Method          : Binary Segmentation (rbf)
+    Breakpoint at   : timestep 565
+    Confidence score: 0.062  (between/total variance ratio)
+Plot saved to bifurcation_inference.png
+Max probability seen  : 0.5090 at t=828
+Mean probability      : 0.4082
+% windows above 0.45  : 32.2%
+% windows above 0.50  : 10.7%
+% windows above thresh: 24.8%
+
+----------------────────────────────────
+INFERENCE COMPLETE. Total Triggers: 2
+----------------────────────────────────
+Detailed logs saved to 'detected_ocean_bifurcations_11.csv'.
+Initializing model topology...
+Trained model weights successfully loaded into memory.
+Loading telemetry data from: ensembles/CANARI_SSP370_12_LON_-56.506_LAT_60.819.csv
+Deploying model... (Threshold: 0.4635704755783081)
+⚠️ Bifurcation Found! Window: [528:656] | Prob: 0.4641
+⚠️ Bifurcation Found! Window: [660:788] | Prob: 0.4773
+⚠️ Bifurcation Found! Window: [792:920] | Prob: 0.4742
+📊 Changepoint Analysis Complete
+    Method          : Binary Segmentation (rbf)
+    Breakpoint at   : timestep 540
+    Confidence score: 0.057  (between/total variance ratio)
+Plot saved to bifurcation_inference.png
+Max probability seen  : 0.4773 at t=660
+Mean probability      : 0.4575
+% windows above 0.45  : 62.4%
+% windows above 0.50  : 0.0%
+% windows above thresh: 40.9%
+
+----------------────────────────────────
+INFERENCE COMPLETE. Total Triggers: 3
+----------------────────────────────────
+Detailed logs saved to 'detected_ocean_bifurcations_12.csv'.
+Initializing model topology...
+Trained model weights successfully loaded into memory.
+Loading telemetry data from: ensembles/CANARI_SSP370_13_LON_-56.506_LAT_60.819.csv
+Deploying model... (Threshold: 0.4657610356807709)
+⚠️ Bifurcation Found! Window: [654:782] | Prob: 0.4659
+⚠️ Bifurcation Found! Window: [786:914] | Prob: 0.5041
+📊 Changepoint Analysis Complete
+    Method          : Binary Segmentation (rbf)
+    Breakpoint at   : timestep 605
+    Confidence score: 0.074  (between/total variance ratio)
+Plot saved to bifurcation_inference.png
+Max probability seen  : 0.5050 at t=774
+Mean probability      : 0.4529
+% windows above 0.45  : 53.7%
+% windows above 0.50  : 8.7%
+% windows above thresh: 26.8%
+
+----------------────────────────────────
+INFERENCE COMPLETE. Total Triggers: 2
+----------------────────────────────────
+Detailed logs saved to 'detected_ocean_bifurcations_13.csv'.
+Initializing model topology...
+Trained model weights successfully loaded into memory.
+Loading telemetry data from: ensembles/CANARI_SSP370_14_LON_-56.506_LAT_60.819.csv
+Deploying model... (Threshold: 0.47263097763061523)
+⚠️ Bifurcation Found! Window: [450:578] | Prob: 0.4727
+⚠️ Bifurcation Found! Window: [582:710] | Prob: 0.4821
+⚠️ Bifurcation Found! Window: [714:842] | Prob: 0.4871
+⚠️ Bifurcation Found! Window: [846:974] | Prob: 0.5226
+📊 Changepoint Analysis Complete
+    Method          : Binary Segmentation (rbf)
+    Breakpoint at   : timestep 740
+    Confidence score: 0.104  (between/total variance ratio)
+Plot saved to bifurcation_inference.png
+Max probability seen  : 0.5230 at t=828
+Mean probability      : 0.4742
+% windows above 0.45  : 85.2%
+% windows above 0.50  : 16.1%
+% windows above thresh: 49.7%
+
+----------------────────────────────────
+INFERENCE COMPLETE. Total Triggers: 4
+----------------────────────────────────
+Detailed logs saved to 'detected_ocean_bifurcations_14.csv'.
+Initializing model topology...
+Trained model weights successfully loaded into memory.
+Loading telemetry data from: ensembles/CANARI_SSP370_15_LON_-56.506_LAT_60.819.csv
+Deploying model... (Threshold: 0.4879858195781708)
+⚠️ Bifurcation Found! Window: [528:656] | Prob: 0.4885
+⚠️ Bifurcation Found! Window: [660:788] | Prob: 0.5108
+⚠️ Bifurcation Found! Window: [792:920] | Prob: 0.5016
+📊 Changepoint Analysis Complete
+    Method          : Binary Segmentation (rbf)
+    Breakpoint at   : timestep 480
+    Confidence score: 0.057  (between/total variance ratio)
+Plot saved to bifurcation_inference.png
+Max probability seen  : 0.5132 at t=876
+Mean probability      : 0.4756
+% windows above 0.45  : 79.9%
+% windows above 0.50  : 32.9%
+% windows above thresh: 40.9%
+
+----------------────────────────────────
+INFERENCE COMPLETE. Total Triggers: 3
+----------------────────────────────────
+Detailed logs saved to 'detected_ocean_bifurcations_15.csv'.
+Initializing model topology...
+Trained model weights successfully loaded into memory.
+Loading telemetry data from: ensembles/CANARI_SSP370_16_LON_-56.506_LAT_60.819.csv
+Deploying model... (Threshold: 0.4763137996196747)
+⚠️ Bifurcation Found! Window: [678:806] | Prob: 0.4764
+⚠️ Bifurcation Found! Window: [810:938] | Prob: 0.4854
+📊 Changepoint Analysis Complete
+    Method          : Binary Segmentation (rbf)
+    Breakpoint at   : timestep 630
+    Confidence score: 0.038  (between/total variance ratio)
+Plot saved to bifurcation_inference.png
+Max probability seen  : 0.4943 at t=762
+Mean probability      : 0.3414
+% windows above 0.45  : 50.3%
+% windows above 0.50  : 0.0%
+% windows above thresh: 24.2%
+
+----------------────────────────────────
+INFERENCE COMPLETE. Total Triggers: 2
+----------------────────────────────────
+Detailed logs saved to 'detected_ocean_bifurcations_16.csv'.
+Initializing model topology...
+Trained model weights successfully loaded into memory.
+Loading telemetry data from: ensembles/CANARI_SSP370_17_LON_-56.506_LAT_60.819.csv
+Deploying model... (Threshold: 0.43677380681037903)
+⚠️ Bifurcation Found! Window: [552:680] | Prob: 0.4370
+⚠️ Bifurcation Found! Window: [684:812] | Prob: 0.4632
+⚠️ Bifurcation Found! Window: [816:944] | Prob: 0.4741
+📊 Changepoint Analysis Complete
+    Method          : Binary Segmentation (rbf)
+    Breakpoint at   : timestep 580
+    Confidence score: 0.027  (between/total variance ratio)
+Plot saved to bifurcation_inference.png
+Max probability seen  : 0.4774 at t=792
+Mean probability      : 0.4295
+% windows above 0.45  : 31.5%
+% windows above 0.50  : 0.0%
+% windows above thresh: 38.3%
+
+----------------────────────────────────
+INFERENCE COMPLETE. Total Triggers: 3
+----------------────────────────────────
+Detailed logs saved to 'detected_ocean_bifurcations_17.csv'.
+Initializing model topology...
+Trained model weights successfully loaded into memory.
+Loading telemetry data from: ensembles/CANARI_SSP370_18_LON_-56.506_LAT_60.819.csv
+Deploying model... (Threshold: 0.42553797364234924)
+⚠️ Bifurcation Found! Window: [192:320] | Prob: 0.4277
+⚠️ Bifurcation Found! Window: [324:452] | Prob: 0.4375
+⚠️ Bifurcation Found! Window: [456:584] | Prob: 0.4451
+⚠️ Bifurcation Found! Window: [588:716] | Prob: 0.4470
+⚠️ Bifurcation Found! Window: [720:848] | Prob: 0.5347
+⚠️ Bifurcation Found! Window: [852:980] | Prob: 0.5149
+📊 Changepoint Analysis Complete
+    Method          : Binary Segmentation (rbf)
+    Breakpoint at   : timestep 575
+    Confidence score: 0.065  (between/total variance ratio)
+Plot saved to bifurcation_inference.png
+Max probability seen  : 0.5488 at t=762
+Mean probability      : 0.4520
+% windows above 0.45  : 45.6%
+% windows above 0.50  : 25.5%
+% windows above thresh: 78.5%
+
+----------------────────────────────────
+INFERENCE COMPLETE. Total Triggers: 6
+----------------────────────────────────
+Detailed logs saved to 'detected_ocean_bifurcations_18.csv'.
+Initializing model topology...
+Trained model weights successfully loaded into memory.
+Loading telemetry data from: ensembles/CANARI_SSP370_19_LON_-56.506_LAT_60.819.csv
+Deploying model... (Threshold: 0.4702129364013672)
+⚠️ Bifurcation Found! Window: [330:458] | Prob: 0.4723
+⚠️ Bifurcation Found! Window: [462:590] | Prob: 0.5002
+⚠️ Bifurcation Found! Window: [594:722] | Prob: 0.5099
+⚠️ Bifurcation Found! Window: [726:854] | Prob: 0.5171
+⚠️ Bifurcation Found! Window: [858:986] | Prob: 0.4845
+📊 Changepoint Analysis Complete
+    Method          : Binary Segmentation (rbf)
+    Breakpoint at   : timestep 320
+    Confidence score: 0.028  (between/total variance ratio)
+Plot saved to bifurcation_inference.png
+Max probability seen  : 0.5184 at t=714
+Mean probability      : 0.4626
+% windows above 0.45  : 66.4%
+% windows above 0.50  : 37.6%
+% windows above thresh: 63.1%
+
+----------------────────────────────────
+INFERENCE COMPLETE. Total Triggers: 5
+----------------────────────────────────
+Detailed logs saved to 'detected_ocean_bifurcations_19.csv'.
+Initializing model topology...
+Trained model weights successfully loaded into memory.
+Loading telemetry data from: ensembles/CANARI_SSP370_20_LON_-56.506_LAT_60.819.csv
+Deploying model... (Threshold: 0.4895966053009033)
+⚠️ Bifurcation Found! Window: [582:710] | Prob: 0.4904
+⚠️ Bifurcation Found! Window: [714:842] | Prob: 0.5376
+⚠️ Bifurcation Found! Window: [846:974] | Prob: 0.5017
+📊 Changepoint Analysis Complete
+    Method          : Binary Segmentation (rbf)
+    Breakpoint at   : timestep 505
+    Confidence score: 0.043  (between/total variance ratio)
+Plot saved to bifurcation_inference.png
+Max probability seen  : 0.5380 at t=702
+Mean probability      : 0.4755
+% windows above 0.45  : 77.9%
+% windows above 0.50  : 29.5%
+% windows above thresh: 34.9%
+
+----------------────────────────────────
+INFERENCE COMPLETE. Total Triggers: 3
+----------------────────────────────────
+Detailed logs saved to 'detected_ocean_bifurcations_20.csv'.
+Initializing model topology...
+Trained model weights successfully loaded into memory.
+Loading telemetry data from: ensembles/CANARI_SSP370_21_LON_-56.506_LAT_60.819.csv
+Deploying model... (Threshold: 0.48300641775131226)
+⚠️ Bifurcation Found! Window: [456:584] | Prob: 0.4837
+⚠️ Bifurcation Found! Window: [588:716] | Prob: 0.4992
+⚠️ Bifurcation Found! Window: [720:848] | Prob: 0.4908
+⚠️ Bifurcation Found! Window: [852:980] | Prob: 0.4956
+📊 Changepoint Analysis Complete
+    Method          : Binary Segmentation (rbf)
+    Breakpoint at   : timestep 390
+    Confidence score: 0.033  (between/total variance ratio)
+Plot saved to bifurcation_inference.png
+Max probability seen  : 0.5028 at t=792
+Mean probability      : 0.4777
+% windows above 0.45  : 98.0%
+% windows above 0.50  : 6.7%
+% windows above thresh: 49.0%
+
+----------------────────────────────────
+INFERENCE COMPLETE. Total Triggers: 4
+----------------────────────────────────
+Detailed logs saved to 'detected_ocean_bifurcations_21.csv'.
+Initializing model topology...
+Trained model weights successfully loaded into memory.
+Loading telemetry data from: ensembles/CANARI_SSP370_22_LON_-56.506_LAT_60.819.csv
+Deploying model... (Threshold: 0.48062998056411743)
+📊 Changepoint Analysis Complete
+    Method          : Binary Segmentation (rbf)
+    Breakpoint at   : timestep 585
+    Confidence score: 0.034  (between/total variance ratio)
+Plot saved to bifurcation_inference.png
+Max probability seen  : 0.4767 at t=636
+Mean probability      : 0.4600
+% windows above 0.45  : 66.4%
+% windows above 0.50  : 0.0%
+% windows above thresh: 0.0%
+
+----------------────────────────────────
+INFERENCE COMPLETE. Total Triggers: 0
+----------------────────────────────────
+Initializing model topology...
+Trained model weights successfully loaded into memory.
+Loading telemetry data from: ensembles/CANARI_SSP370_23_LON_-56.506_LAT_60.819.csv
+Deploying model... (Threshold: 0.4436452090740204)
+⚠️ Bifurcation Found! Window: [630:758] | Prob: 0.4451
+⚠️ Bifurcation Found! Window: [762:890] | Prob: 0.4576
+📊 Changepoint Analysis Complete
+    Method          : Binary Segmentation (rbf)
+    Breakpoint at   : timestep 555
+    Confidence score: 0.027  (between/total variance ratio)
+Plot saved to bifurcation_inference.png
+Max probability seen  : 0.4622 at t=744
+Mean probability      : 0.4217
+% windows above 0.45  : 28.2%
+% windows above 0.50  : 0.0%
+% windows above thresh: 29.5%
+
+----------------────────────────────────
+INFERENCE COMPLETE. Total Triggers: 2
+----------------────────────────────────
+Detailed logs saved to 'detected_ocean_bifurcations_23.csv'.
+Initializing model topology...
+Trained model weights successfully loaded into memory.
+Loading telemetry data from: ensembles/CANARI_SSP370_24_LON_-56.506_LAT_60.819.csv
+Deploying model... (Threshold: 0.4918215572834015)
+⚠️ Bifurcation Found! Window: [444:572] | Prob: 0.4929
+⚠️ Bifurcation Found! Window: [576:704] | Prob: 0.5502
+⚠️ Bifurcation Found! Window: [708:836] | Prob: 0.5091
+⚠️ Bifurcation Found! Window: [840:968] | Prob: 0.5191
+📊 Changepoint Analysis Complete
+    Method          : Binary Segmentation (rbf)
+    Breakpoint at   : timestep 375
+    Confidence score: 0.039  (between/total variance ratio)
+Plot saved to bifurcation_inference.png
+Max probability seen  : 0.5643 at t=606
+Mean probability      : 0.4182
+% windows above 0.45  : 56.4%
+% windows above 0.50  : 40.9%
+% windows above thresh: 47.0%
+
+----------------────────────────────────
+INFERENCE COMPLETE. Total Triggers: 4
+----------------────────────────────────
+Detailed logs saved to 'detected_ocean_bifurcations_24.csv'.
+Initializing model topology...
+Trained model weights successfully loaded into memory.
+Loading telemetry data from: ensembles/CANARI_SSP370_25_LON_-56.506_LAT_60.819.csv
+Deploying model... (Threshold: 0.4641425907611847)
+⚠️ Bifurcation Found! Window: [402:530] | Prob: 0.4668
+⚠️ Bifurcation Found! Window: [534:662] | Prob: 0.5141
+⚠️ Bifurcation Found! Window: [666:794] | Prob: 0.5068
+⚠️ Bifurcation Found! Window: [798:926] | Prob: 0.5431
+📊 Changepoint Analysis Complete
+    Method          : Binary Segmentation (rbf)
+    Breakpoint at   : timestep 675
+    Confidence score: 0.055  (between/total variance ratio)
+Plot saved to bifurcation_inference.png
+Max probability seen  : 0.5456 at t=780
+Mean probability      : 0.4588
+% windows above 0.45  : 59.7%
+% windows above 0.50  : 45.6%
+% windows above thresh: 55.0%
+
+----------------────────────────────────
+INFERENCE COMPLETE. Total Triggers: 4
+----------------────────────────────────
+Detailed logs saved to 'detected_ocean_bifurcations_25.csv'.
+Initializing model topology...
+Trained model weights successfully loaded into memory.
+Loading telemetry data from: ensembles/CANARI_SSP370_26_LON_-56.506_LAT_60.819.csv
+Deploying model... (Threshold: 0.4672958254814148)
+📊 Changepoint Analysis Complete
+    Method          : Binary Segmentation (rbf)
+    Breakpoint at   : timestep 290
+    Confidence score: 0.042  (between/total variance ratio)
+Plot saved to bifurcation_inference.png
+Max probability seen  : 0.4549 at t=822
+Mean probability      : 0.4328
+% windows above 0.45  : 12.1%
+% windows above 0.50  : 0.0%
+% windows above thresh: 0.0%
+
+----------------────────────────────────
+INFERENCE COMPLETE. Total Triggers: 0
+----------------────────────────────────
+Initializing model topology...
+Trained model weights successfully loaded into memory.
+Loading telemetry data from: ensembles/CANARI_SSP370_27_LON_-56.506_LAT_60.819.csv
+Deploying model... (Threshold: 0.4737382233142853)
+📊 Changepoint Analysis Complete
+    Method          : Binary Segmentation (rbf)
+    Breakpoint at   : timestep 635
+    Confidence score: 0.075  (between/total variance ratio)
+Plot saved to bifurcation_inference.png
+Max probability seen  : 0.4638 at t=852
+Mean probability      : 0.4507
+% windows above 0.45  : 81.2%
+% windows above 0.50  : 0.0%
+% windows above thresh: 0.0%
+
+----------------────────────────────────
+INFERENCE COMPLETE. Total Triggers: 0
+----------------────────────────────────
+Initializing model topology...
+Trained model weights successfully loaded into memory.
+Loading telemetry data from: ensembles/CANARI_SSP370_28_LON_-56.506_LAT_60.819.csv
+Deploying model... (Threshold: 0.4489647448062897)
+⚠️ Bifurcation Found! Window: [588:716] | Prob: 0.4490
+⚠️ Bifurcation Found! Window: [720:848] | Prob: 0.4757
+⚠️ Bifurcation Found! Window: [852:980] | Prob: 0.4842
+📊 Changepoint Analysis Complete
+    Method          : Binary Segmentation (rbf)
+    Breakpoint at   : timestep 575
+    Confidence score: 0.050  (between/total variance ratio)
+Plot saved to bifurcation_inference.png
+Max probability seen  : 0.4895 at t=798
+Mean probability      : 0.4362
+% windows above 0.45  : 33.6%
+% windows above 0.50  : 0.0%
+% windows above thresh: 34.2%
+
+----------------────────────────────────
+INFERENCE COMPLETE. Total Triggers: 3
+----------------────────────────────────
+Detailed logs saved to 'detected_ocean_bifurcations_28.csv'.
+Initializing model topology...
+Trained model weights successfully loaded into memory.
+Loading telemetry data from: ensembles/CANARI_SSP370_29_LON_-56.506_LAT_60.819.csv
+Deploying model... (Threshold: 0.47212550044059753)
+⚠️ Bifurcation Found! Window: [480:608] | Prob: 0.4729
+📊 Changepoint Analysis Complete
+    Method          : Binary Segmentation (rbf)
+    Breakpoint at   : timestep 855
+    Confidence score: 0.064  (between/total variance ratio)
+Plot saved to bifurcation_inference.png
+Max probability seen  : 0.4797 at t=534
+Mean probability      : 0.4509
+% windows above 0.45  : 41.6%
+% windows above 0.50  : 0.0%
+% windows above thresh: 14.1%
+
+----------------────────────────────────
+INFERENCE COMPLETE. Total Triggers: 1
+----------------────────────────────────
+Detailed logs saved to 'detected_ocean_bifurcations_29.csv'.
+Initializing model topology...
+Trained model weights successfully loaded into memory.
+Loading telemetry data from: ensembles/CANARI_SSP370_30_LON_-56.506_LAT_60.819.csv
+Deploying model... (Threshold: 0.4466710686683655)
+⚠️ Bifurcation Found! Window: [306:434] | Prob: 0.4475
+⚠️ Bifurcation Found! Window: [438:566] | Prob: 0.4719
+⚠️ Bifurcation Found! Window: [570:698] | Prob: 0.4611
+⚠️ Bifurcation Found! Window: [702:830] | Prob: 0.5185
+⚠️ Bifurcation Found! Window: [834:962] | Prob: 0.5017
+📊 Changepoint Analysis Complete
+    Method          : Binary Segmentation (rbf)
+    Breakpoint at   : timestep 665
+    Confidence score: 0.039  (between/total variance ratio)
+Plot saved to bifurcation_inference.png
+Max probability seen  : 0.5327 at t=744
+Mean probability      : 0.4554
+% windows above 0.45  : 65.1%
+% windows above 0.50  : 18.8%
+% windows above thresh: 65.8%
+
+----------------────────────────────────
+INFERENCE COMPLETE. Total Triggers: 5
+----------------────────────────────────
+Detailed logs saved to 'detected_ocean_bifurcations_30.csv'.
+Initializing model topology...
+Trained model weights successfully loaded into memory.
+Loading telemetry data from: ensembles/CANARI_SSP370_31_LON_-56.506_LAT_60.819.csv
+Deploying model... (Threshold: 0.4826681315898895)
+⚠️ Bifurcation Found! Window: [618:746] | Prob: 0.4827
+⚠️ Bifurcation Found! Window: [750:878] | Prob: 0.5267
+⚠️ Bifurcation Found! Window: [882:1010] | Prob: 0.5178
+📊 Changepoint Analysis Complete
+    Method          : Binary Segmentation (rbf)
+    Breakpoint at   : timestep 175
+    Confidence score: 0.029  (between/total variance ratio)
+Plot saved to bifurcation_inference.png
+Max probability seen  : 0.5270 at t=738
+Mean probability      : 0.4378
+% windows above 0.45  : 38.9%
+% windows above 0.50  : 26.8%
+% windows above thresh: 30.9%
+
+----------------────────────────────────
+INFERENCE COMPLETE. Total Triggers: 3
+----------------────────────────────────
+Detailed logs saved to 'detected_ocean_bifurcations_31.csv'.
+Initializing model topology...
+Trained model weights successfully loaded into memory.
+Loading telemetry data from: ensembles/CANARI_SSP370_32_LON_-56.506_LAT_60.819.csv
+Deploying model... (Threshold: 0.44780683517456055)
+⚠️ Bifurcation Found! Window: [366:494] | Prob: 0.4483
+⚠️ Bifurcation Found! Window: [498:626] | Prob: 0.4648
+⚠️ Bifurcation Found! Window: [630:758] | Prob: 0.4724
+⚠️ Bifurcation Found! Window: [762:890] | Prob: 0.4720
+📊 Changepoint Analysis Complete
+    Method          : Binary Segmentation (rbf)
+    Breakpoint at   : timestep 775
+    Confidence score: 0.078  (between/total variance ratio)
+Plot saved to bifurcation_inference.png
+Max probability seen  : 0.4832 at t=684
+Mean probability      : 0.3460
+% windows above 0.45  : 58.4%
+% windows above 0.50  : 0.0%
+% windows above thresh: 59.1%
+
+----------------────────────────────────
+INFERENCE COMPLETE. Total Triggers: 4
+----------------────────────────────────
+Detailed logs saved to 'detected_ocean_bifurcations_32.csv'.
+Initializing model topology...
+Trained model weights successfully loaded into memory.
+Loading telemetry data from: ensembles/CANARI_SSP370_33_LON_-56.506_LAT_60.819.csv
+Deploying model... (Threshold: 0.4415438771247864)
+⚠️ Bifurcation Found! Window: [342:470] | Prob: 0.4531
+⚠️ Bifurcation Found! Window: [474:602] | Prob: 0.5484
+⚠️ Bifurcation Found! Window: [606:734] | Prob: 0.5417
+⚠️ Bifurcation Found! Window: [738:866] | Prob: 0.5546
+⚠️ Bifurcation Found! Window: [870:998] | Prob: 0.5410
+📊 Changepoint Analysis Complete
+    Method          : Binary Segmentation (rbf)
+    Breakpoint at   : timestep 565
+    Confidence score: 0.027  (between/total variance ratio)
+Plot saved to bifurcation_inference.png
+Max probability seen  : 0.5634 at t=768
+Mean probability      : 0.4031
+% windows above 0.45  : 61.7%
+% windows above 0.50  : 59.1%
+% windows above thresh: 61.7%
+
+----------------────────────────────────
+INFERENCE COMPLETE. Total Triggers: 5
+----------------────────────────────────
+Detailed logs saved to 'detected_ocean_bifurcations_33.csv'.
+Initializing model topology...
+Trained model weights successfully loaded into memory.
+Loading telemetry data from: ensembles/CANARI_SSP370_34_LON_-56.506_LAT_60.819.csv
+Deploying model... (Threshold: 0.4420526325702667)
+⚠️ Bifurcation Found! Window: [510:638] | Prob: 0.4421
+⚠️ Bifurcation Found! Window: [750:878] | Prob: 0.4458
+⚠️ Bifurcation Found! Window: [882:1010] | Prob: 0.4607
+📊 Changepoint Analysis Complete
+    Method          : Binary Segmentation (rbf)
+    Breakpoint at   : timestep 655
+    Confidence score: 0.053  (between/total variance ratio)
+Plot saved to bifurcation_inference.png
+Max probability seen  : 0.4625 at t=828
+Mean probability      : 0.4335
+% windows above 0.45  : 20.1%
+% windows above 0.50  : 0.0%
+% windows above thresh: 26.2%
+
+----------------────────────────────────
+INFERENCE COMPLETE. Total Triggers: 3
+----------------────────────────────────
+Detailed logs saved to 'detected_ocean_bifurcations_34.csv'.
+Initializing model topology...
+Trained model weights successfully loaded into memory.
+Loading telemetry data from: ensembles/CANARI_SSP370_35_LON_-56.506_LAT_60.819.csv
+Deploying model... (Threshold: 0.4369800388813019)
+⚠️ Bifurcation Found! Window: [330:458] | Prob: 0.4395
+⚠️ Bifurcation Found! Window: [462:590] | Prob: 0.4859
+⚠️ Bifurcation Found! Window: [594:722] | Prob: 0.5935
+⚠️ Bifurcation Found! Window: [726:854] | Prob: 0.5549
+⚠️ Bifurcation Found! Window: [858:986] | Prob: 0.5206
+📊 Changepoint Analysis Complete
+    Method          : Binary Segmentation (rbf)
+    Breakpoint at   : timestep 560
+    Confidence score: 0.024  (between/total variance ratio)
+Plot saved to bifurcation_inference.png
+Max probability seen  : 0.6248 at t=624
+Mean probability      : 0.4188
+% windows above 0.45  : 55.0%
+% windows above 0.50  : 42.3%
+% windows above thresh: 58.4%
+
+----------------────────────────────────
+INFERENCE COMPLETE. Total Triggers: 5
+----------------────────────────────────
+Detailed logs saved to 'detected_ocean_bifurcations_35.csv'.
+Initializing model topology...
+Trained model weights successfully loaded into memory.
+Loading telemetry data from: ensembles/CANARI_SSP370_36_LON_-56.506_LAT_60.819.csv
+Deploying model... (Threshold: 0.46843308210372925)
+⚠️ Bifurcation Found! Window: [504:632] | Prob: 0.4705
+⚠️ Bifurcation Found! Window: [636:764] | Prob: 0.4828
+⚠️ Bifurcation Found! Window: [768:896] | Prob: 0.5073
+📊 Changepoint Analysis Complete
+    Method          : Binary Segmentation (rbf)
+    Breakpoint at   : timestep 845
+    Confidence score: 0.083  (between/total variance ratio)
+Plot saved to bifurcation_inference.png
+Max probability seen  : 0.5514 at t=888
+Mean probability      : 0.4654
+% windows above 0.45  : 60.4%
+% windows above 0.50  : 20.1%
+% windows above thresh: 43.6%
+
+----------------────────────────────────
+INFERENCE COMPLETE. Total Triggers: 3
+----------------────────────────────────
+Detailed logs saved to 'detected_ocean_bifurcations_36.csv'.
+Initializing model topology...
+Trained model weights successfully loaded into memory.
+Loading telemetry data from: ensembles/CANARI_SSP370_37_LON_-56.506_LAT_60.819.csv
+Deploying model... (Threshold: 0.44035640358924866)
+⚠️ Bifurcation Found! Window: [294:422] | Prob: 0.4416
+⚠️ Bifurcation Found! Window: [432:560] | Prob: 0.4423
+⚠️ Bifurcation Found! Window: [564:692] | Prob: 0.4786
+⚠️ Bifurcation Found! Window: [696:824] | Prob: 0.4550
+⚠️ Bifurcation Found! Window: [828:956] | Prob: 0.5066
+📊 Changepoint Analysis Complete
+    Method          : Binary Segmentation (rbf)
+    Breakpoint at   : timestep 690
+    Confidence score: 0.088  (between/total variance ratio)
+Plot saved to bifurcation_inference.png
+Max probability seen  : 0.5101 at t=798
+Mean probability      : 0.3795
+% windows above 0.45  : 55.0%
+% windows above 0.50  : 10.1%
+% windows above thresh: 61.7%
+
+----------------────────────────────────
+INFERENCE COMPLETE. Total Triggers: 5
+----------------────────────────────────
+Detailed logs saved to 'detected_ocean_bifurcations_37.csv'.
+Initializing model topology...
+Trained model weights successfully loaded into memory.
+Loading telemetry data from: ensembles/CANARI_SSP370_38_LON_-56.506_LAT_60.819.csv
+Deploying model... (Threshold: 0.4738065302371979)
+⚠️ Bifurcation Found! Window: [516:644] | Prob: 0.4754
+⚠️ Bifurcation Found! Window: [648:776] | Prob: 0.4794
+⚠️ Bifurcation Found! Window: [780:908] | Prob: 0.4877
+📊 Changepoint Analysis Complete
+    Method          : Binary Segmentation (rbf)
+    Breakpoint at   : timestep 695
+    Confidence score: 0.056  (between/total variance ratio)
+Plot saved to bifurcation_inference.png
+Max probability seen  : 0.4982 at t=588
+Mean probability      : 0.3797
+% windows above 0.45  : 51.0%
+% windows above 0.50  : 0.0%
+% windows above thresh: 42.3%
+
+----------------────────────────────────
+INFERENCE COMPLETE. Total Triggers: 3
+----------------────────────────────────
+Detailed logs saved to 'detected_ocean_bifurcations_38.csv'.
+Initializing model topology...
+Trained model weights successfully loaded into memory.
+Loading telemetry data from: ensembles/CANARI_SSP370_39_LON_-56.506_LAT_60.819.csv
+Deploying model... (Threshold: 0.45713871717453003)
+⚠️ Bifurcation Found! Window: [480:608] | Prob: 0.4585
+⚠️ Bifurcation Found! Window: [618:746] | Prob: 0.4573
+⚠️ Bifurcation Found! Window: [750:878] | Prob: 0.4923
+⚠️ Bifurcation Found! Window: [882:1010] | Prob: 0.5040
+📊 Changepoint Analysis Complete
+    Method          : Binary Segmentation (rbf)
+    Breakpoint at   : timestep 615
+    Confidence score: 0.062  (between/total variance ratio)
+Plot saved to bifurcation_inference.png
+Max probability seen  : 0.5048 at t=852
+Mean probability      : 0.4214
+% windows above 0.45  : 51.0%
+% windows above 0.50  : 7.4%
+% windows above thresh: 34.2%
+
+----------------────────────────────────
+INFERENCE COMPLETE. Total Triggers: 4
+----------------────────────────────────
+Detailed logs saved to 'detected_ocean_bifurcations_39.csv'.
+Initializing model topology...
+Trained model weights successfully loaded into memory.
+Loading telemetry data from: ensembles/CANARI_SSP370_40_LON_-56.506_LAT_60.819.csv
+Deploying model... (Threshold: 0.4359261095523834)
+⚠️ Bifurcation Found! Window: [498:626] | Prob: 0.4362
+⚠️ Bifurcation Found! Window: [630:758] | Prob: 0.4688
+⚠️ Bifurcation Found! Window: [762:890] | Prob: 0.5087
+📊 Changepoint Analysis Complete
+    Method          : Binary Segmentation (rbf)
+    Breakpoint at   : timestep 510
+    Confidence score: 0.035  (between/total variance ratio)
+Plot saved to bifurcation_inference.png
+Max probability seen  : 0.5273 at t=810
+Mean probability      : 0.4481
+% windows above 0.45  : 40.9%
+% windows above 0.50  : 16.8%
+% windows above thresh: 44.3%
+
+----------------────────────────────────
+INFERENCE COMPLETE. Total Triggers: 3
+----------------────────────────────────
+Detailed logs saved to 'detected_ocean_bifurcations_40.csv'.
