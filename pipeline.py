@@ -1000,6 +1000,8 @@ def evaluate_and_plot_curves(model, data_loader, device, scaler:TemperatureScale
     print(classification_report(all_targets, preds_opt, digits=3))
 
     print(f"\nClassification Report using minimised FPR threshold ({best_threshold_precision:.4f}):")
+    preds_prec = (all_probs >= best_threshold_precision).astype(int)
+    print(classification_report(all_targets, preds_prec, digits=3))
     print("=" * 60)
     
     return best_threshold_f1
