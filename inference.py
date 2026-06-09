@@ -37,7 +37,6 @@ def load_and_preprocess_csv(csv_path: str) -> tuple:
     
     # Extract arrays and engineer features...
     data_stream = engineer_ocean_features(temp, salt, ssh, u_curr, v_curr)
-    # data_stream = np.stack([temp, salt, ssh, u_curr, v_curr], axis=0)
     # 1. Capture the raw data BEFORE processing for visualization
     raw_stream = data_stream.copy()
 
@@ -175,7 +174,7 @@ def _plot_inference_result(raw_stream, processed_stream, event, cpa_result, chan
 
 
 def run_real_world_inference(model, raw_stream, processed_stream,ensemble, ts,window_size=128, stride=6, 
-                             prob_threshold=0.85, channel_names=None,mc_samples=30):
+                             prob_threshold=0.50, channel_names=None,mc_samples=30):
     
     if channel_names is None:
         channel_names = ['Density (rho)', 'Kinetic Energy', 'SSH Anomaly', 'Speed', 'SSH Variability']

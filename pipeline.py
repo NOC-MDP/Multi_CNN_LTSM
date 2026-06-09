@@ -602,8 +602,24 @@ class BifurcationNet(nn.Module):
         
         # 5. Attention Pooling & Dual Heads
         self.attn_weights = nn.Linear(d_model, 1)
+        # FIX 1: pre-head dropout gate — this is what MC sampling actually draws from.
+        # Without this, the attention-pooled context is nearly identical across all
+        # n_samples because the upstream dropout noise is averaged out over T timesteps.
+        self.pre_head_dropout = nn.Dropout(dropout)
+
         self.detection_head = nn.Linear(d_model, 1)
-        self.timing_head = nn.Linear(d_model, 1)
+
+        # FIX 2: give the timing head its own dedicated MLP so it has a gradient
+        # path that doesn't fully compete with the detection head.
+        # A single shared linear was collapsing to the dataset mean.
+        self.timing_head = nn.Sequential(
+            nn.Linear(d_model, d_model // 2),
+            nn.GELU(),
+            nn.Dropout(dropout),          # additional stochasticity for MC sampling
+            nn.Linear(d_model // 2, 1),
+            nn.Sigmoid()                  # constrain to [0, 1] if timing is normalised
+        )
+
 
     def forward(self, x: torch.Tensor, pad_mask: torch.Tensor = None):
         # x shape: (B, num_params, T)
@@ -635,6 +651,7 @@ class BifurcationNet(nn.Module):
         weights = F.softmax(attn_scores, dim=1)  # Shape: (B, T, 1)
         context = torch.sum(weights * x, dim=1)  # Shape: (B, d_model)
         
+        context = self.pre_head_dropout(context)
         # 6. Extract predictions from your dual heads
         p_bif_pred = self.detection_head(context).squeeze(-1)  # 🔄 (B, 1) -> (B,)
         t_bif_pred = self.timing_head(context).squeeze(-1)     # 🔄 (B, 1) -> (B,)
@@ -728,17 +745,21 @@ class OceanBifurcationDataset(Dataset):
 # ──────────────────────────────────────────────────────────────────────────────
 # 2. Custom Loss Function
 # ──────────────────────────────────────────────────────────────────────────────
-def compute_loss(p_bif_pred, t_bif_pred, y_cls, y_time,criterion_cls):
+def compute_loss(p_bif_pred, t_bif_pred, y_cls, y_time, criterion_cls,
+                 time_weight: float = 0.5):
     loss_cls = criterion_cls(p_bif_pred, y_cls)
     
-    # Only compute timing loss on positive samples
-    mask = (y_cls == 1.0)
+    mask = (y_cls > 0.5)  # robust float comparison
     if mask.sum() > 0:
-        loss_time = F.mse_loss(t_bif_pred[mask], y_time[mask])
+        loss_time = F.smooth_l1_loss(
+            t_bif_pred[mask], y_time[mask], beta=0.1
+        )
     else:
-        loss_time = torch.tensor(0.0, device=p_bif_pred.device)
-    
-    return loss_cls + 0.5 * loss_time, loss_cls, loss_time
+        # keep it in the computation graph so .item() calls don't break
+        loss_time = p_bif_pred.sum() * 0.0
+
+    total = loss_cls + time_weight * loss_time
+    return total, loss_cls, loss_time
 
 # ──────────────────────────────────────────────────────────────────────────────
 # 3. Training and Evaluation Loops
@@ -1187,10 +1208,12 @@ if __name__ == "__main__":
         print("\nStarting Training...")
         history = {
             'train_loss': [],
+            'val_time_loss': [],
             'val_loss': [],
             'f1': [],
             'prec': [],
-            'rec': []
+            'rec': [],
+            'v_bce': []
         }
         best_val_loss = float('inf')
         # Define your patience here:
@@ -1203,14 +1226,16 @@ if __name__ == "__main__":
             
             # Unpack the 7 return values from the new evaluate signature
             val_res = evaluate(model, val_loader, device,criterion_cls)
-            v_loss, _, _, v_prec, v_rec, v_f1, _ = val_res
+            v_loss, v_bce, t_loss, v_prec, v_rec, v_f1, _ = val_res
             # Store metrics
             history['train_loss'].append(tr_loss)
+            history['val_time_loss'].append(t_loss)
             history['val_loss'].append(v_loss)
             history['f1'].append(v_f1)
             history['prec'].append(v_prec)
             history['rec'].append(v_rec)
-            print(f"Epoch {epoch+1:02d} | Val Loss: {v_loss:.4f} | F1: {v_f1:.3f} | Prec: {v_prec:.2f} | Rec: {v_rec:.2f}")
+            history['v_bce'].append(v_bce)
+            print(f"Epoch {epoch+1:02d} | Val Loss: {v_loss:.4f} | Val Time Loss: {t_loss:.4f} | Val Bce: {v_bce:.4f} | F1: {v_f1:.3f} | Prec: {v_prec:.2f} | Rec: {v_rec:.2f}")
             
             # Save best model logic:
             if v_loss < best_val_loss:
