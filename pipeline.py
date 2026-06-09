@@ -643,17 +643,21 @@ class BifurcationNet(nn.Module):
 
     def mc_forward(self, x, pad_mask=None, n_samples=30):
         self.train()
-        # Re-freeze any BatchNorm layers so they use running stats, not batch stats
         for m in self.modules():
             if isinstance(m, (nn.BatchNorm1d, nn.BatchNorm2d)):
                 m.eval()
         with torch.no_grad():
-            logit_samples = torch.stack(
-                [self.forward(x, pad_mask)[0] for _ in range(n_samples)]
-            )
+            samples = [self.forward(x, pad_mask) for _ in range(n_samples)]
+            logit_samples  = torch.stack([s[0] for s in samples])  # (n_samples, B)
+            timing_samples = torch.stack([s[1] for s in samples])  # (n_samples, B)
         self.eval()
         probs = torch.sigmoid(logit_samples)
-        return probs.mean(dim=0), probs.std(dim=0)
+        return (
+            probs.mean(dim=0),          # mean P(bifurcation)   (B,)
+            probs.std(dim=0),           # epistemic uncertainty (B,)
+            timing_samples.mean(dim=0), # mean timing pred      (B,)
+            timing_samples.std(dim=0),  # timing uncertainty    (B,)
+        )
 
 class TemperatureScaler(nn.Module):
     def __init__(self):
@@ -1059,7 +1063,7 @@ def run_inference_on_series(
         x        = torch.tensor(window, dtype=torch.float32).unsqueeze(0).to(device)  # (1,5,W)
         pad_mask = torch.zeros(1, window_size, dtype=torch.bool).to(device)
 
-        mean_p, std_p = model.mc_forward(x, pad_mask, n_samples=mc_samples)
+        mean_p, std_p,_,_ = model.mc_forward(x, pad_mask, n_samples=mc_samples)
 
         # Apply temperature calibration
         # Note: mc_forward returns probs directly, so we calibrate the logit equivalent

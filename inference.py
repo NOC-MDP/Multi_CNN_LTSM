@@ -175,7 +175,7 @@ def _plot_inference_result(raw_stream, processed_stream, event, cpa_result, chan
 
 
 def run_real_world_inference(model, raw_stream, processed_stream,ensemble, ts,window_size=128, stride=6, 
-                             prob_threshold=0.85, channel_names=None):
+                             prob_threshold=0.85, channel_names=None,mc_samples=30):
     
     if channel_names is None:
         channel_names = ['Density (rho)', 'Kinetic Energy', 'SSH Anomaly', 'Speed', 'SSH Variability']
@@ -195,23 +195,29 @@ def run_real_world_inference(model, raw_stream, processed_stream,ensemble, ts,wi
     with torch.no_grad():
         for start_t in range(0, total_timesteps - window_size, stride):
             end_t = start_t + window_size
-            window_slice = processed_stream[:, start_t:end_t]
+            window_slice = processed_stream[:, start_t:end_t] 
             x_tensor = torch.tensor(window_slice, dtype=torch.float32).unsqueeze(0).to(device)
-            
-            logits, pred_time = model(x_tensor, pad_mask=None)
-            prob = torch.sigmoid(ts.scale(logits)).item()
-            all_probs.append((start_t, prob))
-            if prob > prob_threshold:
+            pad_mask = torch.zeros(1, window_size, dtype=torch.bool).to(device)
+
+            mean_p, std_p, mean_t,std_t = model.mc_forward(x_tensor, pad_mask, n_samples=mc_samples)
+
+            all_probs.append((start_t, float(mean_p.detach().cpu())))
+            if mean_p > prob_threshold:
                 if start_t > last_trigger_t + cooldown_period:
-                    relative_frame = int(pred_time.item() * window_size)
+                    relative_frame = int(mean_t.item() * window_size)
                     absolute_frame = start_t + relative_frame
                     
-                    print(f"⚠️ Bifurcation Found! Window: [{start_t}:{end_t}] | Prob: {prob:.4f}")
+                    print(
+                        f"⚠️ Bifurcation Found! "
+                        f"Window: [{start_t}:{end_t}] | "
+                        f"Prob: {float(mean_p):.4f} ± {float(std_p):.4f} | "
+                        f"Timing: {float(mean_t):.1f} ± {float(std_t):.1f}"
+                    )
                     
                     results.append({
                         "window_start": start_t,
                         "window_end": end_t,
-                        "probability": prob,
+                        "probability": float(mean_p),
                         "estimated_bifurcation_timestep": absolute_frame
                     })
                     last_trigger_t = start_t 
