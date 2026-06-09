@@ -1,0 +1,3692 @@
+============================================================
+DYNAMIC CALIBRATION REPORT FOR TARGET REGION
+============================================================
+A. LATENT SDE SYSTEM CONFIG:
+   sigma (Noise Intensity)        : 0.56315
+   strat_decay (Damping factor)   : 0.91310
+   meso_decay (Dissipation rate)  : 1.25592
+------------------------------------------------------------
+B. OBSERVATION BASELINES & SWINGS:
+   temp     -> Baseline Mean:    5.177 | Physical Swing (±1σ): 1.8944
+   salt     -> Baseline Mean:   34.816 | Physical Swing (±1σ): 0.2135
+   ssh      -> Baseline Mean:   -1.454 | Physical Swing (±1σ): 0.0665
+   u_curr   -> Baseline Mean:   -0.050 | Physical Swing (±1σ): 0.0376
+   v_curr   -> Baseline Mean:   -0.005 | Physical Swing (±1σ): 0.0465
+============================================================
+Generating synthetic dataset...
+Fitting scaler on training subset...
+Scaler successfully fitted across training pool data.
+Scaler statistics exported to 'scalers/synthetic_channel_scaler_1.pkl'
+
+Starting Training...
+/home/users/thopri/.local/lib/python3.12/site-packages/torch/nn/modules/transformer.py:515: UserWarning: The PyTorch API of nested tensors is in prototype stage and will change in the near future. We recommend specifying layout=torch.jagged when constructing a nested tensor, as this layout receives active development, has better operator coverage, and works with torch.compile. (Triggered internally at /pytorch/aten/src/ATen/NestedTensorImpl.cpp:178.)
+  output = torch._nested_tensor_from_mask(
+Epoch 01 | Val Loss: 0.1955 | F1: 0.573 | Prec: 0.78 | Rec: 0.45
+Epoch 02 | Val Loss: 0.1870 | F1: 0.595 | Prec: 0.82 | Rec: 0.47
+Epoch 03 | Val Loss: 0.1733 | F1: 0.653 | Prec: 0.70 | Rec: 0.61
+Epoch 04 | Val Loss: 0.1962 | F1: 0.605 | Prec: 0.78 | Rec: 0.49
+Epoch 05 | Val Loss: 0.1724 | F1: 0.606 | Prec: 0.77 | Rec: 0.50
+Epoch 06 | Val Loss: 0.1809 | F1: 0.642 | Prec: 0.69 | Rec: 0.60
+Epoch 07 | Val Loss: 0.1812 | F1: 0.563 | Prec: 0.83 | Rec: 0.43
+Epoch 08 | Val Loss: 0.1797 | F1: 0.619 | Prec: 0.78 | Rec: 0.51
+Epoch 09 | Val Loss: 0.1791 | F1: 0.599 | Prec: 0.78 | Rec: 0.49
+Epoch 10 | Val Loss: 0.1766 | F1: 0.616 | Prec: 0.76 | Rec: 0.52
+Epoch 11 | Val Loss: 0.1691 | F1: 0.623 | Prec: 0.76 | Rec: 0.53
+Epoch 12 | Val Loss: 0.1737 | F1: 0.586 | Prec: 0.77 | Rec: 0.47
+Epoch 13 | Val Loss: 0.1846 | F1: 0.637 | Prec: 0.73 | Rec: 0.57
+Epoch 14 | Val Loss: 0.1688 | F1: 0.599 | Prec: 0.77 | Rec: 0.49
+Epoch 15 | Val Loss: 0.1730 | F1: 0.531 | Prec: 0.86 | Rec: 0.38
+Epoch 16 | Val Loss: 0.1814 | F1: 0.612 | Prec: 0.75 | Rec: 0.51
+Epoch 17 | Val Loss: 0.1900 | F1: 0.602 | Prec: 0.73 | Rec: 0.51
+Epoch 18 | Val Loss: 0.1924 | F1: 0.520 | Prec: 0.86 | Rec: 0.37
+Epoch 19 | Val Loss: 0.1723 | F1: 0.626 | Prec: 0.71 | Rec: 0.56
+Epoch 20 | Val Loss: 0.1915 | F1: 0.586 | Prec: 0.76 | Rec: 0.48
+Epoch 21 | Val Loss: 0.1954 | F1: 0.635 | Prec: 0.70 | Rec: 0.58
+Epoch 22 | Val Loss: 0.1828 | F1: 0.611 | Prec: 0.75 | Rec: 0.52
+Epoch 23 | Val Loss: 0.1915 | F1: 0.629 | Prec: 0.69 | Rec: 0.58
+Epoch 24 | Val Loss: 0.1919 | F1: 0.580 | Prec: 0.77 | Rec: 0.46
+
+Early stopping triggered at epoch 24
+
+Testing on hold-out set...
+/home/users/thopri/.local/lib/python3.12/site-packages/torch/optim/lbfgs.py:457: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:835.)
+  loss = float(closure())
+Calibrated T = 1.4347
+Final Test -> F1: 0.659 | Precision: 0.88 | Recall: 0.53
+Recommended Threshold (FPR ≤ 5%): 0.5127 → TPR: 0.499, FPR: 0.049
+============================================================
+THRESHOLD OPTIMIZATION REPORT
+============================================================
+Area Under ROC Curve (ROC-AUC): 0.7755
+Recommended Threshold (Youden's J): 0.5083
+Recommended Threshold (Maximize F1):  0.4314 -> Max F1: 0.7144
+------------------------------------------------------------
+
+Classification Report using default threshold (0.500):
+              precision    recall  f1-score   support
+
+         0.0      0.649     0.923     0.762       365
+         1.0      0.879     0.527     0.659       385
+
+    accuracy                          0.720       750
+   macro avg      0.764     0.725     0.711       750
+weighted avg      0.767     0.720     0.709       750
+
+
+Classification Report using optimized F1 threshold (0.431):
+              precision    recall  f1-score   support
+
+         0.0      0.723     0.507     0.596       365
+         1.0      0.636     0.816     0.714       385
+
+    accuracy                          0.665       750
+   macro avg      0.679     0.661     0.655       750
+weighted avg      0.678     0.665     0.657       750
+
+
+Classification Report using minimised FPR threshold (0.5127):
+              precision    recall  f1-score   support
+
+         0.0      0.643     0.951     0.767       365
+         1.0      0.914     0.499     0.645       385
+
+    accuracy                          0.719       750
+   macro avg      0.778     0.725     0.706       750
+weighted avg      0.782     0.719     0.704       750
+
+============================================================
+Best Threshold -> 0.4314405918121338
+Historical false-positive alert timesteps: 0 / 780
+============================================================
+DYNAMIC CALIBRATION REPORT FOR TARGET REGION
+============================================================
+A. LATENT SDE SYSTEM CONFIG:
+   sigma (Noise Intensity)        : 0.52204
+   strat_decay (Damping factor)   : 0.77808
+   meso_decay (Dissipation rate)  : 1.42302
+------------------------------------------------------------
+B. OBSERVATION BASELINES & SWINGS:
+   temp     -> Baseline Mean:    5.225 | Physical Swing (±1σ): 1.8578
+   salt     -> Baseline Mean:   34.836 | Physical Swing (±1σ): 0.2153
+   ssh      -> Baseline Mean:   -1.459 | Physical Swing (±1σ): 0.0669
+   u_curr   -> Baseline Mean:   -0.056 | Physical Swing (±1σ): 0.0359
+   v_curr   -> Baseline Mean:   -0.012 | Physical Swing (±1σ): 0.0474
+============================================================
+Generating synthetic dataset...
+Fitting scaler on training subset...
+Scaler successfully fitted across training pool data.
+Scaler statistics exported to 'scalers/synthetic_channel_scaler_2.pkl'
+
+Starting Training...
+Epoch 01 | Val Loss: 0.1938 | F1: 0.606 | Prec: 0.78 | Rec: 0.50
+Epoch 02 | Val Loss: 0.1860 | F1: 0.597 | Prec: 0.86 | Rec: 0.46
+Epoch 03 | Val Loss: 0.1838 | F1: 0.682 | Prec: 0.68 | Rec: 0.69
+Epoch 04 | Val Loss: 0.1858 | F1: 0.599 | Prec: 0.81 | Rec: 0.47
+Epoch 05 | Val Loss: 0.1689 | F1: 0.603 | Prec: 0.77 | Rec: 0.50
+Epoch 06 | Val Loss: 0.1678 | F1: 0.651 | Prec: 0.75 | Rec: 0.57
+Epoch 07 | Val Loss: 0.1764 | F1: 0.578 | Prec: 0.80 | Rec: 0.45
+Epoch 08 | Val Loss: 0.1795 | F1: 0.580 | Prec: 0.86 | Rec: 0.44
+Epoch 09 | Val Loss: 0.1748 | F1: 0.653 | Prec: 0.75 | Rec: 0.58
+Epoch 10 | Val Loss: 0.1602 | F1: 0.598 | Prec: 0.82 | Rec: 0.47
+Epoch 11 | Val Loss: 0.1717 | F1: 0.644 | Prec: 0.76 | Rec: 0.56
+Epoch 12 | Val Loss: 0.1706 | F1: 0.676 | Prec: 0.71 | Rec: 0.65
+Epoch 13 | Val Loss: 0.1714 | F1: 0.667 | Prec: 0.73 | Rec: 0.61
+Epoch 14 | Val Loss: 0.1613 | F1: 0.650 | Prec: 0.77 | Rec: 0.56
+Epoch 15 | Val Loss: 0.1802 | F1: 0.650 | Prec: 0.74 | Rec: 0.58
+Epoch 16 | Val Loss: 0.1738 | F1: 0.667 | Prec: 0.72 | Rec: 0.62
+Epoch 17 | Val Loss: 0.1671 | F1: 0.638 | Prec: 0.76 | Rec: 0.55
+Epoch 18 | Val Loss: 0.1765 | F1: 0.676 | Prec: 0.73 | Rec: 0.63
+Epoch 19 | Val Loss: 0.1741 | F1: 0.660 | Prec: 0.71 | Rec: 0.61
+Epoch 20 | Val Loss: 0.1838 | F1: 0.655 | Prec: 0.73 | Rec: 0.59
+
+Early stopping triggered at epoch 20
+
+Testing on hold-out set...
+Calibrated T = 1.4283
+Final Test -> F1: 0.643 | Precision: 0.90 | Recall: 0.50
+Recommended Threshold (FPR ≤ 5%): 0.5111 → TPR: 0.468, FPR: 0.047
+============================================================
+THRESHOLD OPTIMIZATION REPORT
+============================================================
+Area Under ROC Curve (ROC-AUC): 0.7719
+Recommended Threshold (Youden's J): 0.4861
+Recommended Threshold (Maximize F1):  0.4517 -> Max F1: 0.7179
+------------------------------------------------------------
+
+Classification Report using default threshold (0.500):
+              precision    recall  f1-score   support
+
+         0.0      0.641     0.940     0.762       365
+         1.0      0.898     0.501     0.643       385
+
+    accuracy                          0.715       750
+   macro avg      0.769     0.721     0.703       750
+weighted avg      0.773     0.715     0.701       750
+
+
+Classification Report using optimized F1 threshold (0.452):
+              precision    recall  f1-score   support
+
+         0.0      0.712     0.616     0.661       365
+         1.0      0.677     0.764     0.718       385
+
+    accuracy                          0.692       750
+   macro avg      0.695     0.690     0.689       750
+weighted avg      0.694     0.692     0.690       750
+
+
+Classification Report using minimised FPR threshold (0.5111):
+              precision    recall  f1-score   support
+
+         0.0      0.629     0.953     0.758       365
+         1.0      0.914     0.468     0.619       385
+
+    accuracy                          0.704       750
+   macro avg      0.772     0.710     0.688       750
+weighted avg      0.775     0.704     0.687       750
+
+============================================================
+Best Threshold -> 0.4516788125038147
+Historical false-positive alert timesteps: 0 / 780
+============================================================
+DYNAMIC CALIBRATION REPORT FOR TARGET REGION
+============================================================
+A. LATENT SDE SYSTEM CONFIG:
+   sigma (Noise Intensity)        : 0.46915
+   strat_decay (Damping factor)   : 1.06619
+   meso_decay (Dissipation rate)  : 1.44019
+------------------------------------------------------------
+B. OBSERVATION BASELINES & SWINGS:
+   temp     -> Baseline Mean:    5.090 | Physical Swing (±1σ): 1.8732
+   salt     -> Baseline Mean:   34.792 | Physical Swing (±1σ): 0.1882
+   ssh      -> Baseline Mean:   -1.437 | Physical Swing (±1σ): 0.0593
+   u_curr   -> Baseline Mean:   -0.045 | Physical Swing (±1σ): 0.0356
+   v_curr   -> Baseline Mean:   -0.001 | Physical Swing (±1σ): 0.0465
+============================================================
+Generating synthetic dataset...
+Fitting scaler on training subset...
+Scaler successfully fitted across training pool data.
+Scaler statistics exported to 'scalers/synthetic_channel_scaler_3.pkl'
+
+Starting Training...
+Epoch 01 | Val Loss: 0.2006 | F1: 0.573 | Prec: 0.87 | Rec: 0.43
+Epoch 02 | Val Loss: 0.1692 | F1: 0.601 | Prec: 0.81 | Rec: 0.48
+Epoch 03 | Val Loss: 0.1761 | F1: 0.620 | Prec: 0.80 | Rec: 0.51
+Epoch 04 | Val Loss: 0.1705 | F1: 0.685 | Prec: 0.75 | Rec: 0.63
+Epoch 05 | Val Loss: 0.1760 | F1: 0.591 | Prec: 0.87 | Rec: 0.45
+Epoch 06 | Val Loss: 0.1823 | F1: 0.687 | Prec: 0.67 | Rec: 0.71
+Epoch 07 | Val Loss: 0.1673 | F1: 0.649 | Prec: 0.78 | Rec: 0.55
+Epoch 08 | Val Loss: 0.1664 | F1: 0.651 | Prec: 0.80 | Rec: 0.55
+Epoch 09 | Val Loss: 0.1628 | F1: 0.652 | Prec: 0.80 | Rec: 0.55
+Epoch 10 | Val Loss: 0.1760 | F1: 0.676 | Prec: 0.73 | Rec: 0.63
+Epoch 11 | Val Loss: 0.1686 | F1: 0.669 | Prec: 0.77 | Rec: 0.59
+Epoch 12 | Val Loss: 0.1698 | F1: 0.690 | Prec: 0.67 | Rec: 0.71
+Epoch 13 | Val Loss: 0.1685 | F1: 0.674 | Prec: 0.76 | Rec: 0.61
+Epoch 14 | Val Loss: 0.1668 | F1: 0.680 | Prec: 0.72 | Rec: 0.64
+Epoch 15 | Val Loss: 0.1662 | F1: 0.649 | Prec: 0.77 | Rec: 0.56
+Epoch 16 | Val Loss: 0.1604 | F1: 0.638 | Prec: 0.77 | Rec: 0.54
+Epoch 17 | Val Loss: 0.1652 | F1: 0.675 | Prec: 0.75 | Rec: 0.61
+Epoch 18 | Val Loss: 0.1617 | F1: 0.652 | Prec: 0.79 | Rec: 0.55
+Epoch 19 | Val Loss: 0.1663 | F1: 0.684 | Prec: 0.71 | Rec: 0.66
+Epoch 20 | Val Loss: 0.1562 | F1: 0.626 | Prec: 0.79 | Rec: 0.52
+Epoch 21 | Val Loss: 0.1627 | F1: 0.652 | Prec: 0.78 | Rec: 0.56
+Epoch 22 | Val Loss: 0.1797 | F1: 0.659 | Prec: 0.73 | Rec: 0.60
+Epoch 23 | Val Loss: 0.1624 | F1: 0.650 | Prec: 0.78 | Rec: 0.56
+Epoch 24 | Val Loss: 0.1766 | F1: 0.680 | Prec: 0.71 | Rec: 0.65
+Epoch 25 | Val Loss: 0.1673 | F1: 0.644 | Prec: 0.77 | Rec: 0.55
+Epoch 26 | Val Loss: 0.1777 | F1: 0.666 | Prec: 0.70 | Rec: 0.63
+Epoch 27 | Val Loss: 0.1705 | F1: 0.681 | Prec: 0.72 | Rec: 0.65
+Epoch 28 | Val Loss: 0.1764 | F1: 0.646 | Prec: 0.75 | Rec: 0.57
+Epoch 29 | Val Loss: 0.1845 | F1: 0.655 | Prec: 0.73 | Rec: 0.59
+Epoch 30 | Val Loss: 0.1863 | F1: 0.681 | Prec: 0.70 | Rec: 0.66
+
+Early stopping triggered at epoch 30
+
+Testing on hold-out set...
+Calibrated T = 1.4285
+Final Test -> F1: 0.676 | Precision: 0.87 | Recall: 0.55
+Recommended Threshold (FPR ≤ 5%): 0.5360 → TPR: 0.468, FPR: 0.049
+============================================================
+THRESHOLD OPTIMIZATION REPORT
+============================================================
+Area Under ROC Curve (ROC-AUC): 0.7794
+Recommended Threshold (Youden's J): 0.4980
+Recommended Threshold (Maximize F1):  0.4466 -> Max F1: 0.7111
+------------------------------------------------------------
+
+Classification Report using default threshold (0.500):
+              precision    recall  f1-score   support
+
+         0.0      0.659     0.912     0.766       365
+         1.0      0.869     0.553     0.676       385
+
+    accuracy                          0.728       750
+   macro avg      0.764     0.733     0.721       750
+weighted avg      0.767     0.728     0.720       750
+
+
+Classification Report using optimized F1 threshold (0.447):
+              precision    recall  f1-score   support
+
+         0.0      0.735     0.411     0.527       365
+         1.0      0.606     0.860     0.711       385
+
+    accuracy                          0.641       750
+   macro avg      0.671     0.635     0.619       750
+weighted avg      0.669     0.641     0.622       750
+
+
+Classification Report using minimised FPR threshold (0.5360):
+              precision    recall  f1-score   support
+
+         0.0      0.629     0.951     0.757       365
+         1.0      0.909     0.468     0.617       385
+
+    accuracy                          0.703       750
+   macro avg      0.769     0.709     0.687       750
+weighted avg      0.773     0.703     0.685       750
+
+============================================================
+Best Threshold -> 0.4465560019016266
+Historical false-positive alert timesteps: 150 / 780
+============================================================
+DYNAMIC CALIBRATION REPORT FOR TARGET REGION
+============================================================
+A. LATENT SDE SYSTEM CONFIG:
+   sigma (Noise Intensity)        : 0.58709
+   strat_decay (Damping factor)   : 0.76472
+   meso_decay (Dissipation rate)  : 1.27406
+------------------------------------------------------------
+B. OBSERVATION BASELINES & SWINGS:
+   temp     -> Baseline Mean:    5.142 | Physical Swing (±1σ): 1.8890
+   salt     -> Baseline Mean:   34.859 | Physical Swing (±1σ): 0.2217
+   ssh      -> Baseline Mean:   -1.450 | Physical Swing (±1σ): 0.0630
+   u_curr   -> Baseline Mean:   -0.050 | Physical Swing (±1σ): 0.0375
+   v_curr   -> Baseline Mean:   -0.013 | Physical Swing (±1σ): 0.0454
+============================================================
+Generating synthetic dataset...
+Fitting scaler on training subset...
+Scaler successfully fitted across training pool data.
+Scaler statistics exported to 'scalers/synthetic_channel_scaler_4.pkl'
+
+Starting Training...
+Epoch 01 | Val Loss: 0.1961 | F1: 0.550 | Prec: 0.87 | Rec: 0.40
+Epoch 02 | Val Loss: 0.1827 | F1: 0.580 | Prec: 0.79 | Rec: 0.46
+Epoch 03 | Val Loss: 0.1866 | F1: 0.576 | Prec: 0.88 | Rec: 0.43
+Epoch 04 | Val Loss: 0.1821 | F1: 0.553 | Prec: 0.83 | Rec: 0.41
+Epoch 05 | Val Loss: 0.1696 | F1: 0.649 | Prec: 0.72 | Rec: 0.59
+Epoch 06 | Val Loss: 0.1796 | F1: 0.530 | Prec: 0.86 | Rec: 0.38
+Epoch 07 | Val Loss: 0.1839 | F1: 0.518 | Prec: 0.87 | Rec: 0.37
+Epoch 08 | Val Loss: 0.1800 | F1: 0.538 | Prec: 0.85 | Rec: 0.39
+Epoch 09 | Val Loss: 0.1780 | F1: 0.544 | Prec: 0.83 | Rec: 0.41
+Epoch 10 | Val Loss: 0.1788 | F1: 0.588 | Prec: 0.76 | Rec: 0.48
+Epoch 11 | Val Loss: 0.1825 | F1: 0.659 | Prec: 0.65 | Rec: 0.67
+Epoch 12 | Val Loss: 0.1783 | F1: 0.550 | Prec: 0.79 | Rec: 0.42
+Epoch 13 | Val Loss: 0.1893 | F1: 0.482 | Prec: 0.89 | Rec: 0.33
+Epoch 14 | Val Loss: 0.1784 | F1: 0.620 | Prec: 0.71 | Rec: 0.55
+Epoch 15 | Val Loss: 0.1755 | F1: 0.617 | Prec: 0.73 | Rec: 0.54
+
+Early stopping triggered at epoch 15
+
+Testing on hold-out set...
+Calibrated T = 1.4329
+Final Test -> F1: 0.674 | Precision: 0.79 | Recall: 0.59
+Recommended Threshold (FPR ≤ 5%): 0.5476 → TPR: 0.455, FPR: 0.044
+============================================================
+THRESHOLD OPTIMIZATION REPORT
+============================================================
+Area Under ROC Curve (ROC-AUC): 0.7682
+Recommended Threshold (Youden's J): 0.4934
+Recommended Threshold (Maximize F1):  0.4483 -> Max F1: 0.7130
+------------------------------------------------------------
+
+Classification Report using default threshold (0.500):
+              precision    recall  f1-score   support
+
+         0.0      0.657     0.836     0.736       365
+         1.0      0.790     0.587     0.674       385
+
+    accuracy                          0.708       750
+   macro avg      0.724     0.711     0.705       750
+weighted avg      0.726     0.708     0.704       750
+
+
+Classification Report using optimized F1 threshold (0.448):
+              precision    recall  f1-score   support
+
+         0.0      0.735     0.433     0.545       365
+         1.0      0.613     0.852     0.713       385
+
+    accuracy                          0.648       750
+   macro avg      0.674     0.642     0.629       750
+weighted avg      0.672     0.648     0.631       750
+
+
+Classification Report using minimised FPR threshold (0.5476):
+              precision    recall  f1-score   support
+
+         0.0      0.624     0.956     0.755       365
+         1.0      0.916     0.455     0.608       385
+
+    accuracy                          0.699       750
+   macro avg      0.770     0.705     0.682       750
+weighted avg      0.774     0.699     0.680       750
+
+============================================================
+Best Threshold -> 0.44829484820365906
+Historical false-positive alert timesteps: 0 / 780
+============================================================
+DYNAMIC CALIBRATION REPORT FOR TARGET REGION
+============================================================
+A. LATENT SDE SYSTEM CONFIG:
+   sigma (Noise Intensity)        : 0.62360
+   strat_decay (Damping factor)   : 0.88692
+   meso_decay (Dissipation rate)  : 1.29088
+------------------------------------------------------------
+B. OBSERVATION BASELINES & SWINGS:
+   temp     -> Baseline Mean:    5.130 | Physical Swing (±1σ): 1.8529
+   salt     -> Baseline Mean:   34.838 | Physical Swing (±1σ): 0.2593
+   ssh      -> Baseline Mean:   -1.459 | Physical Swing (±1σ): 0.0550
+   u_curr   -> Baseline Mean:   -0.046 | Physical Swing (±1σ): 0.0377
+   v_curr   -> Baseline Mean:   -0.011 | Physical Swing (±1σ): 0.0473
+============================================================
+Generating synthetic dataset...
+Fitting scaler on training subset...
+Scaler successfully fitted across training pool data.
+Scaler statistics exported to 'scalers/synthetic_channel_scaler_5.pkl'
+
+Starting Training...
+Epoch 01 | Val Loss: 0.2076 | F1: 0.649 | Prec: 0.66 | Rec: 0.63
+Epoch 02 | Val Loss: 0.1850 | F1: 0.634 | Prec: 0.68 | Rec: 0.59
+Epoch 03 | Val Loss: 0.1881 | F1: 0.571 | Prec: 0.81 | Rec: 0.44
+Epoch 04 | Val Loss: 0.1794 | F1: 0.566 | Prec: 0.78 | Rec: 0.45
+Epoch 05 | Val Loss: 0.1732 | F1: 0.657 | Prec: 0.68 | Rec: 0.63
+Epoch 06 | Val Loss: 0.1828 | F1: 0.675 | Prec: 0.66 | Rec: 0.69
+Epoch 07 | Val Loss: 0.1772 | F1: 0.643 | Prec: 0.70 | Rec: 0.59
+Epoch 08 | Val Loss: 0.1891 | F1: 0.593 | Prec: 0.77 | Rec: 0.48
+Epoch 09 | Val Loss: 0.1757 | F1: 0.547 | Prec: 0.82 | Rec: 0.41
+Epoch 10 | Val Loss: 0.1697 | F1: 0.577 | Prec: 0.78 | Rec: 0.46
+Epoch 11 | Val Loss: 0.1727 | F1: 0.582 | Prec: 0.79 | Rec: 0.46
+Epoch 12 | Val Loss: 0.1728 | F1: 0.635 | Prec: 0.71 | Rec: 0.57
+Epoch 13 | Val Loss: 0.1716 | F1: 0.621 | Prec: 0.77 | Rec: 0.52
+Epoch 14 | Val Loss: 0.1707 | F1: 0.653 | Prec: 0.70 | Rec: 0.61
+Epoch 15 | Val Loss: 0.1787 | F1: 0.672 | Prec: 0.61 | Rec: 0.75
+Epoch 16 | Val Loss: 0.1749 | F1: 0.576 | Prec: 0.81 | Rec: 0.45
+Epoch 17 | Val Loss: 0.1691 | F1: 0.614 | Prec: 0.75 | Rec: 0.52
+Epoch 18 | Val Loss: 0.1728 | F1: 0.610 | Prec: 0.79 | Rec: 0.50
+Epoch 19 | Val Loss: 0.1721 | F1: 0.634 | Prec: 0.71 | Rec: 0.57
+Epoch 20 | Val Loss: 0.1730 | F1: 0.637 | Prec: 0.72 | Rec: 0.57
+Epoch 21 | Val Loss: 0.1831 | F1: 0.675 | Prec: 0.66 | Rec: 0.69
+Epoch 22 | Val Loss: 0.1776 | F1: 0.627 | Prec: 0.67 | Rec: 0.59
+Epoch 23 | Val Loss: 0.1700 | F1: 0.621 | Prec: 0.73 | Rec: 0.54
+Epoch 24 | Val Loss: 0.1927 | F1: 0.654 | Prec: 0.66 | Rec: 0.65
+Epoch 25 | Val Loss: 0.2027 | F1: 0.683 | Prec: 0.64 | Rec: 0.74
+Epoch 26 | Val Loss: 0.1751 | F1: 0.637 | Prec: 0.72 | Rec: 0.57
+Epoch 27 | Val Loss: 0.1986 | F1: 0.666 | Prec: 0.66 | Rec: 0.67
+
+Early stopping triggered at epoch 27
+
+Testing on hold-out set...
+Calibrated T = 1.4350
+Final Test -> F1: 0.656 | Precision: 0.84 | Recall: 0.54
+Recommended Threshold (FPR ≤ 5%): 0.5333 → TPR: 0.442, FPR: 0.049
+============================================================
+THRESHOLD OPTIMIZATION REPORT
+============================================================
+Area Under ROC Curve (ROC-AUC): 0.7557
+Recommended Threshold (Youden's J): 0.5029
+Recommended Threshold (Maximize F1):  0.4431 -> Max F1: 0.7042
+------------------------------------------------------------
+
+Classification Report using default threshold (0.500):
+              precision    recall  f1-score   support
+
+         0.0      0.647     0.888     0.748       365
+         1.0      0.835     0.540     0.656       385
+
+    accuracy                          0.709       750
+   macro avg      0.741     0.714     0.702       750
+weighted avg      0.744     0.709     0.701       750
+
+
+Classification Report using optimized F1 threshold (0.443):
+              precision    recall  f1-score   support
+
+         0.0      0.712     0.447     0.549       365
+         1.0      0.612     0.829     0.704       385
+
+    accuracy                          0.643       750
+   macro avg      0.662     0.638     0.627       750
+weighted avg      0.661     0.643     0.629       750
+
+
+Classification Report using minimised FPR threshold (0.5333):
+              precision    recall  f1-score   support
+
+         0.0      0.617     0.951     0.749       365
+         1.0      0.904     0.442     0.593       385
+
+    accuracy                          0.689       750
+   macro avg      0.761     0.696     0.671       750
+weighted avg      0.765     0.689     0.669       750
+
+============================================================
+Best Threshold -> 0.44307181239128113
+Historical false-positive alert timesteps: 0 / 780
+============================================================
+DYNAMIC CALIBRATION REPORT FOR TARGET REGION
+============================================================
+A. LATENT SDE SYSTEM CONFIG:
+   sigma (Noise Intensity)        : 0.65064
+   strat_decay (Damping factor)   : 0.81314
+   meso_decay (Dissipation rate)  : 1.41483
+------------------------------------------------------------
+B. OBSERVATION BASELINES & SWINGS:
+   temp     -> Baseline Mean:    5.509 | Physical Swing (±1σ): 1.8879
+   salt     -> Baseline Mean:   34.846 | Physical Swing (±1σ): 0.2385
+   ssh      -> Baseline Mean:   -1.386 | Physical Swing (±1σ): 0.0710
+   u_curr   -> Baseline Mean:   -0.050 | Physical Swing (±1σ): 0.0354
+   v_curr   -> Baseline Mean:    0.002 | Physical Swing (±1σ): 0.0474
+============================================================
+Generating synthetic dataset...
+/home/users/thopri/PROMOTE/LatentTCN/pipeline.py:328: RuntimeWarning: overflow encountered in scalar power
+  r[t] = r[t-1] + (mu * r[t-1] - r[t-1]**3) * dt + sigma * self.rng.standard_normal()
+/home/users/thopri/PROMOTE/LatentTCN/pipeline.py:328: RuntimeWarning: invalid value encountered in scalar add
+  r[t] = r[t-1] + (mu * r[t-1] - r[t-1]**3) * dt + sigma * self.rng.standard_normal()
+Fitting scaler on training subset...
+Scaler successfully fitted across training pool data.
+Scaler statistics exported to 'scalers/synthetic_channel_scaler_6.pkl'
+
+Starting Training...
+Epoch 01 | Val Loss: nan | F1: 0.000 | Prec: 0.00 | Rec: 0.00
+Epoch 02 | Val Loss: nan | F1: 0.000 | Prec: 0.00 | Rec: 0.00
+Epoch 03 | Val Loss: nan | F1: 0.000 | Prec: 0.00 | Rec: 0.00
+Epoch 04 | Val Loss: nan | F1: 0.000 | Prec: 0.00 | Rec: 0.00
+Epoch 05 | Val Loss: nan | F1: 0.000 | Prec: 0.00 | Rec: 0.00
+Epoch 06 | Val Loss: nan | F1: 0.000 | Prec: 0.00 | Rec: 0.00
+Epoch 07 | Val Loss: nan | F1: 0.000 | Prec: 0.00 | Rec: 0.00
+Epoch 08 | Val Loss: nan | F1: 0.000 | Prec: 0.00 | Rec: 0.00
+Epoch 09 | Val Loss: nan | F1: 0.000 | Prec: 0.00 | Rec: 0.00
+Epoch 10 | Val Loss: nan | F1: 0.000 | Prec: 0.00 | Rec: 0.00
+
+Early stopping triggered at epoch 10
+
+Testing on hold-out set...
+[Errno 2] No such file or directory: '[Errno 2] No such file or directory: 'models/best_bifurcation_model_6.pth''
+ml model not found, skipping this hold out test
+============================================================
+DYNAMIC CALIBRATION REPORT FOR TARGET REGION
+============================================================
+A. LATENT SDE SYSTEM CONFIG:
+   sigma (Noise Intensity)        : 0.54050
+   strat_decay (Damping factor)   : 1.10787
+   meso_decay (Dissipation rate)  : 1.36238
+------------------------------------------------------------
+B. OBSERVATION BASELINES & SWINGS:
+   temp     -> Baseline Mean:    5.381 | Physical Swing (±1σ): 1.9103
+   salt     -> Baseline Mean:   34.828 | Physical Swing (±1σ): 0.1838
+   ssh      -> Baseline Mean:   -1.404 | Physical Swing (±1σ): 0.0547
+   u_curr   -> Baseline Mean:   -0.051 | Physical Swing (±1σ): 0.0372
+   v_curr   -> Baseline Mean:   -0.002 | Physical Swing (±1σ): 0.0476
+============================================================
+Generating synthetic dataset...
+Fitting scaler on training subset...
+Scaler successfully fitted across training pool data.
+Scaler statistics exported to 'scalers/synthetic_channel_scaler_7.pkl'
+
+Starting Training...
+Epoch 01 | Val Loss: 0.1946 | F1: 0.621 | Prec: 0.73 | Rec: 0.54
+Epoch 02 | Val Loss: 0.1820 | F1: 0.588 | Prec: 0.83 | Rec: 0.46
+Epoch 03 | Val Loss: 0.1671 | F1: 0.648 | Prec: 0.76 | Rec: 0.57
+Epoch 04 | Val Loss: 0.1802 | F1: 0.571 | Prec: 0.85 | Rec: 0.43
+Epoch 05 | Val Loss: 0.1738 | F1: 0.603 | Prec: 0.79 | Rec: 0.49
+Epoch 06 | Val Loss: 0.1867 | F1: 0.553 | Prec: 0.86 | Rec: 0.41
+Epoch 07 | Val Loss: 0.1814 | F1: 0.665 | Prec: 0.70 | Rec: 0.63
+Epoch 08 | Val Loss: 0.1715 | F1: 0.662 | Prec: 0.68 | Rec: 0.65
+Epoch 09 | Val Loss: 0.1674 | F1: 0.645 | Prec: 0.72 | Rec: 0.58
+Epoch 10 | Val Loss: 0.1716 | F1: 0.669 | Prec: 0.70 | Rec: 0.64
+Epoch 11 | Val Loss: 0.1748 | F1: 0.692 | Prec: 0.65 | Rec: 0.74
+Epoch 12 | Val Loss: 0.1738 | F1: 0.661 | Prec: 0.71 | Rec: 0.62
+Epoch 13 | Val Loss: 0.1676 | F1: 0.660 | Prec: 0.74 | Rec: 0.60
+
+Early stopping triggered at epoch 13
+
+Testing on hold-out set...
+Calibrated T = 1.4286
+Final Test -> F1: 0.684 | Precision: 0.81 | Recall: 0.59
+Recommended Threshold (FPR ≤ 5%): 0.5370 → TPR: 0.468, FPR: 0.049
+============================================================
+THRESHOLD OPTIMIZATION REPORT
+============================================================
+Area Under ROC Curve (ROC-AUC): 0.7805
+Recommended Threshold (Youden's J): 0.4950
+Recommended Threshold (Maximize F1):  0.4725 -> Max F1: 0.7224
+------------------------------------------------------------
+
+Classification Report using default threshold (0.500):
+              precision    recall  f1-score   support
+
+         0.0      0.665     0.858     0.749       365
+         1.0      0.814     0.590     0.684       385
+
+    accuracy                          0.720       750
+   macro avg      0.739     0.724     0.716       750
+weighted avg      0.741     0.720     0.715       750
+
+
+Classification Report using optimized F1 threshold (0.473):
+              precision    recall  f1-score   support
+
+         0.0      0.702     0.756     0.728       365
+         1.0      0.751     0.696     0.722       385
+
+    accuracy                          0.725       750
+   macro avg      0.726     0.726     0.725       750
+weighted avg      0.727     0.725     0.725       750
+
+
+Classification Report using minimised FPR threshold (0.5370):
+              precision    recall  f1-score   support
+
+         0.0      0.629     0.951     0.757       365
+         1.0      0.909     0.468     0.617       385
+
+    accuracy                          0.703       750
+   macro avg      0.769     0.709     0.687       750
+weighted avg      0.773     0.703     0.685       750
+
+============================================================
+Best Threshold -> 0.47254055738449097
+Historical false-positive alert timesteps: 130 / 780
+============================================================
+DYNAMIC CALIBRATION REPORT FOR TARGET REGION
+============================================================
+A. LATENT SDE SYSTEM CONFIG:
+   sigma (Noise Intensity)        : 0.55752
+   strat_decay (Damping factor)   : 0.85333
+   meso_decay (Dissipation rate)  : 1.44773
+------------------------------------------------------------
+B. OBSERVATION BASELINES & SWINGS:
+   temp     -> Baseline Mean:    5.466 | Physical Swing (±1σ): 1.8265
+   salt     -> Baseline Mean:   34.880 | Physical Swing (±1σ): 0.2083
+   ssh      -> Baseline Mean:   -1.422 | Physical Swing (±1σ): 0.0621
+   u_curr   -> Baseline Mean:   -0.045 | Physical Swing (±1σ): 0.0361
+   v_curr   -> Baseline Mean:   -0.002 | Physical Swing (±1σ): 0.0499
+============================================================
+Generating synthetic dataset...
+Fitting scaler on training subset...
+Scaler successfully fitted across training pool data.
+Scaler statistics exported to 'scalers/synthetic_channel_scaler_8.pkl'
+
+Starting Training...
+Epoch 01 | Val Loss: 0.1909 | F1: 0.642 | Prec: 0.68 | Rec: 0.61
+Epoch 02 | Val Loss: 0.1759 | F1: 0.613 | Prec: 0.81 | Rec: 0.49
+Epoch 03 | Val Loss: 0.1840 | F1: 0.585 | Prec: 0.83 | Rec: 0.45
+Epoch 04 | Val Loss: 0.1689 | F1: 0.581 | Prec: 0.83 | Rec: 0.45
+Epoch 05 | Val Loss: 0.1733 | F1: 0.632 | Prec: 0.75 | Rec: 0.54
+Epoch 06 | Val Loss: 0.1711 | F1: 0.642 | Prec: 0.71 | Rec: 0.58
+Epoch 07 | Val Loss: 0.1695 | F1: 0.612 | Prec: 0.80 | Rec: 0.49
+Epoch 08 | Val Loss: 0.1838 | F1: 0.590 | Prec: 0.79 | Rec: 0.47
+Epoch 09 | Val Loss: 0.1770 | F1: 0.587 | Prec: 0.81 | Rec: 0.46
+Epoch 10 | Val Loss: 0.1666 | F1: 0.598 | Prec: 0.79 | Rec: 0.48
+Epoch 11 | Val Loss: 0.1741 | F1: 0.626 | Prec: 0.78 | Rec: 0.52
+Epoch 12 | Val Loss: 0.1802 | F1: 0.528 | Prec: 0.89 | Rec: 0.38
+Epoch 13 | Val Loss: 0.1822 | F1: 0.666 | Prec: 0.68 | Rec: 0.66
+Epoch 14 | Val Loss: 0.1720 | F1: 0.638 | Prec: 0.75 | Rec: 0.56
+Epoch 15 | Val Loss: 0.1753 | F1: 0.634 | Prec: 0.76 | Rec: 0.54
+Epoch 16 | Val Loss: 0.1777 | F1: 0.611 | Prec: 0.78 | Rec: 0.50
+Epoch 17 | Val Loss: 0.1709 | F1: 0.619 | Prec: 0.77 | Rec: 0.52
+Epoch 18 | Val Loss: 0.1816 | F1: 0.599 | Prec: 0.80 | Rec: 0.48
+Epoch 19 | Val Loss: 0.1804 | F1: 0.634 | Prec: 0.72 | Rec: 0.57
+Epoch 20 | Val Loss: 0.1853 | F1: 0.586 | Prec: 0.75 | Rec: 0.48
+
+Early stopping triggered at epoch 20
+
+Testing on hold-out set...
+Calibrated T = 1.4316
+Final Test -> F1: 0.641 | Precision: 0.87 | Recall: 0.51
+Recommended Threshold (FPR ≤ 5%): 0.5118 → TPR: 0.478, FPR: 0.049
+============================================================
+THRESHOLD OPTIMIZATION REPORT
+============================================================
+Area Under ROC Curve (ROC-AUC): 0.7732
+Recommended Threshold (Youden's J): 0.4868
+Recommended Threshold (Maximize F1):  0.4418 -> Max F1: 0.7103
+------------------------------------------------------------
+
+Classification Report using default threshold (0.500):
+              precision    recall  f1-score   support
+
+         0.0      0.639     0.923     0.756       365
+         1.0      0.874     0.506     0.641       385
+
+    accuracy                          0.709       750
+   macro avg      0.757     0.715     0.699       750
+weighted avg      0.760     0.709     0.697       750
+
+
+Classification Report using optimized F1 threshold (0.442):
+              precision    recall  f1-score   support
+
+         0.0      0.713     0.518     0.600       365
+         1.0      0.637     0.803     0.710       385
+
+    accuracy                          0.664       750
+   macro avg      0.675     0.660     0.655       750
+weighted avg      0.674     0.664     0.657       750
+
+
+Classification Report using minimised FPR threshold (0.5118):
+              precision    recall  f1-score   support
+
+         0.0      0.633     0.951     0.760       365
+         1.0      0.911     0.478     0.627       385
+
+    accuracy                          0.708       750
+   macro avg      0.772     0.714     0.694       750
+weighted avg      0.776     0.708     0.692       750
+
+============================================================
+Best Threshold -> 0.4418141543865204
+Historical false-positive alert timesteps: 0 / 780
+============================================================
+DYNAMIC CALIBRATION REPORT FOR TARGET REGION
+============================================================
+A. LATENT SDE SYSTEM CONFIG:
+   sigma (Noise Intensity)        : 0.58730
+   strat_decay (Damping factor)   : 1.34753
+   meso_decay (Dissipation rate)  : 1.48546
+------------------------------------------------------------
+B. OBSERVATION BASELINES & SWINGS:
+   temp     -> Baseline Mean:    5.302 | Physical Swing (±1σ): 1.8167
+   salt     -> Baseline Mean:   34.803 | Physical Swing (±1σ): 0.2173
+   ssh      -> Baseline Mean:   -1.392 | Physical Swing (±1σ): 0.0600
+   u_curr   -> Baseline Mean:   -0.049 | Physical Swing (±1σ): 0.0381
+   v_curr   -> Baseline Mean:    0.003 | Physical Swing (±1σ): 0.0541
+============================================================
+Generating synthetic dataset...
+Fitting scaler on training subset...
+Scaler successfully fitted across training pool data.
+Scaler statistics exported to 'scalers/synthetic_channel_scaler_9.pkl'
+
+Starting Training...
+Epoch 01 | Val Loss: 0.1926 | F1: 0.557 | Prec: 0.81 | Rec: 0.42
+Epoch 02 | Val Loss: 0.1914 | F1: 0.607 | Prec: 0.78 | Rec: 0.50
+Epoch 03 | Val Loss: 0.1769 | F1: 0.615 | Prec: 0.75 | Rec: 0.52
+Epoch 04 | Val Loss: 0.1751 | F1: 0.604 | Prec: 0.75 | Rec: 0.50
+Epoch 05 | Val Loss: 0.1778 | F1: 0.646 | Prec: 0.69 | Rec: 0.61
+Epoch 06 | Val Loss: 0.1715 | F1: 0.605 | Prec: 0.73 | Rec: 0.51
+Epoch 07 | Val Loss: 0.1832 | F1: 0.602 | Prec: 0.77 | Rec: 0.49
+Epoch 08 | Val Loss: 0.1730 | F1: 0.562 | Prec: 0.83 | Rec: 0.42
+Epoch 09 | Val Loss: 0.1647 | F1: 0.591 | Prec: 0.79 | Rec: 0.47
+Epoch 10 | Val Loss: 0.1730 | F1: 0.615 | Prec: 0.76 | Rec: 0.51
+Epoch 11 | Val Loss: 0.1842 | F1: 0.652 | Prec: 0.66 | Rec: 0.65
+Epoch 12 | Val Loss: 0.1691 | F1: 0.626 | Prec: 0.74 | Rec: 0.54
+Epoch 13 | Val Loss: 0.1721 | F1: 0.604 | Prec: 0.77 | Rec: 0.50
+Epoch 14 | Val Loss: 0.1784 | F1: 0.668 | Prec: 0.66 | Rec: 0.67
+Epoch 15 | Val Loss: 0.1841 | F1: 0.669 | Prec: 0.71 | Rec: 0.63
+Epoch 16 | Val Loss: 0.1685 | F1: 0.633 | Prec: 0.71 | Rec: 0.57
+Epoch 17 | Val Loss: 0.1739 | F1: 0.639 | Prec: 0.73 | Rec: 0.57
+Epoch 18 | Val Loss: 0.1689 | F1: 0.636 | Prec: 0.71 | Rec: 0.57
+Epoch 19 | Val Loss: 0.1895 | F1: 0.582 | Prec: 0.76 | Rec: 0.47
+
+Early stopping triggered at epoch 19
+
+Testing on hold-out set...
+Calibrated T = 1.4339
+Final Test -> F1: 0.630 | Precision: 0.88 | Recall: 0.49
+Recommended Threshold (FPR ≤ 5%): 0.5169 → TPR: 0.447, FPR: 0.044
+============================================================
+THRESHOLD OPTIMIZATION REPORT
+============================================================
+Area Under ROC Curve (ROC-AUC): 0.7636
+Recommended Threshold (Youden's J): 0.4907
+Recommended Threshold (Maximize F1):  0.4609 -> Max F1: 0.7146
+------------------------------------------------------------
+
+Classification Report using default threshold (0.500):
+              precision    recall  f1-score   support
+
+         0.0      0.634     0.929     0.753       365
+         1.0      0.879     0.491     0.630       385
+
+    accuracy                          0.704       750
+   macro avg      0.756     0.710     0.692       750
+weighted avg      0.760     0.704     0.690       750
+
+
+Classification Report using optimized F1 threshold (0.461):
+              precision    recall  f1-score   support
+
+         0.0      0.703     0.660     0.681       365
+         1.0      0.695     0.735     0.715       385
+
+    accuracy                          0.699       750
+   macro avg      0.699     0.698     0.698       750
+weighted avg      0.699     0.699     0.698       750
+
+
+Classification Report using minimised FPR threshold (0.5169):
+              precision    recall  f1-score   support
+
+         0.0      0.621     0.956     0.753       365
+         1.0      0.915     0.447     0.600       385
+
+    accuracy                          0.695       750
+   macro avg      0.768     0.701     0.677       750
+weighted avg      0.772     0.695     0.675       750
+
+============================================================
+Best Threshold -> 0.4609048366546631
+Historical false-positive alert timesteps: 0 / 780
+============================================================
+DYNAMIC CALIBRATION REPORT FOR TARGET REGION
+============================================================
+A. LATENT SDE SYSTEM CONFIG:
+   sigma (Noise Intensity)        : 0.56996
+   strat_decay (Damping factor)   : 0.84203
+   meso_decay (Dissipation rate)  : 1.43348
+------------------------------------------------------------
+B. OBSERVATION BASELINES & SWINGS:
+   temp     -> Baseline Mean:    5.340 | Physical Swing (±1σ): 1.8106
+   salt     -> Baseline Mean:   34.834 | Physical Swing (±1σ): 0.2176
+   ssh      -> Baseline Mean:   -1.418 | Physical Swing (±1σ): 0.0584
+   u_curr   -> Baseline Mean:   -0.054 | Physical Swing (±1σ): 0.0358
+   v_curr   -> Baseline Mean:   -0.009 | Physical Swing (±1σ): 0.0486
+============================================================
+Generating synthetic dataset...
+Fitting scaler on training subset...
+Scaler successfully fitted across training pool data.
+Scaler statistics exported to 'scalers/synthetic_channel_scaler_10.pkl'
+
+Starting Training...
+Epoch 01 | Val Loss: 0.1836 | F1: 0.626 | Prec: 0.69 | Rec: 0.58
+Epoch 02 | Val Loss: 0.1949 | F1: 0.566 | Prec: 0.84 | Rec: 0.43
+Epoch 03 | Val Loss: 0.1785 | F1: 0.663 | Prec: 0.69 | Rec: 0.64
+Epoch 04 | Val Loss: 0.2028 | F1: 0.507 | Prec: 0.89 | Rec: 0.35
+Epoch 05 | Val Loss: 0.1831 | F1: 0.621 | Prec: 0.73 | Rec: 0.54
+Epoch 06 | Val Loss: 0.1788 | F1: 0.633 | Prec: 0.74 | Rec: 0.55
+Epoch 07 | Val Loss: 0.1714 | F1: 0.659 | Prec: 0.67 | Rec: 0.65
+Epoch 08 | Val Loss: 0.1761 | F1: 0.556 | Prec: 0.82 | Rec: 0.42
+Epoch 09 | Val Loss: 0.1762 | F1: 0.585 | Prec: 0.79 | Rec: 0.46
+Epoch 10 | Val Loss: 0.1725 | F1: 0.604 | Prec: 0.76 | Rec: 0.50
+Epoch 11 | Val Loss: 0.1796 | F1: 0.623 | Prec: 0.74 | Rec: 0.54
+Epoch 12 | Val Loss: 0.1718 | F1: 0.594 | Prec: 0.76 | Rec: 0.49
+Epoch 13 | Val Loss: 0.1791 | F1: 0.574 | Prec: 0.81 | Rec: 0.45
+Epoch 14 | Val Loss: 0.1773 | F1: 0.652 | Prec: 0.72 | Rec: 0.60
+Epoch 15 | Val Loss: 0.1713 | F1: 0.651 | Prec: 0.75 | Rec: 0.57
+Epoch 16 | Val Loss: 0.1690 | F1: 0.637 | Prec: 0.72 | Rec: 0.57
+Epoch 17 | Val Loss: 0.1669 | F1: 0.626 | Prec: 0.75 | Rec: 0.54
+Epoch 18 | Val Loss: 0.1726 | F1: 0.664 | Prec: 0.67 | Rec: 0.66
+Epoch 19 | Val Loss: 0.1754 | F1: 0.647 | Prec: 0.69 | Rec: 0.61
+Epoch 20 | Val Loss: 0.1852 | F1: 0.586 | Prec: 0.80 | Rec: 0.46
+Epoch 21 | Val Loss: 0.1723 | F1: 0.633 | Prec: 0.76 | Rec: 0.54
+Epoch 22 | Val Loss: 0.1711 | F1: 0.647 | Prec: 0.72 | Rec: 0.59
+Epoch 23 | Val Loss: 0.1791 | F1: 0.625 | Prec: 0.71 | Rec: 0.56
+Epoch 24 | Val Loss: 0.1888 | F1: 0.661 | Prec: 0.65 | Rec: 0.67
+Epoch 25 | Val Loss: 0.1731 | F1: 0.616 | Prec: 0.74 | Rec: 0.53
+Epoch 26 | Val Loss: 0.1967 | F1: 0.645 | Prec: 0.67 | Rec: 0.62
+Epoch 27 | Val Loss: 0.1914 | F1: 0.638 | Prec: 0.70 | Rec: 0.59
+
+Early stopping triggered at epoch 27
+
+Testing on hold-out set...
+Calibrated T = 1.4403
+Final Test -> F1: 0.643 | Precision: 0.80 | Recall: 0.54
+Recommended Threshold (FPR ≤ 5%): 0.5403 → TPR: 0.421, FPR: 0.041
+============================================================
+THRESHOLD OPTIMIZATION REPORT
+============================================================
+Area Under ROC Curve (ROC-AUC): 0.7436
+Recommended Threshold (Youden's J): 0.4910
+Recommended Threshold (Maximize F1):  0.4283 -> Max F1: 0.6951
+------------------------------------------------------------
+
+Classification Report using default threshold (0.500):
+              precision    recall  f1-score   support
+
+         0.0      0.638     0.863     0.733       365
+         1.0      0.805     0.535     0.643       385
+
+    accuracy                          0.695       750
+   macro avg      0.721     0.699     0.688       750
+weighted avg      0.723     0.695     0.687       750
+
+
+Classification Report using optimized F1 threshold (0.428):
+              precision    recall  f1-score   support
+
+         0.0      0.727     0.255     0.377       365
+         1.0      0.563     0.909     0.695       385
+
+    accuracy                          0.591       750
+   macro avg      0.645     0.582     0.536       750
+weighted avg      0.642     0.591     0.540       750
+
+
+Classification Report using minimised FPR threshold (0.5403):
+              precision    recall  f1-score   support
+
+         0.0      0.611     0.959     0.746       365
+         1.0      0.915     0.421     0.577       385
+
+    accuracy                          0.683       750
+   macro avg      0.763     0.690     0.661       750
+weighted avg      0.767     0.683     0.659       750
+
+============================================================
+Best Threshold -> 0.42829692363739014
+Historical false-positive alert timesteps: 0 / 780
+============================================================
+DYNAMIC CALIBRATION REPORT FOR TARGET REGION
+============================================================
+A. LATENT SDE SYSTEM CONFIG:
+   sigma (Noise Intensity)        : 0.55734
+   strat_decay (Damping factor)   : 0.92369
+   meso_decay (Dissipation rate)  : 1.28114
+------------------------------------------------------------
+B. OBSERVATION BASELINES & SWINGS:
+   temp     -> Baseline Mean:    5.493 | Physical Swing (±1σ): 1.8634
+   salt     -> Baseline Mean:   34.892 | Physical Swing (±1σ): 0.2302
+   ssh      -> Baseline Mean:   -1.401 | Physical Swing (±1σ): 0.0637
+   u_curr   -> Baseline Mean:   -0.056 | Physical Swing (±1σ): 0.0370
+   v_curr   -> Baseline Mean:   -0.001 | Physical Swing (±1σ): 0.0515
+============================================================
+Generating synthetic dataset...
+Fitting scaler on training subset...
+Scaler successfully fitted across training pool data.
+Scaler statistics exported to 'scalers/synthetic_channel_scaler_11.pkl'
+
+Starting Training...
+Epoch 01 | Val Loss: 0.1772 | F1: 0.625 | Prec: 0.67 | Rec: 0.58
+Epoch 02 | Val Loss: 0.2024 | F1: 0.506 | Prec: 0.90 | Rec: 0.35
+Epoch 03 | Val Loss: 0.1906 | F1: 0.602 | Prec: 0.79 | Rec: 0.49
+Epoch 04 | Val Loss: 0.1763 | F1: 0.600 | Prec: 0.78 | Rec: 0.49
+Epoch 05 | Val Loss: 0.1891 | F1: 0.624 | Prec: 0.73 | Rec: 0.54
+Epoch 06 | Val Loss: 0.1883 | F1: 0.567 | Prec: 0.83 | Rec: 0.43
+Epoch 07 | Val Loss: 0.1878 | F1: 0.555 | Prec: 0.83 | Rec: 0.42
+Epoch 08 | Val Loss: 0.1730 | F1: 0.629 | Prec: 0.78 | Rec: 0.53
+Epoch 09 | Val Loss: 0.1836 | F1: 0.618 | Prec: 0.77 | Rec: 0.51
+Epoch 10 | Val Loss: 0.1785 | F1: 0.622 | Prec: 0.77 | Rec: 0.52
+Epoch 11 | Val Loss: 0.1809 | F1: 0.568 | Prec: 0.81 | Rec: 0.44
+Epoch 12 | Val Loss: 0.1696 | F1: 0.519 | Prec: 0.91 | Rec: 0.36
+Epoch 13 | Val Loss: 0.1856 | F1: 0.568 | Prec: 0.80 | Rec: 0.44
+Epoch 14 | Val Loss: 0.1723 | F1: 0.619 | Prec: 0.79 | Rec: 0.51
+Epoch 15 | Val Loss: 0.1831 | F1: 0.610 | Prec: 0.79 | Rec: 0.50
+Epoch 16 | Val Loss: 0.1778 | F1: 0.654 | Prec: 0.72 | Rec: 0.60
+Epoch 17 | Val Loss: 0.1818 | F1: 0.628 | Prec: 0.78 | Rec: 0.53
+Epoch 18 | Val Loss: 0.1711 | F1: 0.621 | Prec: 0.79 | Rec: 0.51
+Epoch 19 | Val Loss: 0.1813 | F1: 0.608 | Prec: 0.77 | Rec: 0.50
+Epoch 20 | Val Loss: 0.1785 | F1: 0.619 | Prec: 0.76 | Rec: 0.52
+Epoch 21 | Val Loss: 0.1705 | F1: 0.648 | Prec: 0.74 | Rec: 0.58
+Epoch 22 | Val Loss: 0.1853 | F1: 0.680 | Prec: 0.67 | Rec: 0.69
+
+Early stopping triggered at epoch 22
+
+Testing on hold-out set...
+Calibrated T = 1.4379
+Final Test -> F1: 0.565 | Precision: 0.93 | Recall: 0.41
+Recommended Threshold (FPR ≤ 5%): 0.4907 → TPR: 0.416, FPR: 0.047
+============================================================
+THRESHOLD OPTIMIZATION REPORT
+============================================================
+Area Under ROC Curve (ROC-AUC): 0.7316
+Recommended Threshold (Youden's J): 0.4634
+Recommended Threshold (Maximize F1):  0.4083 -> Max F1: 0.6859
+------------------------------------------------------------
+
+Classification Report using default threshold (0.500):
+              precision    recall  f1-score   support
+
+         0.0      0.607     0.970     0.747       365
+         1.0      0.934     0.405     0.565       385
+
+    accuracy                          0.680       750
+   macro avg      0.771     0.688     0.656       750
+weighted avg      0.775     0.680     0.654       750
+
+
+Classification Report using optimized F1 threshold (0.408):
+              precision    recall  f1-score   support
+
+         0.0      0.702     0.181     0.288       365
+         1.0      0.544     0.927     0.686       385
+
+    accuracy                          0.564       750
+   macro avg      0.623     0.554     0.487       750
+weighted avg      0.621     0.564     0.492       750
+
+
+Classification Report using minimised FPR threshold (0.4907):
+              precision    recall  f1-score   support
+
+         0.0      0.607     0.953     0.742       365
+         1.0      0.904     0.416     0.569       385
+
+    accuracy                          0.677       750
+   macro avg      0.756     0.685     0.656       750
+weighted avg      0.760     0.677     0.653       750
+
+============================================================
+Best Threshold -> 0.4082913100719452
+Historical false-positive alert timesteps: 0 / 780
+============================================================
+DYNAMIC CALIBRATION REPORT FOR TARGET REGION
+============================================================
+A. LATENT SDE SYSTEM CONFIG:
+   sigma (Noise Intensity)        : 0.60009
+   strat_decay (Damping factor)   : 1.04362
+   meso_decay (Dissipation rate)  : 1.32808
+------------------------------------------------------------
+B. OBSERVATION BASELINES & SWINGS:
+   temp     -> Baseline Mean:    5.372 | Physical Swing (±1σ): 1.8755
+   salt     -> Baseline Mean:   34.874 | Physical Swing (±1σ): 0.2147
+   ssh      -> Baseline Mean:   -1.421 | Physical Swing (±1σ): 0.0618
+   u_curr   -> Baseline Mean:   -0.048 | Physical Swing (±1σ): 0.0365
+   v_curr   -> Baseline Mean:   -0.012 | Physical Swing (±1σ): 0.0500
+============================================================
+Generating synthetic dataset...
+Fitting scaler on training subset...
+Scaler successfully fitted across training pool data.
+Scaler statistics exported to 'scalers/synthetic_channel_scaler_12.pkl'
+
+Starting Training...
+Epoch 01 | Val Loss: 0.1971 | F1: 0.546 | Prec: 0.80 | Rec: 0.41
+Epoch 02 | Val Loss: 0.1963 | F1: 0.623 | Prec: 0.75 | Rec: 0.53
+Epoch 03 | Val Loss: 0.1850 | F1: 0.600 | Prec: 0.81 | Rec: 0.48
+Epoch 04 | Val Loss: 0.1726 | F1: 0.621 | Prec: 0.72 | Rec: 0.54
+Epoch 05 | Val Loss: 0.1848 | F1: 0.561 | Prec: 0.83 | Rec: 0.42
+Epoch 06 | Val Loss: 0.1921 | F1: 0.586 | Prec: 0.76 | Rec: 0.47
+Epoch 07 | Val Loss: 0.1820 | F1: 0.501 | Prec: 0.85 | Rec: 0.35
+Epoch 08 | Val Loss: 0.1815 | F1: 0.586 | Prec: 0.76 | Rec: 0.48
+Epoch 09 | Val Loss: 0.1860 | F1: 0.641 | Prec: 0.67 | Rec: 0.62
+Epoch 10 | Val Loss: 0.1993 | F1: 0.482 | Prec: 0.89 | Rec: 0.33
+Epoch 11 | Val Loss: 0.1713 | F1: 0.599 | Prec: 0.78 | Rec: 0.49
+Epoch 12 | Val Loss: 0.1852 | F1: 0.598 | Prec: 0.77 | Rec: 0.49
+Epoch 13 | Val Loss: 0.1968 | F1: 0.455 | Prec: 0.93 | Rec: 0.30
+Epoch 14 | Val Loss: 0.1822 | F1: 0.562 | Prec: 0.82 | Rec: 0.43
+Epoch 15 | Val Loss: 0.1827 | F1: 0.618 | Prec: 0.75 | Rec: 0.53
+Epoch 16 | Val Loss: 0.1758 | F1: 0.632 | Prec: 0.72 | Rec: 0.56
+Epoch 17 | Val Loss: 0.1818 | F1: 0.603 | Prec: 0.76 | Rec: 0.50
+Epoch 18 | Val Loss: 0.1857 | F1: 0.654 | Prec: 0.69 | Rec: 0.62
+Epoch 19 | Val Loss: 0.1754 | F1: 0.623 | Prec: 0.76 | Rec: 0.53
+Epoch 20 | Val Loss: 0.1730 | F1: 0.595 | Prec: 0.75 | Rec: 0.49
+Epoch 21 | Val Loss: 0.1738 | F1: 0.564 | Prec: 0.85 | Rec: 0.42
+
+Early stopping triggered at epoch 21
+
+Testing on hold-out set...
+Calibrated T = 1.4393
+Final Test -> F1: 0.660 | Precision: 0.88 | Recall: 0.53
+/home/users/thopri/PROMOTE/LatentTCN/pipeline.py:860: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`). Consider using `matplotlib.pyplot.close()`.
+  fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
+Recommended Threshold (FPR ≤ 5%): 0.5333 → TPR: 0.444, FPR: 0.047
+============================================================
+THRESHOLD OPTIMIZATION REPORT
+============================================================
+Area Under ROC Curve (ROC-AUC): 0.7759
+Recommended Threshold (Youden's J): 0.4860
+Recommended Threshold (Maximize F1):  0.4558 -> Max F1: 0.7120
+------------------------------------------------------------
+
+Classification Report using default threshold (0.500):
+              precision    recall  f1-score   support
+
+         0.0      0.650     0.926     0.764       365
+         1.0      0.883     0.527     0.660       385
+
+    accuracy                          0.721       750
+   macro avg      0.766     0.727     0.712       750
+weighted avg      0.769     0.721     0.711       750
+
+
+Classification Report using optimized F1 threshold (0.456):
+              precision    recall  f1-score   support
+
+         0.0      0.692     0.756     0.723       365
+         1.0      0.746     0.681     0.712       385
+
+    accuracy                          0.717       750
+   macro avg      0.719     0.718     0.717       750
+weighted avg      0.720     0.717     0.717       750
+
+
+Classification Report using minimised FPR threshold (0.5333):
+              precision    recall  f1-score   support
+
+         0.0      0.619     0.953     0.751       365
+         1.0      0.910     0.444     0.597       385
+
+    accuracy                          0.692       750
+   macro avg      0.764     0.699     0.674       750
+weighted avg      0.768     0.692     0.672       750
+
+============================================================
+Best Threshold -> 0.4557899534702301
+Historical false-positive alert timesteps: 0 / 780
+============================================================
+DYNAMIC CALIBRATION REPORT FOR TARGET REGION
+============================================================
+A. LATENT SDE SYSTEM CONFIG:
+   sigma (Noise Intensity)        : 0.49747
+   strat_decay (Damping factor)   : 1.15497
+   meso_decay (Dissipation rate)  : 1.45041
+------------------------------------------------------------
+B. OBSERVATION BASELINES & SWINGS:
+   temp     -> Baseline Mean:    5.445 | Physical Swing (±1σ): 1.8918
+   salt     -> Baseline Mean:   34.902 | Physical Swing (±1σ): 0.1933
+   ssh      -> Baseline Mean:   -1.425 | Physical Swing (±1σ): 0.0677
+   u_curr   -> Baseline Mean:   -0.049 | Physical Swing (±1σ): 0.0355
+   v_curr   -> Baseline Mean:    0.003 | Physical Swing (±1σ): 0.0507
+============================================================
+Generating synthetic dataset...
+Fitting scaler on training subset...
+Scaler successfully fitted across training pool data.
+Scaler statistics exported to 'scalers/synthetic_channel_scaler_13.pkl'
+
+Starting Training...
+Epoch 01 | Val Loss: 0.1773 | F1: 0.644 | Prec: 0.70 | Rec: 0.60
+Epoch 02 | Val Loss: 0.1859 | F1: 0.591 | Prec: 0.85 | Rec: 0.45
+Epoch 03 | Val Loss: 0.1951 | F1: 0.588 | Prec: 0.87 | Rec: 0.44
+Epoch 04 | Val Loss: 0.1898 | F1: 0.523 | Prec: 0.94 | Rec: 0.36
+Epoch 05 | Val Loss: 0.1713 | F1: 0.637 | Prec: 0.80 | Rec: 0.53
+Epoch 06 | Val Loss: 0.1737 | F1: 0.564 | Prec: 0.88 | Rec: 0.42
+Epoch 07 | Val Loss: 0.1723 | F1: 0.607 | Prec: 0.79 | Rec: 0.49
+Epoch 08 | Val Loss: 0.1686 | F1: 0.534 | Prec: 0.90 | Rec: 0.38
+Epoch 09 | Val Loss: 0.1750 | F1: 0.566 | Prec: 0.90 | Rec: 0.41
+Epoch 10 | Val Loss: 0.1708 | F1: 0.562 | Prec: 0.84 | Rec: 0.42
+Epoch 11 | Val Loss: 0.1608 | F1: 0.627 | Prec: 0.77 | Rec: 0.53
+Epoch 12 | Val Loss: 0.1656 | F1: 0.586 | Prec: 0.85 | Rec: 0.45
+Epoch 13 | Val Loss: 0.1656 | F1: 0.658 | Prec: 0.77 | Rec: 0.58
+Epoch 14 | Val Loss: 0.1666 | F1: 0.553 | Prec: 0.88 | Rec: 0.40
+Epoch 15 | Val Loss: 0.1871 | F1: 0.561 | Prec: 0.86 | Rec: 0.42
+Epoch 16 | Val Loss: 0.1655 | F1: 0.617 | Prec: 0.79 | Rec: 0.51
+Epoch 17 | Val Loss: 0.1698 | F1: 0.623 | Prec: 0.82 | Rec: 0.50
+Epoch 18 | Val Loss: 0.1656 | F1: 0.640 | Prec: 0.72 | Rec: 0.58
+Epoch 19 | Val Loss: 0.1743 | F1: 0.652 | Prec: 0.72 | Rec: 0.60
+Epoch 20 | Val Loss: 0.1731 | F1: 0.653 | Prec: 0.72 | Rec: 0.60
+Epoch 21 | Val Loss: 0.1789 | F1: 0.573 | Prec: 0.83 | Rec: 0.44
+
+Early stopping triggered at epoch 21
+
+Testing on hold-out set...
+Calibrated T = 1.4323
+Final Test -> F1: 0.677 | Precision: 0.85 | Recall: 0.56
+Recommended Threshold (FPR ≤ 5%): 0.5305 → TPR: 0.475, FPR: 0.049
+============================================================
+THRESHOLD OPTIMIZATION REPORT
+============================================================
+Area Under ROC Curve (ROC-AUC): 0.7819
+Recommended Threshold (Youden's J): 0.4915
+Recommended Threshold (Maximize F1):  0.4658 -> Max F1: 0.7273
+------------------------------------------------------------
+
+Classification Report using default threshold (0.500):
+              precision    recall  f1-score   support
+
+         0.0      0.660     0.899     0.761       365
+         1.0      0.854     0.561     0.677       385
+
+    accuracy                          0.725       750
+   macro avg      0.757     0.730     0.719       750
+weighted avg      0.759     0.725     0.718       750
+
+
+Classification Report using optimized F1 threshold (0.466):
+              precision    recall  f1-score   support
+
+         0.0      0.710     0.732     0.721       365
+         1.0      0.738     0.717     0.727       385
+
+    accuracy                          0.724       750
+   macro avg      0.724     0.724     0.724       750
+weighted avg      0.724     0.724     0.724       750
+
+
+Classification Report using minimised FPR threshold (0.5305):
+              precision    recall  f1-score   support
+
+         0.0      0.632     0.951     0.759       365
+         1.0      0.910     0.475     0.625       385
+
+    accuracy                          0.707       750
+   macro avg      0.771     0.713     0.692       750
+weighted avg      0.775     0.707     0.690       750
+
+============================================================
+Best Threshold -> 0.4658326506614685
+Historical false-positive alert timesteps: 0 / 780
+============================================================
+DYNAMIC CALIBRATION REPORT FOR TARGET REGION
+============================================================
+A. LATENT SDE SYSTEM CONFIG:
+   sigma (Noise Intensity)        : 0.52107
+   strat_decay (Damping factor)   : 0.72146
+   meso_decay (Dissipation rate)  : 1.57104
+------------------------------------------------------------
+B. OBSERVATION BASELINES & SWINGS:
+   temp     -> Baseline Mean:    5.526 | Physical Swing (±1σ): 1.8451
+   salt     -> Baseline Mean:   34.894 | Physical Swing (±1σ): 0.1953
+   ssh      -> Baseline Mean:   -1.401 | Physical Swing (±1σ): 0.0635
+   u_curr   -> Baseline Mean:   -0.057 | Physical Swing (±1σ): 0.0371
+   v_curr   -> Baseline Mean:   -0.008 | Physical Swing (±1σ): 0.0497
+============================================================
+Generating synthetic dataset...
+Fitting scaler on training subset...
+Scaler successfully fitted across training pool data.
+Scaler statistics exported to 'scalers/synthetic_channel_scaler_14.pkl'
+
+Starting Training...
+Epoch 01 | Val Loss: 0.1994 | F1: 0.567 | Prec: 0.85 | Rec: 0.43
+Epoch 02 | Val Loss: 0.1774 | F1: 0.595 | Prec: 0.80 | Rec: 0.47
+Epoch 03 | Val Loss: 0.1786 | F1: 0.612 | Prec: 0.77 | Rec: 0.51
+Epoch 04 | Val Loss: 0.1813 | F1: 0.605 | Prec: 0.84 | Rec: 0.47
+Epoch 05 | Val Loss: 0.1889 | F1: 0.549 | Prec: 0.91 | Rec: 0.39
+Epoch 06 | Val Loss: 0.1751 | F1: 0.630 | Prec: 0.77 | Rec: 0.53
+Epoch 07 | Val Loss: 0.1724 | F1: 0.624 | Prec: 0.79 | Rec: 0.52
+Epoch 08 | Val Loss: 0.1670 | F1: 0.645 | Prec: 0.77 | Rec: 0.56
+Epoch 09 | Val Loss: 0.1606 | F1: 0.642 | Prec: 0.77 | Rec: 0.55
+Epoch 10 | Val Loss: 0.1668 | F1: 0.648 | Prec: 0.78 | Rec: 0.55
+Epoch 11 | Val Loss: 0.1684 | F1: 0.647 | Prec: 0.75 | Rec: 0.57
+Epoch 12 | Val Loss: 0.1588 | F1: 0.635 | Prec: 0.82 | Rec: 0.52
+Epoch 13 | Val Loss: 0.1680 | F1: 0.625 | Prec: 0.78 | Rec: 0.52
+Epoch 14 | Val Loss: 0.1654 | F1: 0.607 | Prec: 0.82 | Rec: 0.48
+Epoch 15 | Val Loss: 0.1610 | F1: 0.600 | Prec: 0.84 | Rec: 0.47
+Epoch 16 | Val Loss: 0.1726 | F1: 0.674 | Prec: 0.70 | Rec: 0.65
+Epoch 17 | Val Loss: 0.1671 | F1: 0.651 | Prec: 0.76 | Rec: 0.57
+Epoch 18 | Val Loss: 0.1651 | F1: 0.627 | Prec: 0.78 | Rec: 0.52
+Epoch 19 | Val Loss: 0.1655 | F1: 0.588 | Prec: 0.84 | Rec: 0.45
+Epoch 20 | Val Loss: 0.1738 | F1: 0.641 | Prec: 0.75 | Rec: 0.56
+Epoch 21 | Val Loss: 0.1655 | F1: 0.643 | Prec: 0.76 | Rec: 0.56
+Epoch 22 | Val Loss: 0.1817 | F1: 0.671 | Prec: 0.73 | Rec: 0.62
+
+Early stopping triggered at epoch 22
+
+Testing on hold-out set...
+Calibrated T = 1.4253
+Final Test -> F1: 0.637 | Precision: 0.88 | Recall: 0.50
+Recommended Threshold (FPR ≤ 5%): 0.5258 → TPR: 0.455, FPR: 0.044
+============================================================
+THRESHOLD OPTIMIZATION REPORT
+============================================================
+Area Under ROC Curve (ROC-AUC): 0.7719
+Recommended Threshold (Youden's J): 0.4879
+Recommended Threshold (Maximize F1):  0.4380 -> Max F1: 0.7159
+------------------------------------------------------------
+
+Classification Report using default threshold (0.500):
+              precision    recall  f1-score   support
+
+         0.0      0.637     0.929     0.756       365
+         1.0      0.881     0.499     0.637       385
+
+    accuracy                          0.708       750
+   macro avg      0.759     0.714     0.696       750
+weighted avg      0.762     0.708     0.695       750
+
+
+Classification Report using optimized F1 threshold (0.438):
+              precision    recall  f1-score   support
+
+         0.0      0.725     0.507     0.597       365
+         1.0      0.636     0.818     0.716       385
+
+    accuracy                          0.667       750
+   macro avg      0.681     0.663     0.656       750
+weighted avg      0.680     0.667     0.658       750
+
+
+Classification Report using minimised FPR threshold (0.5258):
+              precision    recall  f1-score   support
+
+         0.0      0.624     0.956     0.755       365
+         1.0      0.916     0.455     0.608       385
+
+    accuracy                          0.699       750
+   macro avg      0.770     0.705     0.682       750
+weighted avg      0.774     0.699     0.680       750
+
+============================================================
+Best Threshold -> 0.43796005845069885
+Historical false-positive alert timesteps: 0 / 780
+============================================================
+DYNAMIC CALIBRATION REPORT FOR TARGET REGION
+============================================================
+A. LATENT SDE SYSTEM CONFIG:
+   sigma (Noise Intensity)        : 0.58784
+   strat_decay (Damping factor)   : 0.70776
+   meso_decay (Dissipation rate)  : 1.43730
+------------------------------------------------------------
+B. OBSERVATION BASELINES & SWINGS:
+   temp     -> Baseline Mean:    5.478 | Physical Swing (±1σ): 1.7967
+   salt     -> Baseline Mean:   34.898 | Physical Swing (±1σ): 0.2192
+   ssh      -> Baseline Mean:   -1.391 | Physical Swing (±1σ): 0.0622
+   u_curr   -> Baseline Mean:   -0.045 | Physical Swing (±1σ): 0.0358
+   v_curr   -> Baseline Mean:   -0.009 | Physical Swing (±1σ): 0.0480
+============================================================
+Generating synthetic dataset...
+Fitting scaler on training subset...
+Scaler successfully fitted across training pool data.
+Scaler statistics exported to 'scalers/synthetic_channel_scaler_15.pkl'
+
+Starting Training...
+Epoch 01 | Val Loss: 0.1936 | F1: 0.640 | Prec: 0.69 | Rec: 0.60
+Epoch 02 | Val Loss: 0.2113 | F1: 0.517 | Prec: 0.90 | Rec: 0.36
+Epoch 03 | Val Loss: 0.1891 | F1: 0.529 | Prec: 0.88 | Rec: 0.38
+Epoch 04 | Val Loss: 0.1804 | F1: 0.590 | Prec: 0.76 | Rec: 0.48
+Epoch 05 | Val Loss: 0.1774 | F1: 0.626 | Prec: 0.71 | Rec: 0.56
+Epoch 06 | Val Loss: 0.1782 | F1: 0.573 | Prec: 0.80 | Rec: 0.45
+Epoch 07 | Val Loss: 0.1716 | F1: 0.657 | Prec: 0.71 | Rec: 0.61
+Epoch 08 | Val Loss: 0.1766 | F1: 0.614 | Prec: 0.78 | Rec: 0.51
+Epoch 09 | Val Loss: 0.1845 | F1: 0.611 | Prec: 0.73 | Rec: 0.52
+Epoch 10 | Val Loss: 0.1845 | F1: 0.568 | Prec: 0.81 | Rec: 0.44
+Epoch 11 | Val Loss: 0.1798 | F1: 0.623 | Prec: 0.74 | Rec: 0.54
+Epoch 12 | Val Loss: 0.1892 | F1: 0.606 | Prec: 0.81 | Rec: 0.49
+Epoch 13 | Val Loss: 0.1951 | F1: 0.665 | Prec: 0.67 | Rec: 0.66
+Epoch 14 | Val Loss: 0.1762 | F1: 0.590 | Prec: 0.79 | Rec: 0.47
+Epoch 15 | Val Loss: 0.1753 | F1: 0.570 | Prec: 0.78 | Rec: 0.45
+Epoch 16 | Val Loss: 0.1884 | F1: 0.588 | Prec: 0.76 | Rec: 0.48
+Epoch 17 | Val Loss: 0.1856 | F1: 0.603 | Prec: 0.77 | Rec: 0.50
+
+Early stopping triggered at epoch 17
+
+Testing on hold-out set...
+Calibrated T = 1.4360
+Final Test -> F1: 0.702 | Precision: 0.80 | Recall: 0.63
+Recommended Threshold (FPR ≤ 5%): 0.5649 → TPR: 0.449, FPR: 0.044
+============================================================
+THRESHOLD OPTIMIZATION REPORT
+============================================================
+Area Under ROC Curve (ROC-AUC): 0.7796
+Recommended Threshold (Youden's J): 0.5117
+Recommended Threshold (Maximize F1):  0.4632 -> Max F1: 0.7207
+------------------------------------------------------------
+
+Classification Report using default threshold (0.500):
+              precision    recall  f1-score   support
+
+         0.0      0.679     0.830     0.747       365
+         1.0      0.796     0.629     0.702       385
+
+    accuracy                          0.727       750
+   macro avg      0.738     0.729     0.725       750
+weighted avg      0.739     0.727     0.724       750
+
+
+Classification Report using optimized F1 threshold (0.463):
+              precision    recall  f1-score   support
+
+         0.0      0.718     0.605     0.657       365
+         1.0      0.674     0.774     0.721       385
+
+    accuracy                          0.692       750
+   macro avg      0.696     0.690     0.689       750
+weighted avg      0.695     0.692     0.690       750
+
+
+Classification Report using minimised FPR threshold (0.5649):
+              precision    recall  f1-score   support
+
+         0.0      0.622     0.956     0.754       365
+         1.0      0.915     0.449     0.603       385
+
+    accuracy                          0.696       750
+   macro avg      0.769     0.703     0.678       750
+weighted avg      0.773     0.696     0.676       750
+
+============================================================
+Best Threshold -> 0.4632353186607361
+Historical false-positive alert timesteps: 0 / 780
+============================================================
+DYNAMIC CALIBRATION REPORT FOR TARGET REGION
+============================================================
+A. LATENT SDE SYSTEM CONFIG:
+   sigma (Noise Intensity)        : 0.56959
+   strat_decay (Damping factor)   : 0.90666
+   meso_decay (Dissipation rate)  : 1.30165
+------------------------------------------------------------
+B. OBSERVATION BASELINES & SWINGS:
+   temp     -> Baseline Mean:    5.458 | Physical Swing (±1σ): 1.8717
+   salt     -> Baseline Mean:   34.811 | Physical Swing (±1σ): 0.2352
+   ssh      -> Baseline Mean:   -1.397 | Physical Swing (±1σ): 0.0587
+   u_curr   -> Baseline Mean:   -0.044 | Physical Swing (±1σ): 0.0376
+   v_curr   -> Baseline Mean:   -0.002 | Physical Swing (±1σ): 0.0481
+============================================================
+Generating synthetic dataset...
+Fitting scaler on training subset...
+Scaler successfully fitted across training pool data.
+Scaler statistics exported to 'scalers/synthetic_channel_scaler_16.pkl'
+
+Starting Training...
+Epoch 01 | Val Loss: 0.1875 | F1: 0.626 | Prec: 0.67 | Rec: 0.59
+Epoch 02 | Val Loss: 0.2057 | F1: 0.485 | Prec: 0.89 | Rec: 0.33
+Epoch 03 | Val Loss: 0.1697 | F1: 0.655 | Prec: 0.72 | Rec: 0.60
+Epoch 04 | Val Loss: 0.1702 | F1: 0.602 | Prec: 0.81 | Rec: 0.48
+Epoch 05 | Val Loss: 0.1727 | F1: 0.650 | Prec: 0.72 | Rec: 0.59
+Epoch 06 | Val Loss: 0.1895 | F1: 0.646 | Prec: 0.73 | Rec: 0.58
+Epoch 07 | Val Loss: 0.1735 | F1: 0.593 | Prec: 0.81 | Rec: 0.47
+Epoch 08 | Val Loss: 0.1715 | F1: 0.633 | Prec: 0.78 | Rec: 0.53
+Epoch 09 | Val Loss: 0.1685 | F1: 0.639 | Prec: 0.76 | Rec: 0.55
+Epoch 10 | Val Loss: 0.1777 | F1: 0.549 | Prec: 0.83 | Rec: 0.41
+Epoch 11 | Val Loss: 0.1758 | F1: 0.596 | Prec: 0.83 | Rec: 0.46
+Epoch 12 | Val Loss: 0.1776 | F1: 0.540 | Prec: 0.87 | Rec: 0.39
+Epoch 13 | Val Loss: 0.1844 | F1: 0.630 | Prec: 0.77 | Rec: 0.53
+Epoch 14 | Val Loss: 0.1716 | F1: 0.653 | Prec: 0.75 | Rec: 0.58
+Epoch 15 | Val Loss: 0.1749 | F1: 0.665 | Prec: 0.73 | Rec: 0.61
+Epoch 16 | Val Loss: 0.1703 | F1: 0.653 | Prec: 0.71 | Rec: 0.61
+Epoch 17 | Val Loss: 0.1779 | F1: 0.657 | Prec: 0.74 | Rec: 0.59
+Epoch 18 | Val Loss: 0.1833 | F1: 0.639 | Prec: 0.73 | Rec: 0.57
+Epoch 19 | Val Loss: 0.1828 | F1: 0.637 | Prec: 0.75 | Rec: 0.55
+
+Early stopping triggered at epoch 19
+
+Testing on hold-out set...
+Calibrated T = 1.4321
+Final Test -> F1: 0.681 | Precision: 0.84 | Recall: 0.57
+Recommended Threshold (FPR ≤ 5%): 0.5536 → TPR: 0.439, FPR: 0.049
+============================================================
+THRESHOLD OPTIMIZATION REPORT
+============================================================
+Area Under ROC Curve (ROC-AUC): 0.7822
+Recommended Threshold (Youden's J): 0.4808
+Recommended Threshold (Maximize F1):  0.4709 -> Max F1: 0.7198
+------------------------------------------------------------
+
+Classification Report using default threshold (0.500):
+              precision    recall  f1-score   support
+
+         0.0      0.663     0.888     0.759       365
+         1.0      0.843     0.571     0.681       385
+
+    accuracy                          0.725       750
+   macro avg      0.753     0.730     0.720       750
+weighted avg      0.755     0.725     0.719       750
+
+
+Classification Report using optimized F1 threshold (0.471):
+              precision    recall  f1-score   support
+
+         0.0      0.698     0.778     0.736       365
+         1.0      0.764     0.681     0.720       385
+
+    accuracy                          0.728       750
+   macro avg      0.731     0.729     0.728       750
+weighted avg      0.732     0.728     0.728       750
+
+
+Classification Report using minimised FPR threshold (0.5536):
+              precision    recall  f1-score   support
+
+         0.0      0.616     0.951     0.748       365
+         1.0      0.904     0.439     0.591       385
+
+    accuracy                          0.688       750
+   macro avg      0.760     0.695     0.669       750
+weighted avg      0.764     0.688     0.667       750
+
+============================================================
+Best Threshold -> 0.47089245915412903
+Historical false-positive alert timesteps: 41 / 780
+============================================================
+DYNAMIC CALIBRATION REPORT FOR TARGET REGION
+============================================================
+A. LATENT SDE SYSTEM CONFIG:
+   sigma (Noise Intensity)        : 0.58531
+   strat_decay (Damping factor)   : 1.05531
+   meso_decay (Dissipation rate)  : 1.38407
+------------------------------------------------------------
+B. OBSERVATION BASELINES & SWINGS:
+   temp     -> Baseline Mean:    5.166 | Physical Swing (±1σ): 1.8793
+   salt     -> Baseline Mean:   34.827 | Physical Swing (±1σ): 0.2262
+   ssh      -> Baseline Mean:   -1.403 | Physical Swing (±1σ): 0.0548
+   u_curr   -> Baseline Mean:   -0.043 | Physical Swing (±1σ): 0.0365
+   v_curr   -> Baseline Mean:   -0.017 | Physical Swing (±1σ): 0.0530
+============================================================
+Generating synthetic dataset...
+Fitting scaler on training subset...
+Scaler successfully fitted across training pool data.
+Scaler statistics exported to 'scalers/synthetic_channel_scaler_17.pkl'
+
+Starting Training...
+Epoch 01 | Val Loss: 0.1870 | F1: 0.647 | Prec: 0.66 | Rec: 0.63
+Epoch 02 | Val Loss: 0.2203 | F1: 0.538 | Prec: 0.86 | Rec: 0.39
+Epoch 03 | Val Loss: 0.2076 | F1: 0.482 | Prec: 0.91 | Rec: 0.33
+Epoch 04 | Val Loss: 0.1891 | F1: 0.579 | Prec: 0.82 | Rec: 0.45
+Epoch 05 | Val Loss: 0.1854 | F1: 0.534 | Prec: 0.88 | Rec: 0.38
+Epoch 06 | Val Loss: 0.1786 | F1: 0.610 | Prec: 0.75 | Rec: 0.51
+Epoch 07 | Val Loss: 0.1868 | F1: 0.546 | Prec: 0.86 | Rec: 0.40
+Epoch 08 | Val Loss: 0.1732 | F1: 0.575 | Prec: 0.80 | Rec: 0.45
+Epoch 09 | Val Loss: 0.1720 | F1: 0.569 | Prec: 0.80 | Rec: 0.44
+Epoch 10 | Val Loss: 0.1731 | F1: 0.522 | Prec: 0.87 | Rec: 0.37
+Epoch 11 | Val Loss: 0.1728 | F1: 0.578 | Prec: 0.77 | Rec: 0.46
+Epoch 12 | Val Loss: 0.1697 | F1: 0.576 | Prec: 0.79 | Rec: 0.45
+Epoch 13 | Val Loss: 0.1756 | F1: 0.667 | Prec: 0.71 | Rec: 0.63
+Epoch 14 | Val Loss: 0.1670 | F1: 0.570 | Prec: 0.78 | Rec: 0.45
+Epoch 15 | Val Loss: 0.1657 | F1: 0.650 | Prec: 0.74 | Rec: 0.58
+Epoch 16 | Val Loss: 0.1706 | F1: 0.662 | Prec: 0.70 | Rec: 0.63
+Epoch 17 | Val Loss: 0.1676 | F1: 0.627 | Prec: 0.73 | Rec: 0.55
+Epoch 18 | Val Loss: 0.1753 | F1: 0.653 | Prec: 0.66 | Rec: 0.64
+Epoch 19 | Val Loss: 0.1676 | F1: 0.664 | Prec: 0.70 | Rec: 0.63
+Epoch 20 | Val Loss: 0.1683 | F1: 0.624 | Prec: 0.73 | Rec: 0.54
+Epoch 21 | Val Loss: 0.1729 | F1: 0.581 | Prec: 0.78 | Rec: 0.46
+Epoch 22 | Val Loss: 0.1708 | F1: 0.629 | Prec: 0.74 | Rec: 0.54
+Epoch 23 | Val Loss: 0.1795 | F1: 0.622 | Prec: 0.70 | Rec: 0.56
+Epoch 24 | Val Loss: 0.1882 | F1: 0.673 | Prec: 0.60 | Rec: 0.77
+Epoch 25 | Val Loss: 0.1908 | F1: 0.654 | Prec: 0.71 | Rec: 0.61
+
+Early stopping triggered at epoch 25
+
+Testing on hold-out set...
+Calibrated T = 1.4356
+Final Test -> F1: 0.671 | Precision: 0.79 | Recall: 0.58
+Recommended Threshold (FPR ≤ 5%): 0.5387 → TPR: 0.470, FPR: 0.049
+============================================================
+THRESHOLD OPTIMIZATION REPORT
+============================================================
+Area Under ROC Curve (ROC-AUC): 0.7673
+Recommended Threshold (Youden's J): 0.5127
+Recommended Threshold (Maximize F1):  0.4387 -> Max F1: 0.7107
+------------------------------------------------------------
+
+Classification Report using default threshold (0.500):
+              precision    recall  f1-score   support
+
+         0.0      0.655     0.833     0.733       365
+         1.0      0.787     0.584     0.671       385
+
+    accuracy                          0.705       750
+   macro avg      0.721     0.709     0.702       750
+weighted avg      0.723     0.705     0.701       750
+
+
+Classification Report using optimized F1 threshold (0.439):
+              precision    recall  f1-score   support
+
+         0.0      0.746     0.370     0.495       365
+         1.0      0.596     0.881     0.711       385
+
+    accuracy                          0.632       750
+   macro avg      0.671     0.625     0.603       750
+weighted avg      0.669     0.632     0.605       750
+
+
+Classification Report using minimised FPR threshold (0.5387):
+              precision    recall  f1-score   support
+
+         0.0      0.630     0.951     0.758       365
+         1.0      0.910     0.470     0.620       385
+
+    accuracy                          0.704       750
+   macro avg      0.770     0.710     0.689       750
+weighted avg      0.773     0.704     0.687       750
+
+============================================================
+Best Threshold -> 0.43872618675231934
+Historical false-positive alert timesteps: 91 / 780
+============================================================
+DYNAMIC CALIBRATION REPORT FOR TARGET REGION
+============================================================
+A. LATENT SDE SYSTEM CONFIG:
+   sigma (Noise Intensity)        : 0.53409
+   strat_decay (Damping factor)   : 0.77758
+   meso_decay (Dissipation rate)  : 1.44774
+------------------------------------------------------------
+B. OBSERVATION BASELINES & SWINGS:
+   temp     -> Baseline Mean:    5.213 | Physical Swing (±1σ): 1.8086
+   salt     -> Baseline Mean:   34.791 | Physical Swing (±1σ): 0.2042
+   ssh      -> Baseline Mean:   -1.390 | Physical Swing (±1σ): 0.0571
+   u_curr   -> Baseline Mean:   -0.047 | Physical Swing (±1σ): 0.0373
+   v_curr   -> Baseline Mean:   -0.012 | Physical Swing (±1σ): 0.0504
+============================================================
+Generating synthetic dataset...
+Fitting scaler on training subset...
+Scaler successfully fitted across training pool data.
+Scaler statistics exported to 'scalers/synthetic_channel_scaler_18.pkl'
+
+Starting Training...
+Epoch 01 | Val Loss: 0.1778 | F1: 0.610 | Prec: 0.74 | Rec: 0.52
+Epoch 02 | Val Loss: 0.2249 | F1: 0.449 | Prec: 0.93 | Rec: 0.30
+Epoch 03 | Val Loss: 0.1685 | F1: 0.589 | Prec: 0.80 | Rec: 0.47
+Epoch 04 | Val Loss: 0.1660 | F1: 0.589 | Prec: 0.82 | Rec: 0.46
+Epoch 05 | Val Loss: 0.1791 | F1: 0.542 | Prec: 0.92 | Rec: 0.38
+Epoch 06 | Val Loss: 0.1659 | F1: 0.630 | Prec: 0.81 | Rec: 0.51
+Epoch 07 | Val Loss: 0.1661 | F1: 0.646 | Prec: 0.77 | Rec: 0.56
+Epoch 08 | Val Loss: 0.1662 | F1: 0.582 | Prec: 0.83 | Rec: 0.45
+Epoch 09 | Val Loss: 0.1702 | F1: 0.597 | Prec: 0.79 | Rec: 0.48
+Epoch 10 | Val Loss: 0.1651 | F1: 0.681 | Prec: 0.72 | Rec: 0.65
+Epoch 11 | Val Loss: 0.1629 | F1: 0.678 | Prec: 0.70 | Rec: 0.66
+Epoch 12 | Val Loss: 0.1709 | F1: 0.674 | Prec: 0.73 | Rec: 0.62
+Epoch 13 | Val Loss: 0.1624 | F1: 0.623 | Prec: 0.77 | Rec: 0.53
+Epoch 14 | Val Loss: 0.1699 | F1: 0.654 | Prec: 0.75 | Rec: 0.58
+Epoch 15 | Val Loss: 0.1637 | F1: 0.666 | Prec: 0.72 | Rec: 0.62
+Epoch 16 | Val Loss: 0.1616 | F1: 0.630 | Prec: 0.79 | Rec: 0.53
+Epoch 17 | Val Loss: 0.1625 | F1: 0.626 | Prec: 0.79 | Rec: 0.52
+Epoch 18 | Val Loss: 0.1777 | F1: 0.678 | Prec: 0.71 | Rec: 0.65
+Epoch 19 | Val Loss: 0.1714 | F1: 0.677 | Prec: 0.69 | Rec: 0.67
+Epoch 20 | Val Loss: 0.1773 | F1: 0.659 | Prec: 0.74 | Rec: 0.59
+Epoch 21 | Val Loss: 0.1770 | F1: 0.646 | Prec: 0.73 | Rec: 0.58
+Epoch 22 | Val Loss: 0.1685 | F1: 0.648 | Prec: 0.76 | Rec: 0.57
+Epoch 23 | Val Loss: 0.1693 | F1: 0.658 | Prec: 0.72 | Rec: 0.61
+Epoch 24 | Val Loss: 0.1778 | F1: 0.637 | Prec: 0.73 | Rec: 0.57
+Epoch 25 | Val Loss: 0.1731 | F1: 0.655 | Prec: 0.72 | Rec: 0.60
+Epoch 26 | Val Loss: 0.1684 | F1: 0.676 | Prec: 0.72 | Rec: 0.63
+
+Early stopping triggered at epoch 26
+
+Testing on hold-out set...
+Calibrated T = 1.4260
+Final Test -> F1: 0.679 | Precision: 0.89 | Recall: 0.55
+Recommended Threshold (FPR ≤ 5%): 0.5163 → TPR: 0.509, FPR: 0.049
+============================================================
+THRESHOLD OPTIMIZATION REPORT
+============================================================
+Area Under ROC Curve (ROC-AUC): 0.7948
+Recommended Threshold (Youden's J): 0.4901
+Recommended Threshold (Maximize F1):  0.4424 -> Max F1: 0.7232
+------------------------------------------------------------
+
+Classification Report using default threshold (0.500):
+              precision    recall  f1-score   support
+
+         0.0      0.661     0.926     0.772       365
+         1.0      0.887     0.551     0.679       385
+
+    accuracy                          0.733       750
+   macro avg      0.774     0.738     0.726       750
+weighted avg      0.777     0.733     0.724       750
+
+
+Classification Report using optimized F1 threshold (0.442):
+              precision    recall  f1-score   support
+
+         0.0      0.740     0.507     0.602       365
+         1.0      0.640     0.831     0.723       385
+
+    accuracy                          0.673       750
+   macro avg      0.690     0.669     0.662       750
+weighted avg      0.689     0.673     0.664       750
+
+
+Classification Report using minimised FPR threshold (0.5163):
+              precision    recall  f1-score   support
+
+         0.0      0.647     0.951     0.770       365
+         1.0      0.916     0.509     0.654       385
+
+    accuracy                          0.724       750
+   macro avg      0.782     0.730     0.712       750
+weighted avg      0.785     0.724     0.711       750
+
+============================================================
+Best Threshold -> 0.4424104392528534
+Historical false-positive alert timesteps: 0 / 780
+============================================================
+DYNAMIC CALIBRATION REPORT FOR TARGET REGION
+============================================================
+A. LATENT SDE SYSTEM CONFIG:
+   sigma (Noise Intensity)        : 0.53405
+   strat_decay (Damping factor)   : 1.05758
+   meso_decay (Dissipation rate)  : 1.32068
+------------------------------------------------------------
+B. OBSERVATION BASELINES & SWINGS:
+   temp     -> Baseline Mean:    5.140 | Physical Swing (±1σ): 1.7918
+   salt     -> Baseline Mean:   34.819 | Physical Swing (±1σ): 0.2102
+   ssh      -> Baseline Mean:   -1.408 | Physical Swing (±1σ): 0.0630
+   u_curr   -> Baseline Mean:   -0.040 | Physical Swing (±1σ): 0.0364
+   v_curr   -> Baseline Mean:   -0.004 | Physical Swing (±1σ): 0.0473
+============================================================
+Generating synthetic dataset...
+Fitting scaler on training subset...
+Scaler successfully fitted across training pool data.
+Scaler statistics exported to 'scalers/synthetic_channel_scaler_19.pkl'
+
+Starting Training...
+Epoch 01 | Val Loss: 0.1825 | F1: 0.629 | Prec: 0.74 | Rec: 0.54
+Epoch 02 | Val Loss: 0.1956 | F1: 0.547 | Prec: 0.89 | Rec: 0.39
+Epoch 03 | Val Loss: 0.1766 | F1: 0.600 | Prec: 0.80 | Rec: 0.48
+Epoch 04 | Val Loss: 0.1787 | F1: 0.538 | Prec: 0.88 | Rec: 0.39
+Epoch 05 | Val Loss: 0.1696 | F1: 0.621 | Prec: 0.77 | Rec: 0.52
+Epoch 06 | Val Loss: 0.1734 | F1: 0.638 | Prec: 0.72 | Rec: 0.57
+Epoch 07 | Val Loss: 0.1841 | F1: 0.603 | Prec: 0.75 | Rec: 0.50
+Epoch 08 | Val Loss: 0.1801 | F1: 0.567 | Prec: 0.85 | Rec: 0.43
+Epoch 09 | Val Loss: 0.1679 | F1: 0.597 | Prec: 0.77 | Rec: 0.49
+Epoch 10 | Val Loss: 0.1779 | F1: 0.562 | Prec: 0.85 | Rec: 0.42
+Epoch 11 | Val Loss: 0.1822 | F1: 0.556 | Prec: 0.84 | Rec: 0.42
+Epoch 12 | Val Loss: 0.1772 | F1: 0.595 | Prec: 0.80 | Rec: 0.47
+Epoch 13 | Val Loss: 0.1734 | F1: 0.589 | Prec: 0.81 | Rec: 0.46
+Epoch 14 | Val Loss: 0.1742 | F1: 0.605 | Prec: 0.76 | Rec: 0.50
+Epoch 15 | Val Loss: 0.1807 | F1: 0.637 | Prec: 0.75 | Rec: 0.55
+Epoch 16 | Val Loss: 0.1789 | F1: 0.600 | Prec: 0.78 | Rec: 0.49
+Epoch 17 | Val Loss: 0.1781 | F1: 0.642 | Prec: 0.73 | Rec: 0.57
+Epoch 18 | Val Loss: 0.1822 | F1: 0.623 | Prec: 0.80 | Rec: 0.51
+Epoch 19 | Val Loss: 0.2109 | F1: 0.631 | Prec: 0.78 | Rec: 0.53
+
+Early stopping triggered at epoch 19
+
+Testing on hold-out set...
+Calibrated T = 1.4323
+Final Test -> F1: 0.656 | Precision: 0.86 | Recall: 0.53
+Recommended Threshold (FPR ≤ 5%): 0.5283 → TPR: 0.465, FPR: 0.049
+============================================================
+THRESHOLD OPTIMIZATION REPORT
+============================================================
+Area Under ROC Curve (ROC-AUC): 0.7657
+Recommended Threshold (Youden's J): 0.4737
+Recommended Threshold (Maximize F1):  0.4531 -> Max F1: 0.7145
+------------------------------------------------------------
+
+Classification Report using default threshold (0.500):
+              precision    recall  f1-score   support
+
+         0.0      0.647     0.910     0.756       365
+         1.0      0.861     0.530     0.656       385
+
+    accuracy                          0.715       750
+   macro avg      0.754     0.720     0.706       750
+weighted avg      0.757     0.715     0.705       750
+
+
+Classification Report using optimized F1 threshold (0.453):
+              precision    recall  f1-score   support
+
+         0.0      0.701     0.679     0.690       365
+         1.0      0.705     0.725     0.714       385
+
+    accuracy                          0.703       750
+   macro avg      0.703     0.702     0.702       750
+weighted avg      0.703     0.703     0.702       750
+
+
+Classification Report using minimised FPR threshold (0.5283):
+              precision    recall  f1-score   support
+
+         0.0      0.627     0.951     0.756       365
+         1.0      0.909     0.465     0.615       385
+
+    accuracy                          0.701       750
+   macro avg      0.768     0.708     0.686       750
+weighted avg      0.772     0.701     0.684       750
+
+============================================================
+Best Threshold -> 0.45308712124824524
+Historical false-positive alert timesteps: 0 / 780
+============================================================
+DYNAMIC CALIBRATION REPORT FOR TARGET REGION
+============================================================
+A. LATENT SDE SYSTEM CONFIG:
+   sigma (Noise Intensity)        : 0.49336
+   strat_decay (Damping factor)   : 0.78626
+   meso_decay (Dissipation rate)  : 1.43673
+------------------------------------------------------------
+B. OBSERVATION BASELINES & SWINGS:
+   temp     -> Baseline Mean:    5.085 | Physical Swing (±1σ): 1.8892
+   salt     -> Baseline Mean:   34.745 | Physical Swing (±1σ): 0.2051
+   ssh      -> Baseline Mean:   -1.411 | Physical Swing (±1σ): 0.0645
+   u_curr   -> Baseline Mean:   -0.051 | Physical Swing (±1σ): 0.0338
+   v_curr   -> Baseline Mean:   -0.017 | Physical Swing (±1σ): 0.0473
+============================================================
+Generating synthetic dataset...
+Fitting scaler on training subset...
+Scaler successfully fitted across training pool data.
+Scaler statistics exported to 'scalers/synthetic_channel_scaler_20.pkl'
+
+Starting Training...
+Epoch 01 | Val Loss: 0.2103 | F1: 0.520 | Prec: 0.90 | Rec: 0.37
+Epoch 02 | Val Loss: 0.1884 | F1: 0.576 | Prec: 0.88 | Rec: 0.43
+Epoch 03 | Val Loss: 0.1779 | F1: 0.582 | Prec: 0.85 | Rec: 0.44
+Epoch 04 | Val Loss: 0.1745 | F1: 0.559 | Prec: 0.89 | Rec: 0.41
+Epoch 05 | Val Loss: 0.1822 | F1: 0.567 | Prec: 0.89 | Rec: 0.42
+Epoch 06 | Val Loss: 0.1685 | F1: 0.599 | Prec: 0.82 | Rec: 0.47
+Epoch 07 | Val Loss: 0.1772 | F1: 0.577 | Prec: 0.87 | Rec: 0.43
+Epoch 08 | Val Loss: 0.1642 | F1: 0.610 | Prec: 0.78 | Rec: 0.50
+Epoch 09 | Val Loss: 0.1765 | F1: 0.598 | Prec: 0.83 | Rec: 0.47
+Epoch 10 | Val Loss: 0.1625 | F1: 0.597 | Prec: 0.81 | Rec: 0.47
+Epoch 11 | Val Loss: 0.1659 | F1: 0.661 | Prec: 0.75 | Rec: 0.59
+Epoch 12 | Val Loss: 0.1628 | F1: 0.664 | Prec: 0.72 | Rec: 0.62
+Epoch 13 | Val Loss: 0.1646 | F1: 0.572 | Prec: 0.85 | Rec: 0.43
+Epoch 14 | Val Loss: 0.1679 | F1: 0.612 | Prec: 0.83 | Rec: 0.49
+Epoch 15 | Val Loss: 0.1791 | F1: 0.554 | Prec: 0.94 | Rec: 0.39
+Epoch 16 | Val Loss: 0.1626 | F1: 0.636 | Prec: 0.77 | Rec: 0.54
+Epoch 17 | Val Loss: 0.1714 | F1: 0.660 | Prec: 0.74 | Rec: 0.60
+Epoch 18 | Val Loss: 0.1639 | F1: 0.629 | Prec: 0.80 | Rec: 0.52
+Epoch 19 | Val Loss: 0.1614 | F1: 0.625 | Prec: 0.82 | Rec: 0.51
+Epoch 20 | Val Loss: 0.1619 | F1: 0.621 | Prec: 0.83 | Rec: 0.50
+Epoch 21 | Val Loss: 0.1597 | F1: 0.604 | Prec: 0.83 | Rec: 0.47
+Epoch 22 | Val Loss: 0.1758 | F1: 0.609 | Prec: 0.83 | Rec: 0.48
+Epoch 23 | Val Loss: 0.1655 | F1: 0.651 | Prec: 0.74 | Rec: 0.58
+Epoch 24 | Val Loss: 0.1863 | F1: 0.602 | Prec: 0.81 | Rec: 0.48
+Epoch 25 | Val Loss: 0.1730 | F1: 0.627 | Prec: 0.77 | Rec: 0.53
+Epoch 26 | Val Loss: 0.1759 | F1: 0.577 | Prec: 0.90 | Rec: 0.42
+Epoch 27 | Val Loss: 0.1783 | F1: 0.620 | Prec: 0.78 | Rec: 0.51
+Epoch 28 | Val Loss: 0.1803 | F1: 0.620 | Prec: 0.77 | Rec: 0.52
+Epoch 29 | Val Loss: 0.1822 | F1: 0.625 | Prec: 0.79 | Rec: 0.52
+Epoch 30 | Val Loss: 0.1816 | F1: 0.652 | Prec: 0.71 | Rec: 0.60
+Epoch 31 | Val Loss: 0.1873 | F1: 0.620 | Prec: 0.80 | Rec: 0.51
+
+Early stopping triggered at epoch 31
+
+Testing on hold-out set...
+Calibrated T = 1.4266
+Final Test -> F1: 0.640 | Precision: 0.90 | Recall: 0.50
+Recommended Threshold (FPR ≤ 5%): 0.5063 → TPR: 0.486, FPR: 0.049
+============================================================
+THRESHOLD OPTIMIZATION REPORT
+============================================================
+Area Under ROC Curve (ROC-AUC): 0.7941
+Recommended Threshold (Youden's J): 0.4623
+Recommended Threshold (Maximize F1):  0.4566 -> Max F1: 0.7263
+------------------------------------------------------------
+
+Classification Report using default threshold (0.500):
+              precision    recall  f1-score   support
+
+         0.0      0.639     0.942     0.762       365
+         1.0      0.901     0.496     0.640       385
+
+    accuracy                          0.713       750
+   macro avg      0.770     0.719     0.701       750
+weighted avg      0.774     0.713     0.699       750
+
+
+Classification Report using optimized F1 threshold (0.457):
+              precision    recall  f1-score   support
+
+         0.0      0.703     0.786     0.743       365
+         1.0      0.772     0.686     0.726       385
+
+    accuracy                          0.735       750
+   macro avg      0.738     0.736     0.734       750
+weighted avg      0.739     0.735     0.734       750
+
+
+Classification Report using minimised FPR threshold (0.5063):
+              precision    recall  f1-score   support
+
+         0.0      0.637     0.951     0.763       365
+         1.0      0.912     0.486     0.634       385
+
+    accuracy                          0.712       750
+   macro avg      0.774     0.718     0.698       750
+weighted avg      0.778     0.712     0.697       750
+
+============================================================
+Best Threshold -> 0.4566083252429962
+Historical false-positive alert timesteps: 0 / 780
+============================================================
+DYNAMIC CALIBRATION REPORT FOR TARGET REGION
+============================================================
+A. LATENT SDE SYSTEM CONFIG:
+   sigma (Noise Intensity)        : 0.52643
+   strat_decay (Damping factor)   : 1.04691
+   meso_decay (Dissipation rate)  : 1.38349
+------------------------------------------------------------
+B. OBSERVATION BASELINES & SWINGS:
+   temp     -> Baseline Mean:    5.560 | Physical Swing (±1σ): 1.8374
+   salt     -> Baseline Mean:   34.880 | Physical Swing (±1σ): 0.1953
+   ssh      -> Baseline Mean:   -1.373 | Physical Swing (±1σ): 0.0643
+   u_curr   -> Baseline Mean:   -0.051 | Physical Swing (±1σ): 0.0375
+   v_curr   -> Baseline Mean:   -0.009 | Physical Swing (±1σ): 0.0490
+============================================================
+Generating synthetic dataset...
+Fitting scaler on training subset...
+Scaler successfully fitted across training pool data.
+Scaler statistics exported to 'scalers/synthetic_channel_scaler_21.pkl'
+
+Starting Training...
+Epoch 01 | Val Loss: 0.1864 | F1: 0.601 | Prec: 0.78 | Rec: 0.49
+Epoch 02 | Val Loss: 0.1660 | F1: 0.642 | Prec: 0.74 | Rec: 0.57
+Epoch 03 | Val Loss: 0.1841 | F1: 0.608 | Prec: 0.78 | Rec: 0.50
+Epoch 04 | Val Loss: 0.1666 | F1: 0.648 | Prec: 0.74 | Rec: 0.58
+Epoch 05 | Val Loss: 0.1757 | F1: 0.647 | Prec: 0.71 | Rec: 0.60
+Epoch 06 | Val Loss: 0.1691 | F1: 0.592 | Prec: 0.79 | Rec: 0.47
+Epoch 07 | Val Loss: 0.1737 | F1: 0.622 | Prec: 0.76 | Rec: 0.53
+Epoch 08 | Val Loss: 0.1731 | F1: 0.578 | Prec: 0.78 | Rec: 0.46
+Epoch 09 | Val Loss: 0.1715 | F1: 0.636 | Prec: 0.75 | Rec: 0.55
+Epoch 10 | Val Loss: 0.1689 | F1: 0.622 | Prec: 0.74 | Rec: 0.54
+Epoch 11 | Val Loss: 0.1644 | F1: 0.576 | Prec: 0.79 | Rec: 0.45
+Epoch 12 | Val Loss: 0.1754 | F1: 0.634 | Prec: 0.73 | Rec: 0.56
+Epoch 13 | Val Loss: 0.1723 | F1: 0.611 | Prec: 0.80 | Rec: 0.49
+Epoch 14 | Val Loss: 0.1754 | F1: 0.594 | Prec: 0.80 | Rec: 0.47
+Epoch 15 | Val Loss: 0.1919 | F1: 0.647 | Prec: 0.70 | Rec: 0.60
+Epoch 16 | Val Loss: 0.1890 | F1: 0.619 | Prec: 0.73 | Rec: 0.54
+Epoch 17 | Val Loss: 0.1812 | F1: 0.602 | Prec: 0.78 | Rec: 0.49
+Epoch 18 | Val Loss: 0.1824 | F1: 0.572 | Prec: 0.78 | Rec: 0.45
+Epoch 19 | Val Loss: 0.1886 | F1: 0.569 | Prec: 0.84 | Rec: 0.43
+Epoch 20 | Val Loss: 0.2127 | F1: 0.632 | Prec: 0.73 | Rec: 0.56
+Epoch 21 | Val Loss: 0.1831 | F1: 0.579 | Prec: 0.75 | Rec: 0.47
+
+Early stopping triggered at epoch 21
+
+Testing on hold-out set...
+Calibrated T = 1.4361
+Final Test -> F1: 0.631 | Precision: 0.89 | Recall: 0.49
+Recommended Threshold (FPR ≤ 5%): 0.5152 → TPR: 0.460, FPR: 0.044
+============================================================
+THRESHOLD OPTIMIZATION REPORT
+============================================================
+Area Under ROC Curve (ROC-AUC): 0.7620
+Recommended Threshold (Youden's J): 0.4707
+Recommended Threshold (Maximize F1):  0.4496 -> Max F1: 0.7043
+------------------------------------------------------------
+
+Classification Report using default threshold (0.500):
+              precision    recall  f1-score   support
+
+         0.0      0.635     0.937     0.757       365
+         1.0      0.891     0.488     0.631       385
+
+    accuracy                          0.707       750
+   macro avg      0.763     0.713     0.694       750
+weighted avg      0.766     0.707     0.692       750
+
+
+Classification Report using optimized F1 threshold (0.450):
+              precision    recall  f1-score   support
+
+         0.0      0.694     0.608     0.648       365
+         1.0      0.667     0.745     0.704       385
+
+    accuracy                          0.679       750
+   macro avg      0.681     0.677     0.676       750
+weighted avg      0.680     0.679     0.677       750
+
+
+Classification Report using minimised FPR threshold (0.5152):
+              precision    recall  f1-score   support
+
+         0.0      0.627     0.956     0.757       365
+         1.0      0.917     0.460     0.612       385
+
+    accuracy                          0.701       750
+   macro avg      0.772     0.708     0.685       750
+weighted avg      0.776     0.701     0.683       750
+
+============================================================
+Best Threshold -> 0.4496278166770935
+Historical false-positive alert timesteps: 0 / 780
+============================================================
+DYNAMIC CALIBRATION REPORT FOR TARGET REGION
+============================================================
+A. LATENT SDE SYSTEM CONFIG:
+   sigma (Noise Intensity)        : 0.51189
+   strat_decay (Damping factor)   : 0.87521
+   meso_decay (Dissipation rate)  : 1.40128
+------------------------------------------------------------
+B. OBSERVATION BASELINES & SWINGS:
+   temp     -> Baseline Mean:    5.585 | Physical Swing (±1σ): 1.8146
+   salt     -> Baseline Mean:   34.887 | Physical Swing (±1σ): 0.2183
+   ssh      -> Baseline Mean:   -1.346 | Physical Swing (±1σ): 0.0698
+   u_curr   -> Baseline Mean:   -0.045 | Physical Swing (±1σ): 0.0389
+   v_curr   -> Baseline Mean:   -0.010 | Physical Swing (±1σ): 0.0472
+============================================================
+Generating synthetic dataset...
+Fitting scaler on training subset...
+Scaler successfully fitted across training pool data.
+Scaler statistics exported to 'scalers/synthetic_channel_scaler_22.pkl'
+
+Starting Training...
+Epoch 01 | Val Loss: 0.1926 | F1: 0.611 | Prec: 0.77 | Rec: 0.51
+Epoch 02 | Val Loss: 0.1990 | F1: 0.526 | Prec: 0.92 | Rec: 0.37
+Epoch 03 | Val Loss: 0.1680 | F1: 0.604 | Prec: 0.79 | Rec: 0.49
+Epoch 04 | Val Loss: 0.1682 | F1: 0.659 | Prec: 0.76 | Rec: 0.58
+Epoch 05 | Val Loss: 0.1829 | F1: 0.562 | Prec: 0.91 | Rec: 0.41
+Epoch 06 | Val Loss: 0.1803 | F1: 0.543 | Prec: 0.87 | Rec: 0.39
+Epoch 07 | Val Loss: 0.1685 | F1: 0.637 | Prec: 0.81 | Rec: 0.53
+Epoch 08 | Val Loss: 0.1784 | F1: 0.543 | Prec: 0.90 | Rec: 0.39
+Epoch 09 | Val Loss: 0.1680 | F1: 0.638 | Prec: 0.78 | Rec: 0.54
+Epoch 10 | Val Loss: 0.1637 | F1: 0.626 | Prec: 0.81 | Rec: 0.51
+Epoch 11 | Val Loss: 0.1656 | F1: 0.641 | Prec: 0.77 | Rec: 0.55
+Epoch 12 | Val Loss: 0.1745 | F1: 0.561 | Prec: 0.91 | Rec: 0.41
+Epoch 13 | Val Loss: 0.1696 | F1: 0.565 | Prec: 0.89 | Rec: 0.41
+Epoch 14 | Val Loss: 0.1655 | F1: 0.670 | Prec: 0.73 | Rec: 0.62
+Epoch 15 | Val Loss: 0.1619 | F1: 0.613 | Prec: 0.85 | Rec: 0.48
+Epoch 16 | Val Loss: 0.1707 | F1: 0.647 | Prec: 0.77 | Rec: 0.56
+Epoch 17 | Val Loss: 0.1591 | F1: 0.659 | Prec: 0.74 | Rec: 0.59
+Epoch 18 | Val Loss: 0.1684 | F1: 0.697 | Prec: 0.63 | Rec: 0.79
+Epoch 19 | Val Loss: 0.1665 | F1: 0.643 | Prec: 0.79 | Rec: 0.54
+Epoch 20 | Val Loss: 0.1715 | F1: 0.647 | Prec: 0.75 | Rec: 0.57
+Epoch 21 | Val Loss: 0.1679 | F1: 0.653 | Prec: 0.74 | Rec: 0.58
+Epoch 22 | Val Loss: 0.1728 | F1: 0.645 | Prec: 0.74 | Rec: 0.57
+Epoch 23 | Val Loss: 0.1698 | F1: 0.648 | Prec: 0.74 | Rec: 0.58
+Epoch 24 | Val Loss: 0.1657 | F1: 0.619 | Prec: 0.82 | Rec: 0.50
+Epoch 25 | Val Loss: 0.1859 | F1: 0.626 | Prec: 0.83 | Rec: 0.50
+Epoch 26 | Val Loss: 0.1823 | F1: 0.589 | Prec: 0.88 | Rec: 0.44
+Epoch 27 | Val Loss: 0.1782 | F1: 0.666 | Prec: 0.72 | Rec: 0.62
+
+Early stopping triggered at epoch 27
+
+Testing on hold-out set...
+Calibrated T = 1.4314
+Final Test -> F1: 0.683 | Precision: 0.80 | Recall: 0.59
+Recommended Threshold (FPR ≤ 5%): 0.5327 → TPR: 0.509, FPR: 0.049
+============================================================
+THRESHOLD OPTIMIZATION REPORT
+============================================================
+Area Under ROC Curve (ROC-AUC): 0.7633
+Recommended Threshold (Youden's J): 0.5123
+Recommended Threshold (Maximize F1):  0.4731 -> Max F1: 0.7111
+------------------------------------------------------------
+
+Classification Report using default threshold (0.500):
+              precision    recall  f1-score   support
+
+         0.0      0.664     0.844     0.743       365
+         1.0      0.801     0.595     0.683       385
+
+    accuracy                          0.716       750
+   macro avg      0.732     0.719     0.713       750
+weighted avg      0.734     0.716     0.712       750
+
+
+Classification Report using optimized F1 threshold (0.473):
+              precision    recall  f1-score   support
+
+         0.0      0.702     0.625     0.661       365
+         1.0      0.678     0.748     0.711       385
+
+    accuracy                          0.688       750
+   macro avg      0.690     0.686     0.686       750
+weighted avg      0.689     0.688     0.687       750
+
+
+Classification Report using minimised FPR threshold (0.5327):
+              precision    recall  f1-score   support
+
+         0.0      0.647     0.951     0.770       365
+         1.0      0.916     0.509     0.654       385
+
+    accuracy                          0.724       750
+   macro avg      0.782     0.730     0.712       750
+weighted avg      0.785     0.724     0.711       750
+
+============================================================
+Best Threshold -> 0.47305774688720703
+Historical false-positive alert timesteps: 0 / 780
+============================================================
+DYNAMIC CALIBRATION REPORT FOR TARGET REGION
+============================================================
+A. LATENT SDE SYSTEM CONFIG:
+   sigma (Noise Intensity)        : 0.52719
+   strat_decay (Damping factor)   : 1.01345
+   meso_decay (Dissipation rate)  : 1.59351
+------------------------------------------------------------
+B. OBSERVATION BASELINES & SWINGS:
+   temp     -> Baseline Mean:    5.463 | Physical Swing (±1σ): 1.9013
+   salt     -> Baseline Mean:   34.850 | Physical Swing (±1σ): 0.1908
+   ssh      -> Baseline Mean:   -1.345 | Physical Swing (±1σ): 0.0678
+   u_curr   -> Baseline Mean:   -0.046 | Physical Swing (±1σ): 0.0392
+   v_curr   -> Baseline Mean:   -0.005 | Physical Swing (±1σ): 0.0472
+============================================================
+Generating synthetic dataset...
+Fitting scaler on training subset...
+Scaler successfully fitted across training pool data.
+Scaler statistics exported to 'scalers/synthetic_channel_scaler_23.pkl'
+
+Starting Training...
+Epoch 01 | Val Loss: 0.1973 | F1: 0.600 | Prec: 0.72 | Rec: 0.51
+Epoch 02 | Val Loss: 0.1850 | F1: 0.568 | Prec: 0.85 | Rec: 0.43
+Epoch 03 | Val Loss: 0.1752 | F1: 0.615 | Prec: 0.75 | Rec: 0.52
+Epoch 04 | Val Loss: 0.1997 | F1: 0.548 | Prec: 0.87 | Rec: 0.40
+Epoch 05 | Val Loss: 0.1852 | F1: 0.552 | Prec: 0.85 | Rec: 0.41
+Epoch 06 | Val Loss: 0.1807 | F1: 0.540 | Prec: 0.88 | Rec: 0.39
+Epoch 07 | Val Loss: 0.1805 | F1: 0.546 | Prec: 0.86 | Rec: 0.40
+Epoch 08 | Val Loss: 0.1685 | F1: 0.561 | Prec: 0.81 | Rec: 0.43
+Epoch 09 | Val Loss: 0.1855 | F1: 0.553 | Prec: 0.86 | Rec: 0.41
+Epoch 10 | Val Loss: 0.1696 | F1: 0.656 | Prec: 0.74 | Rec: 0.59
+Epoch 11 | Val Loss: 0.1684 | F1: 0.638 | Prec: 0.76 | Rec: 0.55
+Epoch 12 | Val Loss: 0.1796 | F1: 0.631 | Prec: 0.78 | Rec: 0.53
+Epoch 13 | Val Loss: 0.1729 | F1: 0.582 | Prec: 0.80 | Rec: 0.46
+Epoch 14 | Val Loss: 0.1825 | F1: 0.567 | Prec: 0.83 | Rec: 0.43
+Epoch 15 | Val Loss: 0.1748 | F1: 0.560 | Prec: 0.84 | Rec: 0.42
+Epoch 16 | Val Loss: 0.1722 | F1: 0.597 | Prec: 0.80 | Rec: 0.48
+Epoch 17 | Val Loss: 0.1697 | F1: 0.573 | Prec: 0.86 | Rec: 0.43
+Epoch 18 | Val Loss: 0.1690 | F1: 0.623 | Prec: 0.74 | Rec: 0.54
+Epoch 19 | Val Loss: 0.1819 | F1: 0.596 | Prec: 0.79 | Rec: 0.48
+Epoch 20 | Val Loss: 0.1889 | F1: 0.587 | Prec: 0.81 | Rec: 0.46
+Epoch 21 | Val Loss: 0.1776 | F1: 0.617 | Prec: 0.78 | Rec: 0.51
+
+Early stopping triggered at epoch 21
+
+Testing on hold-out set...
+Calibrated T = 1.4314
+Final Test -> F1: 0.661 | Precision: 0.84 | Recall: 0.55
+Recommended Threshold (FPR ≤ 5%): 0.5288 → TPR: 0.488, FPR: 0.049
+============================================================
+THRESHOLD OPTIMIZATION REPORT
+============================================================
+Area Under ROC Curve (ROC-AUC): 0.7802
+Recommended Threshold (Youden's J): 0.5162
+Recommended Threshold (Maximize F1):  0.4482 -> Max F1: 0.7223
+------------------------------------------------------------
+
+Classification Report using default threshold (0.500):
+              precision    recall  f1-score   support
+
+         0.0      0.650     0.890     0.751       365
+         1.0      0.840     0.545     0.661       385
+
+    accuracy                          0.713       750
+   macro avg      0.745     0.718     0.706       750
+weighted avg      0.748     0.713     0.705       750
+
+
+Classification Report using optimized F1 threshold (0.448):
+              precision    recall  f1-score   support
+
+         0.0      0.714     0.649     0.680       365
+         1.0      0.694     0.753     0.722       385
+
+    accuracy                          0.703       750
+   macro avg      0.704     0.701     0.701       750
+weighted avg      0.704     0.703     0.702       750
+
+
+Classification Report using minimised FPR threshold (0.5288):
+              precision    recall  f1-score   support
+
+         0.0      0.638     0.951     0.763       365
+         1.0      0.913     0.488     0.636       385
+
+    accuracy                          0.713       750
+   macro avg      0.775     0.719     0.700       750
+weighted avg      0.779     0.713     0.698       750
+
+============================================================
+Best Threshold -> 0.448224276304245
+Historical false-positive alert timesteps: 0 / 780
+============================================================
+DYNAMIC CALIBRATION REPORT FOR TARGET REGION
+============================================================
+A. LATENT SDE SYSTEM CONFIG:
+   sigma (Noise Intensity)        : 0.50134
+   strat_decay (Damping factor)   : 0.88209
+   meso_decay (Dissipation rate)  : 1.35082
+------------------------------------------------------------
+B. OBSERVATION BASELINES & SWINGS:
+   temp     -> Baseline Mean:    5.728 | Physical Swing (±1σ): 1.8080
+   salt     -> Baseline Mean:   34.865 | Physical Swing (±1σ): 0.1880
+   ssh      -> Baseline Mean:   -1.349 | Physical Swing (±1σ): 0.0619
+   u_curr   -> Baseline Mean:   -0.053 | Physical Swing (±1σ): 0.0365
+   v_curr   -> Baseline Mean:   -0.003 | Physical Swing (±1σ): 0.0487
+============================================================
+Generating synthetic dataset...
+Fitting scaler on training subset...
+Scaler successfully fitted across training pool data.
+Scaler statistics exported to 'scalers/synthetic_channel_scaler_24.pkl'
+
+Starting Training...
+Epoch 01 | Val Loss: 0.1924 | F1: 0.580 | Prec: 0.85 | Rec: 0.44
+Epoch 02 | Val Loss: 0.1735 | F1: 0.634 | Prec: 0.77 | Rec: 0.54
+Epoch 03 | Val Loss: 0.1879 | F1: 0.577 | Prec: 0.87 | Rec: 0.43
+Epoch 04 | Val Loss: 0.1775 | F1: 0.531 | Prec: 0.89 | Rec: 0.38
+Epoch 05 | Val Loss: 0.1844 | F1: 0.555 | Prec: 0.88 | Rec: 0.41
+Epoch 06 | Val Loss: 0.1682 | F1: 0.649 | Prec: 0.77 | Rec: 0.56
+Epoch 07 | Val Loss: 0.1767 | F1: 0.566 | Prec: 0.89 | Rec: 0.42
+Epoch 08 | Val Loss: 0.1703 | F1: 0.621 | Prec: 0.82 | Rec: 0.50
+Epoch 09 | Val Loss: 0.1688 | F1: 0.613 | Prec: 0.84 | Rec: 0.48
+Epoch 10 | Val Loss: 0.1845 | F1: 0.543 | Prec: 0.91 | Rec: 0.39
+Epoch 11 | Val Loss: 0.1681 | F1: 0.641 | Prec: 0.75 | Rec: 0.56
+Epoch 12 | Val Loss: 0.1646 | F1: 0.630 | Prec: 0.78 | Rec: 0.53
+Epoch 13 | Val Loss: 0.1628 | F1: 0.626 | Prec: 0.84 | Rec: 0.50
+Epoch 14 | Val Loss: 0.1586 | F1: 0.643 | Prec: 0.78 | Rec: 0.55
+Epoch 15 | Val Loss: 0.1623 | F1: 0.641 | Prec: 0.76 | Rec: 0.55
+Epoch 16 | Val Loss: 0.1757 | F1: 0.643 | Prec: 0.78 | Rec: 0.55
+Epoch 17 | Val Loss: 0.1695 | F1: 0.668 | Prec: 0.68 | Rec: 0.66
+Epoch 18 | Val Loss: 0.1820 | F1: 0.591 | Prec: 0.83 | Rec: 0.46
+Epoch 19 | Val Loss: 0.1665 | F1: 0.630 | Prec: 0.80 | Rec: 0.52
+Epoch 20 | Val Loss: 0.1729 | F1: 0.670 | Prec: 0.72 | Rec: 0.62
+Epoch 21 | Val Loss: 0.1776 | F1: 0.609 | Prec: 0.83 | Rec: 0.48
+Epoch 22 | Val Loss: 0.1768 | F1: 0.668 | Prec: 0.69 | Rec: 0.64
+Epoch 23 | Val Loss: 0.1700 | F1: 0.633 | Prec: 0.76 | Rec: 0.54
+Epoch 24 | Val Loss: 0.1763 | F1: 0.637 | Prec: 0.74 | Rec: 0.56
+
+Early stopping triggered at epoch 24
+
+Testing on hold-out set...
+Calibrated T = 1.4215
+Final Test -> F1: 0.674 | Precision: 0.84 | Recall: 0.56
+Recommended Threshold (FPR ≤ 5%): 0.5402 → TPR: 0.460, FPR: 0.049
+============================================================
+THRESHOLD OPTIMIZATION REPORT
+============================================================
+Area Under ROC Curve (ROC-AUC): 0.7776
+Recommended Threshold (Youden's J): 0.4916
+Recommended Threshold (Maximize F1):  0.4622 -> Max F1: 0.7120
+------------------------------------------------------------
+
+Classification Report using default threshold (0.500):
+              precision    recall  f1-score   support
+
+         0.0      0.658     0.890     0.757       365
+         1.0      0.844     0.561     0.674       385
+
+    accuracy                          0.721       750
+   macro avg      0.751     0.726     0.715       750
+weighted avg      0.753     0.721     0.714       750
+
+
+Classification Report using optimized F1 threshold (0.462):
+              precision    recall  f1-score   support
+
+         0.0      0.695     0.707     0.701       365
+         1.0      0.718     0.706     0.712       385
+
+    accuracy                          0.707       750
+   macro avg      0.707     0.707     0.707       750
+weighted avg      0.707     0.707     0.707       750
+
+
+Classification Report using minimised FPR threshold (0.5402):
+              precision    recall  f1-score   support
+
+         0.0      0.625     0.951     0.754       365
+         1.0      0.908     0.460     0.610       385
+
+    accuracy                          0.699       750
+   macro avg      0.766     0.705     0.682       750
+weighted avg      0.770     0.699     0.680       750
+
+============================================================
+Best Threshold -> 0.4621729254722595
+Historical false-positive alert timesteps: 0 / 780
+============================================================
+DYNAMIC CALIBRATION REPORT FOR TARGET REGION
+============================================================
+A. LATENT SDE SYSTEM CONFIG:
+   sigma (Noise Intensity)        : 0.50466
+   strat_decay (Damping factor)   : 0.86293
+   meso_decay (Dissipation rate)  : 1.46646
+------------------------------------------------------------
+B. OBSERVATION BASELINES & SWINGS:
+   temp     -> Baseline Mean:    5.472 | Physical Swing (±1σ): 1.8302
+   salt     -> Baseline Mean:   34.883 | Physical Swing (±1σ): 0.1911
+   ssh      -> Baseline Mean:   -1.369 | Physical Swing (±1σ): 0.0590
+   u_curr   -> Baseline Mean:   -0.052 | Physical Swing (±1σ): 0.0369
+   v_curr   -> Baseline Mean:    0.002 | Physical Swing (±1σ): 0.0462
+============================================================
+Generating synthetic dataset...
+Fitting scaler on training subset...
+Scaler successfully fitted across training pool data.
+Scaler statistics exported to 'scalers/synthetic_channel_scaler_25.pkl'
+
+Starting Training...
+Epoch 01 | Val Loss: 0.2132 | F1: 0.517 | Prec: 0.90 | Rec: 0.36
+Epoch 02 | Val Loss: 0.1841 | F1: 0.577 | Prec: 0.85 | Rec: 0.44
+Epoch 03 | Val Loss: 0.1738 | F1: 0.638 | Prec: 0.78 | Rec: 0.54
+Epoch 04 | Val Loss: 0.1780 | F1: 0.611 | Prec: 0.79 | Rec: 0.50
+Epoch 05 | Val Loss: 0.1765 | F1: 0.598 | Prec: 0.86 | Rec: 0.46
+Epoch 06 | Val Loss: 0.2139 | F1: 0.516 | Prec: 0.91 | Rec: 0.36
+Epoch 07 | Val Loss: 0.1731 | F1: 0.628 | Prec: 0.80 | Rec: 0.51
+Epoch 08 | Val Loss: 0.1766 | F1: 0.605 | Prec: 0.81 | Rec: 0.48
+Epoch 09 | Val Loss: 0.1714 | F1: 0.628 | Prec: 0.78 | Rec: 0.53
+Epoch 10 | Val Loss: 0.1758 | F1: 0.576 | Prec: 0.90 | Rec: 0.42
+Epoch 11 | Val Loss: 0.1644 | F1: 0.621 | Prec: 0.81 | Rec: 0.50
+Epoch 12 | Val Loss: 0.1645 | F1: 0.657 | Prec: 0.73 | Rec: 0.60
+Epoch 13 | Val Loss: 0.1750 | F1: 0.653 | Prec: 0.75 | Rec: 0.58
+Epoch 14 | Val Loss: 0.1662 | F1: 0.621 | Prec: 0.80 | Rec: 0.51
+Epoch 15 | Val Loss: 0.1703 | F1: 0.645 | Prec: 0.78 | Rec: 0.55
+Epoch 16 | Val Loss: 0.1711 | F1: 0.669 | Prec: 0.71 | Rec: 0.63
+Epoch 17 | Val Loss: 0.1712 | F1: 0.667 | Prec: 0.72 | Rec: 0.62
+Epoch 18 | Val Loss: 0.1860 | F1: 0.674 | Prec: 0.72 | Rec: 0.64
+Epoch 19 | Val Loss: 0.1604 | F1: 0.654 | Prec: 0.77 | Rec: 0.57
+Epoch 20 | Val Loss: 0.1761 | F1: 0.606 | Prec: 0.84 | Rec: 0.47
+Epoch 21 | Val Loss: 0.1749 | F1: 0.657 | Prec: 0.74 | Rec: 0.59
+Epoch 22 | Val Loss: 0.1874 | F1: 0.660 | Prec: 0.69 | Rec: 0.63
+Epoch 23 | Val Loss: 0.1779 | F1: 0.690 | Prec: 0.70 | Rec: 0.68
+Epoch 24 | Val Loss: 0.1784 | F1: 0.655 | Prec: 0.74 | Rec: 0.59
+Epoch 25 | Val Loss: 0.1936 | F1: 0.682 | Prec: 0.70 | Rec: 0.67
+Epoch 26 | Val Loss: 0.1824 | F1: 0.666 | Prec: 0.73 | Rec: 0.61
+Epoch 27 | Val Loss: 0.1887 | F1: 0.672 | Prec: 0.74 | Rec: 0.61
+Epoch 28 | Val Loss: 0.1846 | F1: 0.694 | Prec: 0.66 | Rec: 0.73
+Epoch 29 | Val Loss: 0.2019 | F1: 0.681 | Prec: 0.71 | Rec: 0.65
+
+Early stopping triggered at epoch 29
+
+Testing on hold-out set...
+Calibrated T = 1.4282
+Final Test -> F1: 0.686 | Precision: 0.85 | Recall: 0.58
+Recommended Threshold (FPR ≤ 5%): 0.5430 → TPR: 0.468, FPR: 0.049
+============================================================
+THRESHOLD OPTIMIZATION REPORT
+============================================================
+Area Under ROC Curve (ROC-AUC): 0.7696
+Recommended Threshold (Youden's J): 0.5005
+Recommended Threshold (Maximize F1):  0.4452 -> Max F1: 0.7107
+------------------------------------------------------------
+
+Classification Report using default threshold (0.500):
+              precision    recall  f1-score   support
+
+         0.0      0.666     0.890     0.762       365
+         1.0      0.847     0.577     0.686       385
+
+    accuracy                          0.729       750
+   macro avg      0.757     0.734     0.724       750
+weighted avg      0.759     0.729     0.723       750
+
+
+Classification Report using optimized F1 threshold (0.445):
+              precision    recall  f1-score   support
+
+         0.0      0.731     0.425     0.537       365
+         1.0      0.610     0.852     0.711       385
+
+    accuracy                          0.644       750
+   macro avg      0.670     0.638     0.624       750
+weighted avg      0.669     0.644     0.626       750
+
+
+Classification Report using minimised FPR threshold (0.5430):
+              precision    recall  f1-score   support
+
+         0.0      0.629     0.951     0.757       365
+         1.0      0.909     0.468     0.617       385
+
+    accuracy                          0.703       750
+   macro avg      0.769     0.709     0.687       750
+weighted avg      0.773     0.703     0.685       750
+
+============================================================
+Best Threshold -> 0.4451926350593567
+Historical false-positive alert timesteps: 58 / 780
+============================================================
+DYNAMIC CALIBRATION REPORT FOR TARGET REGION
+============================================================
+A. LATENT SDE SYSTEM CONFIG:
+   sigma (Noise Intensity)        : 0.51777
+   strat_decay (Damping factor)   : 0.74380
+   meso_decay (Dissipation rate)  : 1.36726
+------------------------------------------------------------
+B. OBSERVATION BASELINES & SWINGS:
+   temp     -> Baseline Mean:    5.585 | Physical Swing (±1σ): 1.8297
+   salt     -> Baseline Mean:   34.895 | Physical Swing (±1σ): 0.2305
+   ssh      -> Baseline Mean:   -1.328 | Physical Swing (±1σ): 0.0738
+   u_curr   -> Baseline Mean:   -0.053 | Physical Swing (±1σ): 0.0385
+   v_curr   -> Baseline Mean:   -0.009 | Physical Swing (±1σ): 0.0475
+============================================================
+Generating synthetic dataset...
+Fitting scaler on training subset...
+Scaler successfully fitted across training pool data.
+Scaler statistics exported to 'scalers/synthetic_channel_scaler_26.pkl'
+
+Starting Training...
+Epoch 01 | Val Loss: 0.1963 | F1: 0.615 | Prec: 0.74 | Rec: 0.53
+Epoch 02 | Val Loss: 0.1947 | F1: 0.597 | Prec: 0.81 | Rec: 0.47
+Epoch 03 | Val Loss: 0.1767 | F1: 0.657 | Prec: 0.72 | Rec: 0.61
+Epoch 04 | Val Loss: 0.1990 | F1: 0.517 | Prec: 0.92 | Rec: 0.36
+Epoch 05 | Val Loss: 0.1731 | F1: 0.596 | Prec: 0.81 | Rec: 0.47
+Epoch 06 | Val Loss: 0.1884 | F1: 0.578 | Prec: 0.87 | Rec: 0.43
+Epoch 07 | Val Loss: 0.1726 | F1: 0.583 | Prec: 0.82 | Rec: 0.45
+Epoch 08 | Val Loss: 0.1712 | F1: 0.534 | Prec: 0.86 | Rec: 0.39
+Epoch 09 | Val Loss: 0.1660 | F1: 0.641 | Prec: 0.77 | Rec: 0.55
+Epoch 10 | Val Loss: 0.1761 | F1: 0.647 | Prec: 0.75 | Rec: 0.57
+Epoch 11 | Val Loss: 0.1779 | F1: 0.660 | Prec: 0.70 | Rec: 0.63
+Epoch 12 | Val Loss: 0.1763 | F1: 0.625 | Prec: 0.79 | Rec: 0.51
+Epoch 13 | Val Loss: 0.1674 | F1: 0.612 | Prec: 0.80 | Rec: 0.49
+Epoch 14 | Val Loss: 0.1808 | F1: 0.631 | Prec: 0.74 | Rec: 0.55
+Epoch 15 | Val Loss: 0.1706 | F1: 0.635 | Prec: 0.70 | Rec: 0.58
+Epoch 16 | Val Loss: 0.1768 | F1: 0.646 | Prec: 0.69 | Rec: 0.61
+Epoch 17 | Val Loss: 0.1837 | F1: 0.638 | Prec: 0.70 | Rec: 0.58
+Epoch 18 | Val Loss: 0.1766 | F1: 0.617 | Prec: 0.82 | Rec: 0.50
+Epoch 19 | Val Loss: 0.1849 | F1: 0.633 | Prec: 0.76 | Rec: 0.54
+
+Early stopping triggered at epoch 19
+
+Testing on hold-out set...
+Calibrated T = 1.4262
+Final Test -> F1: 0.666 | Precision: 0.84 | Recall: 0.55
+Recommended Threshold (FPR ≤ 5%): 0.5310 → TPR: 0.488, FPR: 0.049
+============================================================
+THRESHOLD OPTIMIZATION REPORT
+============================================================
+Area Under ROC Curve (ROC-AUC): 0.7746
+Recommended Threshold (Youden's J): 0.4849
+Recommended Threshold (Maximize F1):  0.4434 -> Max F1: 0.7184
+------------------------------------------------------------
+
+Classification Report using default threshold (0.500):
+              precision    recall  f1-score   support
+
+         0.0      0.653     0.890     0.753       365
+         1.0      0.841     0.551     0.666       385
+
+    accuracy                          0.716       750
+   macro avg      0.747     0.721     0.709       750
+weighted avg      0.749     0.716     0.708       750
+
+
+Classification Report using optimized F1 threshold (0.443):
+              precision    recall  f1-score   support
+
+         0.0      0.714     0.608     0.657       365
+         1.0      0.674     0.769     0.718       385
+
+    accuracy                          0.691       750
+   macro avg      0.694     0.689     0.688       750
+weighted avg      0.694     0.691     0.688       750
+
+
+Classification Report using minimised FPR threshold (0.5310):
+              precision    recall  f1-score   support
+
+         0.0      0.638     0.951     0.763       365
+         1.0      0.913     0.488     0.636       385
+
+    accuracy                          0.713       750
+   macro avg      0.775     0.719     0.700       750
+weighted avg      0.779     0.713     0.698       750
+
+============================================================
+Best Threshold -> 0.4434323310852051
+Historical false-positive alert timesteps: 0 / 780
+============================================================
+DYNAMIC CALIBRATION REPORT FOR TARGET REGION
+============================================================
+A. LATENT SDE SYSTEM CONFIG:
+   sigma (Noise Intensity)        : 0.55718
+   strat_decay (Damping factor)   : 0.91064
+   meso_decay (Dissipation rate)  : 1.36037
+------------------------------------------------------------
+B. OBSERVATION BASELINES & SWINGS:
+   temp     -> Baseline Mean:    5.452 | Physical Swing (±1σ): 1.9122
+   salt     -> Baseline Mean:   34.881 | Physical Swing (±1σ): 0.1961
+   ssh      -> Baseline Mean:   -1.372 | Physical Swing (±1σ): 0.0650
+   u_curr   -> Baseline Mean:   -0.055 | Physical Swing (±1σ): 0.0346
+   v_curr   -> Baseline Mean:   -0.016 | Physical Swing (±1σ): 0.0488
+============================================================
+Generating synthetic dataset...
+Fitting scaler on training subset...
+Scaler successfully fitted across training pool data.
+Scaler statistics exported to 'scalers/synthetic_channel_scaler_27.pkl'
+
+Starting Training...
+Epoch 01 | Val Loss: 0.1999 | F1: 0.664 | Prec: 0.59 | Rec: 0.76
+Epoch 02 | Val Loss: 0.1970 | F1: 0.575 | Prec: 0.86 | Rec: 0.43
+Epoch 03 | Val Loss: 0.1922 | F1: 0.588 | Prec: 0.86 | Rec: 0.45
+Epoch 04 | Val Loss: 0.1758 | F1: 0.562 | Prec: 0.81 | Rec: 0.43
+Epoch 05 | Val Loss: 0.1692 | F1: 0.595 | Prec: 0.78 | Rec: 0.48
+Epoch 06 | Val Loss: 0.1779 | F1: 0.562 | Prec: 0.82 | Rec: 0.43
+Epoch 07 | Val Loss: 0.1741 | F1: 0.578 | Prec: 0.83 | Rec: 0.44
+Epoch 08 | Val Loss: 0.1669 | F1: 0.617 | Prec: 0.77 | Rec: 0.51
+Epoch 09 | Val Loss: 0.1690 | F1: 0.637 | Prec: 0.74 | Rec: 0.56
+Epoch 10 | Val Loss: 0.1658 | F1: 0.585 | Prec: 0.80 | Rec: 0.46
+Epoch 11 | Val Loss: 0.1658 | F1: 0.633 | Prec: 0.77 | Rec: 0.54
+Epoch 12 | Val Loss: 0.1677 | F1: 0.577 | Prec: 0.80 | Rec: 0.45
+Epoch 13 | Val Loss: 0.1746 | F1: 0.662 | Prec: 0.64 | Rec: 0.69
+Epoch 14 | Val Loss: 0.1656 | F1: 0.575 | Prec: 0.82 | Rec: 0.44
+Epoch 15 | Val Loss: 0.1702 | F1: 0.582 | Prec: 0.79 | Rec: 0.46
+Epoch 16 | Val Loss: 0.1657 | F1: 0.551 | Prec: 0.82 | Rec: 0.41
+Epoch 17 | Val Loss: 0.1618 | F1: 0.650 | Prec: 0.71 | Rec: 0.60
+Epoch 18 | Val Loss: 0.1618 | F1: 0.631 | Prec: 0.75 | Rec: 0.55
+Epoch 19 | Val Loss: 0.1649 | F1: 0.677 | Prec: 0.67 | Rec: 0.69
+Epoch 20 | Val Loss: 0.1690 | F1: 0.654 | Prec: 0.72 | Rec: 0.60
+Epoch 21 | Val Loss: 0.1599 | F1: 0.646 | Prec: 0.75 | Rec: 0.57
+Epoch 22 | Val Loss: 0.1664 | F1: 0.603 | Prec: 0.83 | Rec: 0.47
+Epoch 23 | Val Loss: 0.1597 | F1: 0.656 | Prec: 0.72 | Rec: 0.61
+Epoch 24 | Val Loss: 0.1667 | F1: 0.645 | Prec: 0.72 | Rec: 0.59
+Epoch 25 | Val Loss: 0.1747 | F1: 0.659 | Prec: 0.67 | Rec: 0.65
+Epoch 26 | Val Loss: 0.1662 | F1: 0.599 | Prec: 0.85 | Rec: 0.46
+Epoch 27 | Val Loss: 0.1648 | F1: 0.653 | Prec: 0.75 | Rec: 0.58
+Epoch 28 | Val Loss: 0.1651 | F1: 0.631 | Prec: 0.76 | Rec: 0.54
+Epoch 29 | Val Loss: 0.1807 | F1: 0.655 | Prec: 0.66 | Rec: 0.65
+Epoch 30 | Val Loss: 0.1639 | F1: 0.623 | Prec: 0.75 | Rec: 0.53
+Epoch 31 | Val Loss: 0.1651 | F1: 0.630 | Prec: 0.77 | Rec: 0.53
+Epoch 32 | Val Loss: 0.1665 | F1: 0.633 | Prec: 0.77 | Rec: 0.54
+Epoch 33 | Val Loss: 0.1677 | F1: 0.617 | Prec: 0.79 | Rec: 0.51
+
+Early stopping triggered at epoch 33
+
+Testing on hold-out set...
+Calibrated T = 1.4355
+Final Test -> F1: 0.683 | Precision: 0.76 | Recall: 0.62
+Recommended Threshold (FPR ≤ 5%): 0.5493 → TPR: 0.460, FPR: 0.049
+============================================================
+THRESHOLD OPTIMIZATION REPORT
+============================================================
+Area Under ROC Curve (ROC-AUC): 0.7661
+Recommended Threshold (Youden's J): 0.5206
+Recommended Threshold (Maximize F1):  0.4700 -> Max F1: 0.7070
+------------------------------------------------------------
+
+Classification Report using default threshold (0.500):
+              precision    recall  f1-score   support
+
+         0.0      0.664     0.792     0.723       365
+         1.0      0.759     0.621     0.683       385
+
+    accuracy                          0.704       750
+   macro avg      0.712     0.706     0.703       750
+weighted avg      0.713     0.704     0.702       750
+
+
+Classification Report using optimized F1 threshold (0.470):
+              precision    recall  f1-score   support
+
+         0.0      0.705     0.532     0.606       365
+         1.0      0.640     0.790     0.707       385
+
+    accuracy                          0.664       750
+   macro avg      0.673     0.661     0.657       750
+weighted avg      0.672     0.664     0.658       750
+
+
+Classification Report using minimised FPR threshold (0.5493):
+              precision    recall  f1-score   support
+
+         0.0      0.625     0.951     0.754       365
+         1.0      0.908     0.460     0.610       385
+
+    accuracy                          0.699       750
+   macro avg      0.766     0.705     0.682       750
+weighted avg      0.770     0.699     0.680       750
+
+============================================================
+Best Threshold -> 0.4700017273426056
+Historical false-positive alert timesteps: 59 / 780
+============================================================
+DYNAMIC CALIBRATION REPORT FOR TARGET REGION
+============================================================
+A. LATENT SDE SYSTEM CONFIG:
+   sigma (Noise Intensity)        : 0.57913
+   strat_decay (Damping factor)   : 0.83635
+   meso_decay (Dissipation rate)  : 1.33063
+------------------------------------------------------------
+B. OBSERVATION BASELINES & SWINGS:
+   temp     -> Baseline Mean:    5.448 | Physical Swing (±1σ): 2.0067
+   salt     -> Baseline Mean:   34.862 | Physical Swing (±1σ): 0.1916
+   ssh      -> Baseline Mean:   -1.346 | Physical Swing (±1σ): 0.0626
+   u_curr   -> Baseline Mean:   -0.051 | Physical Swing (±1σ): 0.0369
+   v_curr   -> Baseline Mean:   -0.004 | Physical Swing (±1σ): 0.0467
+============================================================
+Generating synthetic dataset...
+Fitting scaler on training subset...
+Scaler successfully fitted across training pool data.
+Scaler statistics exported to 'scalers/synthetic_channel_scaler_28.pkl'
+
+Starting Training...
+Epoch 01 | Val Loss: 0.2235 | F1: 0.659 | Prec: 0.63 | Rec: 0.70
+Epoch 02 | Val Loss: 0.1931 | F1: 0.576 | Prec: 0.83 | Rec: 0.44
+Epoch 03 | Val Loss: 0.1807 | F1: 0.584 | Prec: 0.80 | Rec: 0.46
+Epoch 04 | Val Loss: 0.1858 | F1: 0.649 | Prec: 0.68 | Rec: 0.62
+Epoch 05 | Val Loss: 0.1762 | F1: 0.595 | Prec: 0.75 | Rec: 0.49
+Epoch 06 | Val Loss: 0.1834 | F1: 0.605 | Prec: 0.74 | Rec: 0.51
+Epoch 07 | Val Loss: 0.1811 | F1: 0.591 | Prec: 0.77 | Rec: 0.48
+Epoch 08 | Val Loss: 0.1781 | F1: 0.669 | Prec: 0.70 | Rec: 0.65
+Epoch 09 | Val Loss: 0.1720 | F1: 0.628 | Prec: 0.73 | Rec: 0.55
+Epoch 10 | Val Loss: 0.1766 | F1: 0.607 | Prec: 0.76 | Rec: 0.50
+Epoch 11 | Val Loss: 0.1816 | F1: 0.655 | Prec: 0.68 | Rec: 0.63
+Epoch 12 | Val Loss: 0.1757 | F1: 0.595 | Prec: 0.80 | Rec: 0.47
+Epoch 13 | Val Loss: 0.2073 | F1: 0.682 | Prec: 0.63 | Rec: 0.74
+Epoch 14 | Val Loss: 0.1746 | F1: 0.591 | Prec: 0.77 | Rec: 0.48
+Epoch 15 | Val Loss: 0.1898 | F1: 0.576 | Prec: 0.83 | Rec: 0.44
+Epoch 16 | Val Loss: 0.1911 | F1: 0.679 | Prec: 0.68 | Rec: 0.68
+Epoch 17 | Val Loss: 0.1885 | F1: 0.607 | Prec: 0.74 | Rec: 0.51
+Epoch 18 | Val Loss: 0.1858 | F1: 0.604 | Prec: 0.76 | Rec: 0.50
+Epoch 19 | Val Loss: 0.2022 | F1: 0.653 | Prec: 0.64 | Rec: 0.67
+
+Early stopping triggered at epoch 19
+
+Testing on hold-out set...
+Calibrated T = 1.4371
+Final Test -> F1: 0.677 | Precision: 0.82 | Recall: 0.57
+Recommended Threshold (FPR ≤ 5%): 0.5380 → TPR: 0.439, FPR: 0.049
+============================================================
+THRESHOLD OPTIMIZATION REPORT
+============================================================
+Area Under ROC Curve (ROC-AUC): 0.7706
+Recommended Threshold (Youden's J): 0.4967
+Recommended Threshold (Maximize F1):  0.4811 -> Max F1: 0.7204
+------------------------------------------------------------
+
+Classification Report using default threshold (0.500):
+              precision    recall  f1-score   support
+
+         0.0      0.660     0.871     0.751       365
+         1.0      0.825     0.574     0.677       385
+
+    accuracy                          0.719       750
+   macro avg      0.742     0.723     0.714       750
+weighted avg      0.744     0.719     0.713       750
+
+
+Classification Report using optimized F1 threshold (0.481):
+              precision    recall  f1-score   support
+
+         0.0      0.701     0.751     0.725       365
+         1.0      0.747     0.696     0.720       385
+
+    accuracy                          0.723       750
+   macro avg      0.724     0.723     0.723       750
+weighted avg      0.724     0.723     0.723       750
+
+
+Classification Report using minimised FPR threshold (0.5380):
+              precision    recall  f1-score   support
+
+         0.0      0.616     0.951     0.748       365
+         1.0      0.904     0.439     0.591       385
+
+    accuracy                          0.688       750
+   macro avg      0.760     0.695     0.669       750
+weighted avg      0.764     0.688     0.667       750
+
+============================================================
+Best Threshold -> 0.48108500242233276
+Historical false-positive alert timesteps: 0 / 780
+============================================================
+DYNAMIC CALIBRATION REPORT FOR TARGET REGION
+============================================================
+A. LATENT SDE SYSTEM CONFIG:
+   sigma (Noise Intensity)        : 0.50382
+   strat_decay (Damping factor)   : 0.96209
+   meso_decay (Dissipation rate)  : 1.42490
+------------------------------------------------------------
+B. OBSERVATION BASELINES & SWINGS:
+   temp     -> Baseline Mean:    5.489 | Physical Swing (±1σ): 1.8607
+   salt     -> Baseline Mean:   34.899 | Physical Swing (±1σ): 0.1899
+   ssh      -> Baseline Mean:   -1.348 | Physical Swing (±1σ): 0.0713
+   u_curr   -> Baseline Mean:   -0.053 | Physical Swing (±1σ): 0.0390
+   v_curr   -> Baseline Mean:   -0.010 | Physical Swing (±1σ): 0.0473
+============================================================
+Generating synthetic dataset...
+Fitting scaler on training subset...
+Scaler successfully fitted across training pool data.
+Scaler statistics exported to 'scalers/synthetic_channel_scaler_29.pkl'
+
+Starting Training...
+Epoch 01 | Val Loss: 0.1899 | F1: 0.657 | Prec: 0.68 | Rec: 0.63
+Epoch 02 | Val Loss: 0.1910 | F1: 0.586 | Prec: 0.86 | Rec: 0.44
+Epoch 03 | Val Loss: 0.1780 | F1: 0.626 | Prec: 0.78 | Rec: 0.52
+Epoch 04 | Val Loss: 0.1865 | F1: 0.576 | Prec: 0.85 | Rec: 0.44
+Epoch 05 | Val Loss: 0.1881 | F1: 0.579 | Prec: 0.85 | Rec: 0.44
+Epoch 06 | Val Loss: 0.1788 | F1: 0.608 | Prec: 0.78 | Rec: 0.50
+Epoch 07 | Val Loss: 0.1766 | F1: 0.609 | Prec: 0.82 | Rec: 0.49
+Epoch 08 | Val Loss: 0.1698 | F1: 0.629 | Prec: 0.78 | Rec: 0.53
+Epoch 09 | Val Loss: 0.1843 | F1: 0.681 | Prec: 0.67 | Rec: 0.70
+Epoch 10 | Val Loss: 0.1783 | F1: 0.615 | Prec: 0.76 | Rec: 0.52
+Epoch 11 | Val Loss: 0.1828 | F1: 0.650 | Prec: 0.72 | Rec: 0.59
+Epoch 12 | Val Loss: 0.1786 | F1: 0.660 | Prec: 0.73 | Rec: 0.60
+Epoch 13 | Val Loss: 0.1742 | F1: 0.640 | Prec: 0.74 | Rec: 0.57
+Epoch 14 | Val Loss: 0.1732 | F1: 0.656 | Prec: 0.72 | Rec: 0.60
+Epoch 15 | Val Loss: 0.1687 | F1: 0.648 | Prec: 0.74 | Rec: 0.57
+Epoch 16 | Val Loss: 0.1707 | F1: 0.656 | Prec: 0.74 | Rec: 0.59
+Epoch 17 | Val Loss: 0.1850 | F1: 0.649 | Prec: 0.73 | Rec: 0.58
+Epoch 18 | Val Loss: 0.1768 | F1: 0.623 | Prec: 0.77 | Rec: 0.52
+Epoch 19 | Val Loss: 0.1871 | F1: 0.648 | Prec: 0.74 | Rec: 0.58
+Epoch 20 | Val Loss: 0.1756 | F1: 0.610 | Prec: 0.78 | Rec: 0.50
+Epoch 21 | Val Loss: 0.1770 | F1: 0.642 | Prec: 0.71 | Rec: 0.59
+Epoch 22 | Val Loss: 0.1813 | F1: 0.609 | Prec: 0.78 | Rec: 0.50
+Epoch 23 | Val Loss: 0.1943 | F1: 0.658 | Prec: 0.71 | Rec: 0.62
+Epoch 24 | Val Loss: 0.2002 | F1: 0.654 | Prec: 0.69 | Rec: 0.62
+Epoch 25 | Val Loss: 0.1820 | F1: 0.659 | Prec: 0.68 | Rec: 0.64
+
+Early stopping triggered at epoch 25
+
+Testing on hold-out set...
+Calibrated T = 1.4343
+Final Test -> F1: 0.660 | Precision: 0.79 | Recall: 0.57
+Recommended Threshold (FPR ≤ 5%): 0.5717 → TPR: 0.478, FPR: 0.049
+============================================================
+THRESHOLD OPTIMIZATION REPORT
+============================================================
+Area Under ROC Curve (ROC-AUC): 0.7604
+Recommended Threshold (Youden's J): 0.5123
+Recommended Threshold (Maximize F1):  0.4424 -> Max F1: 0.6993
+------------------------------------------------------------
+
+Classification Report using default threshold (0.500):
+              precision    recall  f1-score   support
+
+         0.0      0.648     0.841     0.732       365
+         1.0      0.790     0.566     0.660       385
+
+    accuracy                          0.700       750
+   macro avg      0.719     0.704     0.696       750
+weighted avg      0.721     0.700     0.695       750
+
+
+Classification Report using optimized F1 threshold (0.442):
+              precision    recall  f1-score   support
+
+         0.0      0.696     0.490     0.576       365
+         1.0      0.623     0.797     0.699       385
+
+    accuracy                          0.648       750
+   macro avg      0.660     0.644     0.637       750
+weighted avg      0.659     0.648     0.639       750
+
+
+Classification Report using minimised FPR threshold (0.5717):
+              precision    recall  f1-score   support
+
+         0.0      0.633     0.951     0.760       365
+         1.0      0.911     0.478     0.627       385
+
+    accuracy                          0.708       750
+   macro avg      0.772     0.714     0.694       750
+weighted avg      0.776     0.708     0.692       750
+
+============================================================
+Best Threshold -> 0.4424314498901367
+Historical false-positive alert timesteps: 4 / 780
+============================================================
+DYNAMIC CALIBRATION REPORT FOR TARGET REGION
+============================================================
+A. LATENT SDE SYSTEM CONFIG:
+   sigma (Noise Intensity)        : 0.51773
+   strat_decay (Damping factor)   : 1.06906
+   meso_decay (Dissipation rate)  : 1.37660
+------------------------------------------------------------
+B. OBSERVATION BASELINES & SWINGS:
+   temp     -> Baseline Mean:    5.562 | Physical Swing (±1σ): 1.7604
+   salt     -> Baseline Mean:   34.849 | Physical Swing (±1σ): 0.2149
+   ssh      -> Baseline Mean:   -1.311 | Physical Swing (±1σ): 0.0565
+   u_curr   -> Baseline Mean:   -0.055 | Physical Swing (±1σ): 0.0375
+   v_curr   -> Baseline Mean:   -0.012 | Physical Swing (±1σ): 0.0487
+============================================================
+Generating synthetic dataset...
+Fitting scaler on training subset...
+Scaler successfully fitted across training pool data.
+Scaler statistics exported to 'scalers/synthetic_channel_scaler_30.pkl'
+
+Starting Training...
+Epoch 01 | Val Loss: 0.1946 | F1: 0.611 | Prec: 0.75 | Rec: 0.51
+Epoch 02 | Val Loss: 0.2041 | F1: 0.543 | Prec: 0.90 | Rec: 0.39
+Epoch 03 | Val Loss: 0.1770 | F1: 0.625 | Prec: 0.78 | Rec: 0.52
+Epoch 04 | Val Loss: 0.1703 | F1: 0.630 | Prec: 0.79 | Rec: 0.52
+Epoch 05 | Val Loss: 0.1791 | F1: 0.545 | Prec: 0.87 | Rec: 0.40
+Epoch 06 | Val Loss: 0.1735 | F1: 0.679 | Prec: 0.65 | Rec: 0.72
+Epoch 07 | Val Loss: 0.1726 | F1: 0.593 | Prec: 0.80 | Rec: 0.47
+Epoch 08 | Val Loss: 0.1718 | F1: 0.614 | Prec: 0.81 | Rec: 0.49
+Epoch 09 | Val Loss: 0.1631 | F1: 0.677 | Prec: 0.73 | Rec: 0.63
+Epoch 10 | Val Loss: 0.1700 | F1: 0.691 | Prec: 0.67 | Rec: 0.71
+Epoch 11 | Val Loss: 0.1687 | F1: 0.670 | Prec: 0.72 | Rec: 0.63
+Epoch 12 | Val Loss: 0.1627 | F1: 0.684 | Prec: 0.75 | Rec: 0.63
+Epoch 13 | Val Loss: 0.1592 | F1: 0.624 | Prec: 0.81 | Rec: 0.51
+Epoch 14 | Val Loss: 0.1699 | F1: 0.684 | Prec: 0.68 | Rec: 0.69
+Epoch 15 | Val Loss: 0.1659 | F1: 0.676 | Prec: 0.70 | Rec: 0.65
+Epoch 16 | Val Loss: 0.1705 | F1: 0.654 | Prec: 0.73 | Rec: 0.59
+Epoch 17 | Val Loss: 0.1790 | F1: 0.636 | Prec: 0.78 | Rec: 0.54
+Epoch 18 | Val Loss: 0.1837 | F1: 0.657 | Prec: 0.71 | Rec: 0.61
+Epoch 19 | Val Loss: 0.1681 | F1: 0.643 | Prec: 0.76 | Rec: 0.56
+Epoch 20 | Val Loss: 0.1744 | F1: 0.679 | Prec: 0.70 | Rec: 0.66
+Epoch 21 | Val Loss: 0.1739 | F1: 0.695 | Prec: 0.66 | Rec: 0.73
+Epoch 22 | Val Loss: 0.1757 | F1: 0.670 | Prec: 0.71 | Rec: 0.64
+Epoch 23 | Val Loss: 0.1734 | F1: 0.658 | Prec: 0.69 | Rec: 0.63
+
+Early stopping triggered at epoch 23
+
+Testing on hold-out set...
+Calibrated T = 1.4316
+Final Test -> F1: 0.639 | Precision: 0.88 | Recall: 0.50
+Recommended Threshold (FPR ≤ 5%): 0.5103 → TPR: 0.460, FPR: 0.047
+============================================================
+THRESHOLD OPTIMIZATION REPORT
+============================================================
+Area Under ROC Curve (ROC-AUC): 0.7654
+Recommended Threshold (Youden's J): 0.4901
+Recommended Threshold (Maximize F1):  0.4583 -> Max F1: 0.7066
+------------------------------------------------------------
+
+Classification Report using default threshold (0.500):
+              precision    recall  f1-score   support
+
+         0.0      0.638     0.929     0.757       365
+         1.0      0.881     0.501     0.639       385
+
+    accuracy                          0.709       750
+   macro avg      0.760     0.715     0.698       750
+weighted avg      0.763     0.709     0.696       750
+
+
+Classification Report using optimized F1 threshold (0.458):
+              precision    recall  f1-score   support
+
+         0.0      0.703     0.545     0.614       365
+         1.0      0.645     0.782     0.707       385
+
+    accuracy                          0.667       750
+   macro avg      0.674     0.664     0.660       750
+weighted avg      0.673     0.667     0.662       750
+
+
+Classification Report using minimised FPR threshold (0.5103):
+              precision    recall  f1-score   support
+
+         0.0      0.626     0.953     0.756       365
+         1.0      0.912     0.460     0.611       385
+
+    accuracy                          0.700       750
+   macro avg      0.769     0.707     0.684       750
+weighted avg      0.773     0.700     0.682       750
+
+============================================================
+Best Threshold -> 0.45832559466362
+Historical false-positive alert timesteps: 0 / 780
+============================================================
+DYNAMIC CALIBRATION REPORT FOR TARGET REGION
+============================================================
+A. LATENT SDE SYSTEM CONFIG:
+   sigma (Noise Intensity)        : 0.53418
+   strat_decay (Damping factor)   : 0.80064
+   meso_decay (Dissipation rate)  : 1.45852
+------------------------------------------------------------
+B. OBSERVATION BASELINES & SWINGS:
+   temp     -> Baseline Mean:    5.791 | Physical Swing (±1σ): 1.8176
+   salt     -> Baseline Mean:   34.928 | Physical Swing (±1σ): 0.1929
+   ssh      -> Baseline Mean:   -1.370 | Physical Swing (±1σ): 0.0646
+   u_curr   -> Baseline Mean:   -0.062 | Physical Swing (±1σ): 0.0368
+   v_curr   -> Baseline Mean:    0.001 | Physical Swing (±1σ): 0.0477
+============================================================
+Generating synthetic dataset...
+Fitting scaler on training subset...
+Scaler successfully fitted across training pool data.
+Scaler statistics exported to 'scalers/synthetic_channel_scaler_31.pkl'
+
+Starting Training...
+Epoch 01 | Val Loss: 0.1833 | F1: 0.595 | Prec: 0.78 | Rec: 0.48
+Epoch 02 | Val Loss: 0.1791 | F1: 0.572 | Prec: 0.87 | Rec: 0.43
+Epoch 03 | Val Loss: 0.1788 | F1: 0.577 | Prec: 0.88 | Rec: 0.43
+Epoch 04 | Val Loss: 0.1923 | F1: 0.493 | Prec: 0.93 | Rec: 0.34
+Epoch 05 | Val Loss: 0.1664 | F1: 0.634 | Prec: 0.79 | Rec: 0.53
+Epoch 06 | Val Loss: 0.1752 | F1: 0.568 | Prec: 0.85 | Rec: 0.43
+Epoch 07 | Val Loss: 0.1827 | F1: 0.448 | Prec: 0.95 | Rec: 0.29
+Epoch 08 | Val Loss: 0.1660 | F1: 0.640 | Prec: 0.80 | Rec: 0.53
+Epoch 09 | Val Loss: 0.1642 | F1: 0.672 | Prec: 0.73 | Rec: 0.63
+Epoch 10 | Val Loss: 0.1760 | F1: 0.592 | Prec: 0.79 | Rec: 0.47
+Epoch 11 | Val Loss: 0.1661 | F1: 0.552 | Prec: 0.82 | Rec: 0.42
+Epoch 12 | Val Loss: 0.1658 | F1: 0.571 | Prec: 0.86 | Rec: 0.43
+Epoch 13 | Val Loss: 0.1631 | F1: 0.612 | Prec: 0.83 | Rec: 0.49
+Epoch 14 | Val Loss: 0.1673 | F1: 0.627 | Prec: 0.80 | Rec: 0.51
+Epoch 15 | Val Loss: 0.1739 | F1: 0.528 | Prec: 0.90 | Rec: 0.37
+Epoch 16 | Val Loss: 0.1734 | F1: 0.551 | Prec: 0.87 | Rec: 0.40
+Epoch 17 | Val Loss: 0.1607 | F1: 0.675 | Prec: 0.71 | Rec: 0.64
+Epoch 18 | Val Loss: 0.1628 | F1: 0.656 | Prec: 0.77 | Rec: 0.57
+Epoch 19 | Val Loss: 0.1717 | F1: 0.635 | Prec: 0.78 | Rec: 0.54
+Epoch 20 | Val Loss: 0.1709 | F1: 0.617 | Prec: 0.79 | Rec: 0.50
+Epoch 21 | Val Loss: 0.1641 | F1: 0.644 | Prec: 0.78 | Rec: 0.55
+Epoch 22 | Val Loss: 0.1831 | F1: 0.632 | Prec: 0.79 | Rec: 0.53
+Epoch 23 | Val Loss: 0.1711 | F1: 0.618 | Prec: 0.81 | Rec: 0.50
+Epoch 24 | Val Loss: 0.1727 | F1: 0.622 | Prec: 0.80 | Rec: 0.51
+Epoch 25 | Val Loss: 0.1681 | F1: 0.611 | Prec: 0.80 | Rec: 0.49
+Epoch 26 | Val Loss: 0.1753 | F1: 0.646 | Prec: 0.83 | Rec: 0.53
+Epoch 27 | Val Loss: 0.1736 | F1: 0.662 | Prec: 0.76 | Rec: 0.59
+
+Early stopping triggered at epoch 27
+
+Testing on hold-out set...
+Calibrated T = 1.4364
+Final Test -> F1: 0.704 | Precision: 0.77 | Recall: 0.65
+Recommended Threshold (FPR ≤ 5%): 0.5463 → TPR: 0.462, FPR: 0.049
+============================================================
+THRESHOLD OPTIMIZATION REPORT
+============================================================
+Area Under ROC Curve (ROC-AUC): 0.7777
+Recommended Threshold (Youden's J): 0.4998
+Recommended Threshold (Maximize F1):  0.4806 -> Max F1: 0.7184
+------------------------------------------------------------
+
+Classification Report using default threshold (0.500):
+              precision    recall  f1-score   support
+
+         0.0      0.682     0.795     0.734       365
+         1.0      0.769     0.649     0.704       385
+
+    accuracy                          0.720       750
+   macro avg      0.726     0.722     0.719       750
+weighted avg      0.727     0.720     0.719       750
+
+
+Classification Report using optimized F1 threshold (0.481):
+              precision    recall  f1-score   support
+
+         0.0      0.717     0.584     0.644       365
+         1.0      0.664     0.782     0.718       385
+
+    accuracy                          0.685       750
+   macro avg      0.691     0.683     0.681       750
+weighted avg      0.690     0.685     0.682       750
+
+
+Classification Report using minimised FPR threshold (0.5463):
+              precision    recall  f1-score   support
+
+         0.0      0.626     0.951     0.755       365
+         1.0      0.908     0.462     0.613       385
+
+    accuracy                          0.700       750
+   macro avg      0.767     0.707     0.684       750
+weighted avg      0.771     0.700     0.682       750
+
+============================================================
+Best Threshold -> 0.48060789704322815
+Historical false-positive alert timesteps: 108 / 780
+============================================================
+DYNAMIC CALIBRATION REPORT FOR TARGET REGION
+============================================================
+A. LATENT SDE SYSTEM CONFIG:
+   sigma (Noise Intensity)        : 0.54011
+   strat_decay (Damping factor)   : 0.74709
+   meso_decay (Dissipation rate)  : 1.34177
+------------------------------------------------------------
+B. OBSERVATION BASELINES & SWINGS:
+   temp     -> Baseline Mean:    5.869 | Physical Swing (±1σ): 1.8857
+   salt     -> Baseline Mean:   34.920 | Physical Swing (±1σ): 0.1930
+   ssh      -> Baseline Mean:   -1.350 | Physical Swing (±1σ): 0.0576
+   u_curr   -> Baseline Mean:   -0.058 | Physical Swing (±1σ): 0.0359
+   v_curr   -> Baseline Mean:    0.000 | Physical Swing (±1σ): 0.0491
+============================================================
+Generating synthetic dataset...
+Fitting scaler on training subset...
+Scaler successfully fitted across training pool data.
+Scaler statistics exported to 'scalers/synthetic_channel_scaler_32.pkl'
+
+Starting Training...
+Epoch 01 | Val Loss: 0.2143 | F1: 0.515 | Prec: 0.87 | Rec: 0.37
+Epoch 02 | Val Loss: 0.1786 | F1: 0.611 | Prec: 0.77 | Rec: 0.50
+Epoch 03 | Val Loss: 0.1674 | F1: 0.659 | Prec: 0.72 | Rec: 0.61
+Epoch 04 | Val Loss: 0.1799 | F1: 0.564 | Prec: 0.83 | Rec: 0.43
+Epoch 05 | Val Loss: 0.1811 | F1: 0.549 | Prec: 0.86 | Rec: 0.40
+Epoch 06 | Val Loss: 0.1816 | F1: 0.554 | Prec: 0.87 | Rec: 0.41
+Epoch 07 | Val Loss: 0.1899 | F1: 0.581 | Prec: 0.85 | Rec: 0.44
+Epoch 08 | Val Loss: 0.1684 | F1: 0.663 | Prec: 0.73 | Rec: 0.61
+Epoch 09 | Val Loss: 0.1790 | F1: 0.571 | Prec: 0.83 | Rec: 0.43
+Epoch 10 | Val Loss: 0.1734 | F1: 0.625 | Prec: 0.76 | Rec: 0.53
+Epoch 11 | Val Loss: 0.1740 | F1: 0.605 | Prec: 0.78 | Rec: 0.49
+Epoch 12 | Val Loss: 0.1698 | F1: 0.673 | Prec: 0.66 | Rec: 0.69
+Epoch 13 | Val Loss: 0.1719 | F1: 0.643 | Prec: 0.71 | Rec: 0.59
+
+Early stopping triggered at epoch 13
+
+Testing on hold-out set...
+Calibrated T = 1.4273
+Final Test -> F1: 0.701 | Precision: 0.79 | Recall: 0.63
+Recommended Threshold (FPR ≤ 5%): 0.5566 → TPR: 0.460, FPR: 0.049
+============================================================
+THRESHOLD OPTIMIZATION REPORT
+============================================================
+Area Under ROC Curve (ROC-AUC): 0.7949
+Recommended Threshold (Youden's J): 0.5088
+Recommended Threshold (Maximize F1):  0.4719 -> Max F1: 0.7440
+------------------------------------------------------------
+
+Classification Report using default threshold (0.500):
+              precision    recall  f1-score   support
+
+         0.0      0.679     0.827     0.746       365
+         1.0      0.793     0.629     0.701       385
+
+    accuracy                          0.725       750
+   macro avg      0.736     0.728     0.724       750
+weighted avg      0.738     0.725     0.723       750
+
+
+Classification Report using optimized F1 threshold (0.472):
+              precision    recall  f1-score   support
+
+         0.0      0.737     0.690     0.713       365
+         1.0      0.723     0.766     0.744       385
+
+    accuracy                          0.729       750
+   macro avg      0.730     0.728     0.728       750
+weighted avg      0.730     0.729     0.729       750
+
+
+Classification Report using minimised FPR threshold (0.5566):
+              precision    recall  f1-score   support
+
+         0.0      0.625     0.951     0.754       365
+         1.0      0.908     0.460     0.610       385
+
+    accuracy                          0.699       750
+   macro avg      0.766     0.705     0.682       750
+weighted avg      0.770     0.699     0.680       750
+
+============================================================
+Best Threshold -> 0.47192636132240295
+Historical false-positive alert timesteps: 0 / 780
+============================================================
+DYNAMIC CALIBRATION REPORT FOR TARGET REGION
+============================================================
+A. LATENT SDE SYSTEM CONFIG:
+   sigma (Noise Intensity)        : 0.47414
+   strat_decay (Damping factor)   : 0.83771
+   meso_decay (Dissipation rate)  : 1.33642
+------------------------------------------------------------
+B. OBSERVATION BASELINES & SWINGS:
+   temp     -> Baseline Mean:    5.768 | Physical Swing (±1σ): 1.8142
+   salt     -> Baseline Mean:   34.930 | Physical Swing (±1σ): 0.1999
+   ssh      -> Baseline Mean:   -1.377 | Physical Swing (±1σ): 0.0551
+   u_curr   -> Baseline Mean:   -0.042 | Physical Swing (±1σ): 0.0362
+   v_curr   -> Baseline Mean:   -0.002 | Physical Swing (±1σ): 0.0456
+============================================================
+Generating synthetic dataset...
+Fitting scaler on training subset...
+Scaler successfully fitted across training pool data.
+Scaler statistics exported to 'scalers/synthetic_channel_scaler_33.pkl'
+
+Starting Training...
+Epoch 01 | Val Loss: 0.1788 | F1: 0.638 | Prec: 0.74 | Rec: 0.56
+Epoch 02 | Val Loss: 0.1678 | F1: 0.634 | Prec: 0.78 | Rec: 0.53
+Epoch 03 | Val Loss: 0.2062 | F1: 0.538 | Prec: 0.91 | Rec: 0.38
+Epoch 04 | Val Loss: 0.1746 | F1: 0.602 | Prec: 0.86 | Rec: 0.46
+Epoch 05 | Val Loss: 0.1773 | F1: 0.591 | Prec: 0.82 | Rec: 0.46
+Epoch 06 | Val Loss: 0.1708 | F1: 0.683 | Prec: 0.70 | Rec: 0.67
+Epoch 07 | Val Loss: 0.1680 | F1: 0.685 | Prec: 0.74 | Rec: 0.64
+Epoch 08 | Val Loss: 0.1674 | F1: 0.684 | Prec: 0.73 | Rec: 0.64
+Epoch 09 | Val Loss: 0.1603 | F1: 0.639 | Prec: 0.78 | Rec: 0.54
+Epoch 10 | Val Loss: 0.1614 | F1: 0.605 | Prec: 0.78 | Rec: 0.50
+Epoch 11 | Val Loss: 0.1604 | F1: 0.700 | Prec: 0.74 | Rec: 0.66
+Epoch 12 | Val Loss: 0.1609 | F1: 0.640 | Prec: 0.77 | Rec: 0.55
+Epoch 13 | Val Loss: 0.1625 | F1: 0.659 | Prec: 0.76 | Rec: 0.58
+Epoch 14 | Val Loss: 0.1606 | F1: 0.682 | Prec: 0.73 | Rec: 0.64
+Epoch 15 | Val Loss: 0.1563 | F1: 0.702 | Prec: 0.73 | Rec: 0.68
+Epoch 16 | Val Loss: 0.1601 | F1: 0.624 | Prec: 0.79 | Rec: 0.52
+Epoch 17 | Val Loss: 0.1722 | F1: 0.656 | Prec: 0.77 | Rec: 0.57
+Epoch 18 | Val Loss: 0.1622 | F1: 0.685 | Prec: 0.73 | Rec: 0.65
+Epoch 19 | Val Loss: 0.1610 | F1: 0.680 | Prec: 0.73 | Rec: 0.63
+Epoch 20 | Val Loss: 0.1787 | F1: 0.715 | Prec: 0.68 | Rec: 0.75
+Epoch 21 | Val Loss: 0.1943 | F1: 0.692 | Prec: 0.66 | Rec: 0.72
+Epoch 22 | Val Loss: 0.1717 | F1: 0.668 | Prec: 0.76 | Rec: 0.59
+Epoch 23 | Val Loss: 0.1734 | F1: 0.691 | Prec: 0.73 | Rec: 0.66
+Epoch 24 | Val Loss: 0.1785 | F1: 0.692 | Prec: 0.71 | Rec: 0.67
+Epoch 25 | Val Loss: 0.1795 | F1: 0.698 | Prec: 0.64 | Rec: 0.76
+
+Early stopping triggered at epoch 25
+
+Testing on hold-out set...
+Calibrated T = 1.4292
+Final Test -> F1: 0.684 | Precision: 0.73 | Recall: 0.64
+Recommended Threshold (FPR ≤ 5%): 0.5440 → TPR: 0.514, FPR: 0.049
+============================================================
+THRESHOLD OPTIMIZATION REPORT
+============================================================
+Area Under ROC Curve (ROC-AUC): 0.7789
+Recommended Threshold (Youden's J): 0.5440
+Recommended Threshold (Maximize F1):  0.4809 -> Max F1: 0.7193
+------------------------------------------------------------
+
+Classification Report using default threshold (0.500):
+              precision    recall  f1-score   support
+
+         0.0      0.666     0.748     0.705       365
+         1.0      0.729     0.644     0.684       385
+
+    accuracy                          0.695       750
+   macro avg      0.698     0.696     0.694       750
+weighted avg      0.698     0.695     0.694       750
+
+
+Classification Report using optimized F1 threshold (0.481):
+              precision    recall  f1-score   support
+
+         0.0      0.721     0.567     0.635       365
+         1.0      0.659     0.792     0.719       385
+
+    accuracy                          0.683       750
+   macro avg      0.690     0.680     0.677       750
+weighted avg      0.689     0.683     0.678       750
+
+
+Classification Report using minimised FPR threshold (0.5440):
+              precision    recall  f1-score   support
+
+         0.0      0.650     0.951     0.772       365
+         1.0      0.917     0.514     0.659       385
+
+    accuracy                          0.727       750
+   macro avg      0.783     0.732     0.715       750
+weighted avg      0.787     0.727     0.714       750
+
+============================================================
+Best Threshold -> 0.4809475243091583
+Historical false-positive alert timesteps: 622 / 780
+============================================================
+DYNAMIC CALIBRATION REPORT FOR TARGET REGION
+============================================================
+A. LATENT SDE SYSTEM CONFIG:
+   sigma (Noise Intensity)        : 0.57519
+   strat_decay (Damping factor)   : 0.71064
+   meso_decay (Dissipation rate)  : 1.19340
+------------------------------------------------------------
+B. OBSERVATION BASELINES & SWINGS:
+   temp     -> Baseline Mean:    5.846 | Physical Swing (±1σ): 1.8599
+   salt     -> Baseline Mean:   34.944 | Physical Swing (±1σ): 0.2127
+   ssh      -> Baseline Mean:   -1.360 | Physical Swing (±1σ): 0.0617
+   u_curr   -> Baseline Mean:   -0.051 | Physical Swing (±1σ): 0.0349
+   v_curr   -> Baseline Mean:   -0.001 | Physical Swing (±1σ): 0.0505
+============================================================
+Generating synthetic dataset...
+Fitting scaler on training subset...
+Scaler successfully fitted across training pool data.
+Scaler statistics exported to 'scalers/synthetic_channel_scaler_34.pkl'
+
+Starting Training...
+Epoch 01 | Val Loss: 0.1901 | F1: 0.622 | Prec: 0.70 | Rec: 0.56
+Epoch 02 | Val Loss: 0.1839 | F1: 0.607 | Prec: 0.83 | Rec: 0.48
+Epoch 03 | Val Loss: 0.1986 | F1: 0.490 | Prec: 0.91 | Rec: 0.34
+Epoch 04 | Val Loss: 0.1674 | F1: 0.632 | Prec: 0.74 | Rec: 0.55
+Epoch 05 | Val Loss: 0.1815 | F1: 0.571 | Prec: 0.84 | Rec: 0.43
+Epoch 06 | Val Loss: 0.1740 | F1: 0.562 | Prec: 0.73 | Rec: 0.46
+Epoch 07 | Val Loss: 0.1706 | F1: 0.646 | Prec: 0.77 | Rec: 0.55
+Epoch 08 | Val Loss: 0.1695 | F1: 0.647 | Prec: 0.72 | Rec: 0.59
+Epoch 09 | Val Loss: 0.1813 | F1: 0.556 | Prec: 0.84 | Rec: 0.42
+Epoch 10 | Val Loss: 0.1740 | F1: 0.608 | Prec: 0.77 | Rec: 0.50
+Epoch 11 | Val Loss: 0.1767 | F1: 0.666 | Prec: 0.68 | Rec: 0.65
+Epoch 12 | Val Loss: 0.1849 | F1: 0.687 | Prec: 0.59 | Rec: 0.82
+Epoch 13 | Val Loss: 0.1656 | F1: 0.656 | Prec: 0.74 | Rec: 0.59
+Epoch 14 | Val Loss: 0.1807 | F1: 0.671 | Prec: 0.69 | Rec: 0.66
+Epoch 15 | Val Loss: 0.1812 | F1: 0.692 | Prec: 0.63 | Rec: 0.76
+Epoch 16 | Val Loss: 0.1722 | F1: 0.662 | Prec: 0.71 | Rec: 0.62
+Epoch 17 | Val Loss: 0.1709 | F1: 0.657 | Prec: 0.70 | Rec: 0.62
+Epoch 18 | Val Loss: 0.2080 | F1: 0.691 | Prec: 0.55 | Rec: 0.93
+Epoch 19 | Val Loss: 0.1882 | F1: 0.661 | Prec: 0.70 | Rec: 0.63
+Epoch 20 | Val Loss: 0.1814 | F1: 0.634 | Prec: 0.73 | Rec: 0.56
+Epoch 21 | Val Loss: 0.1812 | F1: 0.601 | Prec: 0.74 | Rec: 0.51
+Epoch 22 | Val Loss: 0.1895 | F1: 0.630 | Prec: 0.69 | Rec: 0.58
+Epoch 23 | Val Loss: 0.1901 | F1: 0.633 | Prec: 0.71 | Rec: 0.57
+
+Early stopping triggered at epoch 23
+
+Testing on hold-out set...
+Calibrated T = 1.4302
+Final Test -> F1: 0.661 | Precision: 0.80 | Recall: 0.56
+Recommended Threshold (FPR ≤ 5%): 0.5487 → TPR: 0.462, FPR: 0.049
+============================================================
+THRESHOLD OPTIMIZATION REPORT
+============================================================
+Area Under ROC Curve (ROC-AUC): 0.7655
+Recommended Threshold (Youden's J): 0.5244
+Recommended Threshold (Maximize F1):  0.4087 -> Max F1: 0.7040
+------------------------------------------------------------
+
+Classification Report using default threshold (0.500):
+              precision    recall  f1-score   support
+
+         0.0      0.649     0.849     0.735       365
+         1.0      0.798     0.564     0.661       385
+
+    accuracy                          0.703       750
+   macro avg      0.723     0.706     0.698       750
+weighted avg      0.725     0.703     0.697       750
+
+
+Classification Report using optimized F1 threshold (0.409):
+              precision    recall  f1-score   support
+
+         0.0      0.796     0.214     0.337       365
+         1.0      0.560     0.948     0.704       385
+
+    accuracy                          0.591       750
+   macro avg      0.678     0.581     0.520       750
+weighted avg      0.675     0.591     0.525       750
+
+
+Classification Report using minimised FPR threshold (0.5487):
+              precision    recall  f1-score   support
+
+         0.0      0.626     0.951     0.755       365
+         1.0      0.908     0.462     0.613       385
+
+    accuracy                          0.700       750
+   macro avg      0.767     0.707     0.684       750
+weighted avg      0.771     0.700     0.682       750
+
+============================================================
+Best Threshold -> 0.40874290466308594
+Historical false-positive alert timesteps: 25 / 780
+============================================================
+DYNAMIC CALIBRATION REPORT FOR TARGET REGION
+============================================================
+A. LATENT SDE SYSTEM CONFIG:
+   sigma (Noise Intensity)        : 0.50272
+   strat_decay (Damping factor)   : 1.00515
+   meso_decay (Dissipation rate)  : 1.43566
+------------------------------------------------------------
+B. OBSERVATION BASELINES & SWINGS:
+   temp     -> Baseline Mean:    5.695 | Physical Swing (±1σ): 1.8166
+   salt     -> Baseline Mean:   34.924 | Physical Swing (±1σ): 0.1969
+   ssh      -> Baseline Mean:   -1.373 | Physical Swing (±1σ): 0.0555
+   u_curr   -> Baseline Mean:   -0.053 | Physical Swing (±1σ): 0.0365
+   v_curr   -> Baseline Mean:    0.002 | Physical Swing (±1σ): 0.0513
+============================================================
+Generating synthetic dataset...
+Fitting scaler on training subset...
+Scaler successfully fitted across training pool data.
+Scaler statistics exported to 'scalers/synthetic_channel_scaler_35.pkl'
+
+Starting Training...
+Epoch 01 | Val Loss: 0.2090 | F1: 0.579 | Prec: 0.87 | Rec: 0.43
+Epoch 02 | Val Loss: 0.1737 | F1: 0.613 | Prec: 0.82 | Rec: 0.49
+Epoch 03 | Val Loss: 0.1778 | F1: 0.571 | Prec: 0.86 | Rec: 0.43
+Epoch 04 | Val Loss: 0.1705 | F1: 0.675 | Prec: 0.70 | Rec: 0.65
+Epoch 05 | Val Loss: 0.1640 | F1: 0.638 | Prec: 0.75 | Rec: 0.56
+Epoch 06 | Val Loss: 0.1645 | F1: 0.646 | Prec: 0.75 | Rec: 0.57
+Epoch 07 | Val Loss: 0.1798 | F1: 0.681 | Prec: 0.70 | Rec: 0.66
+Epoch 08 | Val Loss: 0.1692 | F1: 0.683 | Prec: 0.70 | Rec: 0.66
+Epoch 09 | Val Loss: 0.1652 | F1: 0.654 | Prec: 0.73 | Rec: 0.59
+Epoch 10 | Val Loss: 0.1612 | F1: 0.614 | Prec: 0.78 | Rec: 0.50
+Epoch 11 | Val Loss: 0.1690 | F1: 0.663 | Prec: 0.77 | Rec: 0.58
+Epoch 12 | Val Loss: 0.1623 | F1: 0.673 | Prec: 0.67 | Rec: 0.67
+Epoch 13 | Val Loss: 0.1625 | F1: 0.640 | Prec: 0.76 | Rec: 0.55
+Epoch 14 | Val Loss: 0.1666 | F1: 0.649 | Prec: 0.75 | Rec: 0.57
+Epoch 15 | Val Loss: 0.1765 | F1: 0.684 | Prec: 0.71 | Rec: 0.66
+Epoch 16 | Val Loss: 0.1578 | F1: 0.617 | Prec: 0.79 | Rec: 0.51
+Epoch 17 | Val Loss: 0.1770 | F1: 0.628 | Prec: 0.75 | Rec: 0.54
+Epoch 18 | Val Loss: 0.1660 | F1: 0.579 | Prec: 0.87 | Rec: 0.43
+Epoch 19 | Val Loss: 0.1818 | F1: 0.684 | Prec: 0.69 | Rec: 0.68
+Epoch 20 | Val Loss: 0.1649 | F1: 0.653 | Prec: 0.76 | Rec: 0.57
+Epoch 21 | Val Loss: 0.1733 | F1: 0.666 | Prec: 0.74 | Rec: 0.61
+Epoch 22 | Val Loss: 0.1710 | F1: 0.654 | Prec: 0.72 | Rec: 0.60
+Epoch 23 | Val Loss: 0.1829 | F1: 0.678 | Prec: 0.70 | Rec: 0.66
+Epoch 24 | Val Loss: 0.1766 | F1: 0.674 | Prec: 0.70 | Rec: 0.65
+Epoch 25 | Val Loss: 0.1853 | F1: 0.685 | Prec: 0.67 | Rec: 0.70
+Epoch 26 | Val Loss: 0.1756 | F1: 0.614 | Prec: 0.78 | Rec: 0.51
+
+Early stopping triggered at epoch 26
+
+Testing on hold-out set...
+Calibrated T = 1.4270
+Final Test -> F1: 0.650 | Precision: 0.88 | Recall: 0.51
+Recommended Threshold (FPR ≤ 5%): 0.5181 → TPR: 0.486, FPR: 0.044
+============================================================
+THRESHOLD OPTIMIZATION REPORT
+============================================================
+Area Under ROC Curve (ROC-AUC): 0.7871
+Recommended Threshold (Youden's J): 0.4809
+Recommended Threshold (Maximize F1):  0.4561 -> Max F1: 0.7257
+------------------------------------------------------------
+
+Classification Report using default threshold (0.500):
+              precision    recall  f1-score   support
+
+         0.0      0.644     0.929     0.761       365
+         1.0      0.884     0.514     0.650       385
+
+    accuracy                          0.716       750
+   macro avg      0.764     0.722     0.706       750
+weighted avg      0.767     0.716     0.704       750
+
+
+Classification Report using optimized F1 threshold (0.456):
+              precision    recall  f1-score   support
+
+         0.0      0.720     0.636     0.675       365
+         1.0      0.689     0.766     0.726       385
+
+    accuracy                          0.703       750
+   macro avg      0.705     0.701     0.701       750
+weighted avg      0.704     0.703     0.701       750
+
+
+Classification Report using minimised FPR threshold (0.5181):
+              precision    recall  f1-score   support
+
+         0.0      0.638     0.956     0.765       365
+         1.0      0.921     0.486     0.636       385
+
+    accuracy                          0.715       750
+   macro avg      0.780     0.721     0.701       750
+weighted avg      0.783     0.715     0.699       750
+
+============================================================
+Best Threshold -> 0.45611679553985596
+Historical false-positive alert timesteps: 146 / 780
+============================================================
+DYNAMIC CALIBRATION REPORT FOR TARGET REGION
+============================================================
+A. LATENT SDE SYSTEM CONFIG:
+   sigma (Noise Intensity)        : 0.53015
+   strat_decay (Damping factor)   : 1.01716
+   meso_decay (Dissipation rate)  : 1.34621
+------------------------------------------------------------
+B. OBSERVATION BASELINES & SWINGS:
+   temp     -> Baseline Mean:    5.214 | Physical Swing (±1σ): 1.8767
+   salt     -> Baseline Mean:   34.790 | Physical Swing (±1σ): 0.1910
+   ssh      -> Baseline Mean:   -1.364 | Physical Swing (±1σ): 0.0607
+   u_curr   -> Baseline Mean:   -0.047 | Physical Swing (±1σ): 0.0354
+   v_curr   -> Baseline Mean:   -0.004 | Physical Swing (±1σ): 0.0508
+============================================================
+Generating synthetic dataset...
+Fitting scaler on training subset...
+Scaler successfully fitted across training pool data.
+Scaler statistics exported to 'scalers/synthetic_channel_scaler_36.pkl'
+
+Starting Training...
+Epoch 01 | Val Loss: 0.2008 | F1: 0.570 | Prec: 0.80 | Rec: 0.44
+Epoch 02 | Val Loss: 0.1816 | F1: 0.643 | Prec: 0.74 | Rec: 0.57
+Epoch 03 | Val Loss: 0.1667 | F1: 0.651 | Prec: 0.73 | Rec: 0.59
+Epoch 04 | Val Loss: 0.1675 | F1: 0.611 | Prec: 0.76 | Rec: 0.51
+Epoch 05 | Val Loss: 0.1725 | F1: 0.621 | Prec: 0.75 | Rec: 0.53
+Epoch 06 | Val Loss: 0.1702 | F1: 0.641 | Prec: 0.71 | Rec: 0.58
+Epoch 07 | Val Loss: 0.1702 | F1: 0.608 | Prec: 0.75 | Rec: 0.51
+Epoch 08 | Val Loss: 0.1734 | F1: 0.634 | Prec: 0.73 | Rec: 0.56
+Epoch 09 | Val Loss: 0.1751 | F1: 0.650 | Prec: 0.72 | Rec: 0.59
+Epoch 10 | Val Loss: 0.1736 | F1: 0.651 | Prec: 0.72 | Rec: 0.59
+Epoch 11 | Val Loss: 0.1778 | F1: 0.656 | Prec: 0.72 | Rec: 0.61
+Epoch 12 | Val Loss: 0.1756 | F1: 0.587 | Prec: 0.81 | Rec: 0.46
+Epoch 13 | Val Loss: 0.1696 | F1: 0.637 | Prec: 0.72 | Rec: 0.57
+
+Early stopping triggered at epoch 13
+
+Testing on hold-out set...
+Calibrated T = 1.4288
+Final Test -> F1: 0.695 | Precision: 0.81 | Recall: 0.61
+Recommended Threshold (FPR ≤ 5%): 0.5524 → TPR: 0.452, FPR: 0.049
+============================================================
+THRESHOLD OPTIMIZATION REPORT
+============================================================
+Area Under ROC Curve (ROC-AUC): 0.7930
+Recommended Threshold (Youden's J): 0.4858
+Recommended Threshold (Maximize F1):  0.4643 -> Max F1: 0.7340
+------------------------------------------------------------
+
+Classification Report using default threshold (0.500):
+              precision    recall  f1-score   support
+
+         0.0      0.673     0.852     0.752       365
+         1.0      0.812     0.608     0.695       385
+
+    accuracy                          0.727       750
+   macro avg      0.743     0.730     0.724       750
+weighted avg      0.745     0.727     0.723       750
+
+
+Classification Report using optimized F1 threshold (0.464):
+              precision    recall  f1-score   support
+
+         0.0      0.722     0.699     0.710       365
+         1.0      0.723     0.745     0.734       385
+
+    accuracy                          0.723       750
+   macro avg      0.723     0.722     0.722       750
+weighted avg      0.723     0.723     0.722       750
+
+
+Classification Report using minimised FPR threshold (0.5524):
+              precision    recall  f1-score   support
+
+         0.0      0.622     0.951     0.752       365
+         1.0      0.906     0.452     0.603       385
+
+    accuracy                          0.695       750
+   macro avg      0.764     0.701     0.678       750
+weighted avg      0.768     0.695     0.676       750
+
+============================================================
+Best Threshold -> 0.46430203318595886
+Historical false-positive alert timesteps: 0 / 780
+============================================================
+DYNAMIC CALIBRATION REPORT FOR TARGET REGION
+============================================================
+A. LATENT SDE SYSTEM CONFIG:
+   sigma (Noise Intensity)        : 0.53228
+   strat_decay (Damping factor)   : 0.90297
+   meso_decay (Dissipation rate)  : 1.37604
+------------------------------------------------------------
+B. OBSERVATION BASELINES & SWINGS:
+   temp     -> Baseline Mean:    5.195 | Physical Swing (±1σ): 1.8496
+   salt     -> Baseline Mean:   34.786 | Physical Swing (±1σ): 0.1827
+   ssh      -> Baseline Mean:   -1.385 | Physical Swing (±1σ): 0.0622
+   u_curr   -> Baseline Mean:   -0.051 | Physical Swing (±1σ): 0.0379
+   v_curr   -> Baseline Mean:   -0.024 | Physical Swing (±1σ): 0.0484
+============================================================
+Generating synthetic dataset...
+Fitting scaler on training subset...
+Scaler successfully fitted across training pool data.
+Scaler statistics exported to 'scalers/synthetic_channel_scaler_37.pkl'
+
+Starting Training...
+Epoch 01 | Val Loss: 0.2132 | F1: 0.485 | Prec: 0.91 | Rec: 0.33
+Epoch 02 | Val Loss: 0.1864 | F1: 0.566 | Prec: 0.82 | Rec: 0.43
+Epoch 03 | Val Loss: 0.1675 | F1: 0.628 | Prec: 0.75 | Rec: 0.54
+Epoch 04 | Val Loss: 0.1731 | F1: 0.645 | Prec: 0.75 | Rec: 0.57
+Epoch 05 | Val Loss: 0.1666 | F1: 0.639 | Prec: 0.73 | Rec: 0.57
+Epoch 06 | Val Loss: 0.1707 | F1: 0.614 | Prec: 0.81 | Rec: 0.50
+Epoch 07 | Val Loss: 0.1729 | F1: 0.626 | Prec: 0.79 | Rec: 0.52
+Epoch 08 | Val Loss: 0.1656 | F1: 0.610 | Prec: 0.79 | Rec: 0.50
+Epoch 09 | Val Loss: 0.1649 | F1: 0.639 | Prec: 0.76 | Rec: 0.55
+Epoch 10 | Val Loss: 0.1726 | F1: 0.678 | Prec: 0.72 | Rec: 0.64
+Epoch 11 | Val Loss: 0.1693 | F1: 0.639 | Prec: 0.77 | Rec: 0.55
+Epoch 12 | Val Loss: 0.1717 | F1: 0.607 | Prec: 0.78 | Rec: 0.50
+Epoch 13 | Val Loss: 0.1686 | F1: 0.605 | Prec: 0.76 | Rec: 0.50
+Epoch 14 | Val Loss: 0.1740 | F1: 0.610 | Prec: 0.76 | Rec: 0.51
+Epoch 15 | Val Loss: 0.1715 | F1: 0.584 | Prec: 0.81 | Rec: 0.46
+Epoch 16 | Val Loss: 0.1783 | F1: 0.620 | Prec: 0.75 | Rec: 0.53
+Epoch 17 | Val Loss: 0.1878 | F1: 0.677 | Prec: 0.70 | Rec: 0.65
+Epoch 18 | Val Loss: 0.1868 | F1: 0.622 | Prec: 0.77 | Rec: 0.52
+Epoch 19 | Val Loss: 0.1725 | F1: 0.644 | Prec: 0.69 | Rec: 0.60
+
+Early stopping triggered at epoch 19
+
+Testing on hold-out set...
+Calibrated T = 1.4293
+Final Test -> F1: 0.674 | Precision: 0.85 | Recall: 0.56
+Recommended Threshold (FPR ≤ 5%): 0.5432 → TPR: 0.468, FPR: 0.041
+============================================================
+THRESHOLD OPTIMIZATION REPORT
+============================================================
+Area Under ROC Curve (ROC-AUC): 0.7782
+Recommended Threshold (Youden's J): 0.4760
+Recommended Threshold (Maximize F1):  0.4473 -> Max F1: 0.7194
+------------------------------------------------------------
+
+Classification Report using default threshold (0.500):
+              precision    recall  f1-score   support
+
+         0.0      0.658     0.896     0.759       365
+         1.0      0.850     0.558     0.674       385
+
+    accuracy                          0.723       750
+   macro avg      0.754     0.727     0.716       750
+weighted avg      0.756     0.723     0.715       750
+
+
+Classification Report using optimized F1 threshold (0.447):
+              precision    recall  f1-score   support
+
+         0.0      0.712     0.636     0.671       365
+         1.0      0.686     0.756     0.719       385
+
+    accuracy                          0.697       750
+   macro avg      0.699     0.696     0.695       750
+weighted avg      0.699     0.697     0.696       750
+
+
+Classification Report using minimised FPR threshold (0.5432):
+              precision    recall  f1-score   support
+
+         0.0      0.631     0.959     0.761       365
+         1.0      0.923     0.468     0.621       385
+
+    accuracy                          0.707       750
+   macro avg      0.777     0.713     0.691       750
+weighted avg      0.781     0.707     0.689       750
+
+============================================================
+Best Threshold -> 0.4473385214805603
+Historical false-positive alert timesteps: 36 / 780
+============================================================
+DYNAMIC CALIBRATION REPORT FOR TARGET REGION
+============================================================
+A. LATENT SDE SYSTEM CONFIG:
+   sigma (Noise Intensity)        : 0.47580
+   strat_decay (Damping factor)   : 0.72173
+   meso_decay (Dissipation rate)  : 1.50952
+------------------------------------------------------------
+B. OBSERVATION BASELINES & SWINGS:
+   temp     -> Baseline Mean:    5.277 | Physical Swing (±1σ): 1.8609
+   salt     -> Baseline Mean:   34.824 | Physical Swing (±1σ): 0.1941
+   ssh      -> Baseline Mean:   -1.363 | Physical Swing (±1σ): 0.0659
+   u_curr   -> Baseline Mean:   -0.048 | Physical Swing (±1σ): 0.0371
+   v_curr   -> Baseline Mean:   -0.012 | Physical Swing (±1σ): 0.0470
+============================================================
+Generating synthetic dataset...
+Fitting scaler on training subset...
+Scaler successfully fitted across training pool data.
+Scaler statistics exported to 'scalers/synthetic_channel_scaler_38.pkl'
+
+Starting Training...
+Epoch 01 | Val Loss: 0.1747 | F1: 0.651 | Prec: 0.72 | Rec: 0.59
+Epoch 02 | Val Loss: 0.1733 | F1: 0.619 | Prec: 0.82 | Rec: 0.50
+Epoch 03 | Val Loss: 0.1679 | F1: 0.632 | Prec: 0.79 | Rec: 0.53
+Epoch 04 | Val Loss: 0.2142 | F1: 0.509 | Prec: 0.94 | Rec: 0.35
+Epoch 05 | Val Loss: 0.1996 | F1: 0.477 | Prec: 0.98 | Rec: 0.31
+Epoch 06 | Val Loss: 0.1657 | F1: 0.585 | Prec: 0.86 | Rec: 0.44
+Epoch 07 | Val Loss: 0.1713 | F1: 0.651 | Prec: 0.82 | Rec: 0.54
+Epoch 08 | Val Loss: 0.1617 | F1: 0.614 | Prec: 0.85 | Rec: 0.48
+Epoch 09 | Val Loss: 0.1661 | F1: 0.630 | Prec: 0.80 | Rec: 0.52
+Epoch 10 | Val Loss: 0.1626 | F1: 0.624 | Prec: 0.80 | Rec: 0.51
+Epoch 11 | Val Loss: 0.1613 | F1: 0.597 | Prec: 0.86 | Rec: 0.46
+Epoch 12 | Val Loss: 0.1662 | F1: 0.611 | Prec: 0.87 | Rec: 0.47
+Epoch 13 | Val Loss: 0.1715 | F1: 0.582 | Prec: 0.94 | Rec: 0.42
+Epoch 14 | Val Loss: 0.1709 | F1: 0.623 | Prec: 0.87 | Rec: 0.49
+Epoch 15 | Val Loss: 0.1728 | F1: 0.615 | Prec: 0.86 | Rec: 0.48
+Epoch 16 | Val Loss: 0.1738 | F1: 0.635 | Prec: 0.79 | Rec: 0.53
+Epoch 17 | Val Loss: 0.1685 | F1: 0.632 | Prec: 0.79 | Rec: 0.53
+Epoch 18 | Val Loss: 0.1634 | F1: 0.652 | Prec: 0.79 | Rec: 0.55
+Epoch 19 | Val Loss: 0.1664 | F1: 0.627 | Prec: 0.84 | Rec: 0.50
+Epoch 20 | Val Loss: 0.1693 | F1: 0.638 | Prec: 0.78 | Rec: 0.54
+Epoch 21 | Val Loss: 0.1809 | F1: 0.671 | Prec: 0.74 | Rec: 0.61
+
+Early stopping triggered at epoch 21
+
+Testing on hold-out set...
+Calibrated T = 1.4243
+Final Test -> F1: 0.621 | Precision: 0.92 | Recall: 0.47
+Recommended Threshold (FPR ≤ 5%): 0.4937 → TPR: 0.488, FPR: 0.047
+============================================================
+THRESHOLD OPTIMIZATION REPORT
+============================================================
+Area Under ROC Curve (ROC-AUC): 0.7754
+Recommended Threshold (Youden's J): 0.4590
+Recommended Threshold (Maximize F1):  0.4385 -> Max F1: 0.7130
+------------------------------------------------------------
+
+Classification Report using default threshold (0.500):
+              precision    recall  f1-score   support
+
+         0.0      0.631     0.959     0.761       365
+         1.0      0.923     0.468     0.621       385
+
+    accuracy                          0.707       750
+   macro avg      0.777     0.713     0.691       750
+weighted avg      0.781     0.707     0.689       750
+
+
+Classification Report using optimized F1 threshold (0.439):
+              precision    recall  f1-score   support
+
+         0.0      0.698     0.685     0.692       365
+         1.0      0.707     0.719     0.713       385
+
+    accuracy                          0.703       750
+   macro avg      0.702     0.702     0.702       750
+weighted avg      0.703     0.703     0.703       750
+
+
+Classification Report using minimised FPR threshold (0.4937):
+              precision    recall  f1-score   support
+
+         0.0      0.639     0.953     0.765       365
+         1.0      0.917     0.488     0.637       385
+
+    accuracy                          0.715       750
+   macro avg      0.778     0.721     0.701       750
+weighted avg      0.782     0.715     0.699       750
+
+============================================================
+Best Threshold -> 0.4385414123535156
+Historical false-positive alert timesteps: 0 / 780
+============================================================
+DYNAMIC CALIBRATION REPORT FOR TARGET REGION
+============================================================
+A. LATENT SDE SYSTEM CONFIG:
+   sigma (Noise Intensity)        : 0.48470
+   strat_decay (Damping factor)   : 1.20870
+   meso_decay (Dissipation rate)  : 1.40553
+------------------------------------------------------------
+B. OBSERVATION BASELINES & SWINGS:
+   temp     -> Baseline Mean:    5.318 | Physical Swing (±1σ): 1.7884
+   salt     -> Baseline Mean:   34.845 | Physical Swing (±1σ): 0.1889
+   ssh      -> Baseline Mean:   -1.397 | Physical Swing (±1σ): 0.0657
+   u_curr   -> Baseline Mean:   -0.044 | Physical Swing (±1σ): 0.0363
+   v_curr   -> Baseline Mean:   -0.013 | Physical Swing (±1σ): 0.0517
+============================================================
+Generating synthetic dataset...
+Fitting scaler on training subset...
+Scaler successfully fitted across training pool data.
+Scaler statistics exported to 'scalers/synthetic_channel_scaler_39.pkl'
+
+Starting Training...
+Epoch 01 | Val Loss: 0.2096 | F1: 0.563 | Prec: 0.90 | Rec: 0.41
+Epoch 02 | Val Loss: 0.1688 | F1: 0.650 | Prec: 0.79 | Rec: 0.55
+Epoch 03 | Val Loss: 0.2040 | F1: 0.494 | Prec: 0.93 | Rec: 0.34
+Epoch 04 | Val Loss: 0.1868 | F1: 0.546 | Prec: 0.91 | Rec: 0.39
+Epoch 05 | Val Loss: 0.1814 | F1: 0.556 | Prec: 0.90 | Rec: 0.40
+Epoch 06 | Val Loss: 0.1657 | F1: 0.576 | Prec: 0.88 | Rec: 0.43
+Epoch 07 | Val Loss: 0.1657 | F1: 0.592 | Prec: 0.88 | Rec: 0.45
+Epoch 08 | Val Loss: 0.1624 | F1: 0.596 | Prec: 0.84 | Rec: 0.46
+Epoch 09 | Val Loss: 0.1709 | F1: 0.601 | Prec: 0.85 | Rec: 0.47
+Epoch 10 | Val Loss: 0.1785 | F1: 0.588 | Prec: 0.87 | Rec: 0.45
+Epoch 11 | Val Loss: 0.1623 | F1: 0.631 | Prec: 0.83 | Rec: 0.51
+Epoch 12 | Val Loss: 0.1713 | F1: 0.658 | Prec: 0.78 | Rec: 0.57
+Epoch 13 | Val Loss: 0.1622 | F1: 0.641 | Prec: 0.81 | Rec: 0.53
+Epoch 14 | Val Loss: 0.1665 | F1: 0.637 | Prec: 0.80 | Rec: 0.53
+Epoch 15 | Val Loss: 0.1787 | F1: 0.646 | Prec: 0.73 | Rec: 0.58
+Epoch 16 | Val Loss: 0.1663 | F1: 0.667 | Prec: 0.77 | Rec: 0.59
+Epoch 17 | Val Loss: 0.1656 | F1: 0.651 | Prec: 0.80 | Rec: 0.55
+Epoch 18 | Val Loss: 0.1698 | F1: 0.632 | Prec: 0.82 | Rec: 0.51
+Epoch 19 | Val Loss: 0.1734 | F1: 0.664 | Prec: 0.79 | Rec: 0.57
+Epoch 20 | Val Loss: 0.1717 | F1: 0.650 | Prec: 0.78 | Rec: 0.56
+Epoch 21 | Val Loss: 0.1830 | F1: 0.649 | Prec: 0.70 | Rec: 0.61
+Epoch 22 | Val Loss: 0.1669 | F1: 0.634 | Prec: 0.85 | Rec: 0.51
+Epoch 23 | Val Loss: 0.1755 | F1: 0.653 | Prec: 0.78 | Rec: 0.56
+
+Early stopping triggered at epoch 23
+
+Testing on hold-out set...
+Calibrated T = 1.4182
+Final Test -> F1: 0.670 | Precision: 0.87 | Recall: 0.54
+Recommended Threshold (FPR ≤ 5%): 0.5315 → TPR: 0.496, FPR: 0.047
+============================================================
+THRESHOLD OPTIMIZATION REPORT
+============================================================
+Area Under ROC Curve (ROC-AUC): 0.7854
+Recommended Threshold (Youden's J): 0.4758
+Recommended Threshold (Maximize F1):  0.4237 -> Max F1: 0.7175
+------------------------------------------------------------
+
+Classification Report using default threshold (0.500):
+              precision    recall  f1-score   support
+
+         0.0      0.656     0.918     0.765       365
+         1.0      0.874     0.543     0.670       385
+
+    accuracy                          0.725       750
+   macro avg      0.765     0.730     0.717       750
+weighted avg      0.768     0.725     0.716       750
+
+
+Classification Report using optimized F1 threshold (0.424):
+              precision    recall  f1-score   support
+
+         0.0      0.728     0.512     0.601       365
+         1.0      0.639     0.818     0.718       385
+
+    accuracy                          0.669       750
+   macro avg      0.683     0.665     0.659       750
+weighted avg      0.682     0.669     0.661       750
+
+
+Classification Report using minimised FPR threshold (0.5315):
+              precision    recall  f1-score   support
+
+         0.0      0.642     0.953     0.767       365
+         1.0      0.918     0.496     0.644       385
+
+    accuracy                          0.719       750
+   macro avg      0.780     0.725     0.706       750
+weighted avg      0.784     0.719     0.704       750
+
+============================================================
+Best Threshold -> 0.42371833324432373
+Historical false-positive alert timesteps: 0 / 780
+============================================================
+DYNAMIC CALIBRATION REPORT FOR TARGET REGION
+============================================================
+A. LATENT SDE SYSTEM CONFIG:
+   sigma (Noise Intensity)        : 0.50531
+   strat_decay (Damping factor)   : 0.77441
+   meso_decay (Dissipation rate)  : 1.38262
+------------------------------------------------------------
+B. OBSERVATION BASELINES & SWINGS:
+   temp     -> Baseline Mean:    5.399 | Physical Swing (±1σ): 1.8737
+   salt     -> Baseline Mean:   34.849 | Physical Swing (±1σ): 0.1943
+   ssh      -> Baseline Mean:   -1.348 | Physical Swing (±1σ): 0.0615
+   u_curr   -> Baseline Mean:   -0.045 | Physical Swing (±1σ): 0.0355
+   v_curr   -> Baseline Mean:   -0.000 | Physical Swing (±1σ): 0.0470
+============================================================
+Generating synthetic dataset...
+Fitting scaler on training subset...
+Scaler successfully fitted across training pool data.
+Scaler statistics exported to 'scalers/synthetic_channel_scaler_40.pkl'
+
+Starting Training...
+Epoch 01 | Val Loss: 0.2298 | F1: 0.482 | Prec: 0.89 | Rec: 0.33
+Epoch 02 | Val Loss: 0.2024 | F1: 0.549 | Prec: 0.86 | Rec: 0.40
+Epoch 03 | Val Loss: 0.1836 | F1: 0.606 | Prec: 0.79 | Rec: 0.49
+Epoch 04 | Val Loss: 0.1882 | F1: 0.628 | Prec: 0.75 | Rec: 0.54
+Epoch 05 | Val Loss: 0.1976 | F1: 0.536 | Prec: 0.86 | Rec: 0.39
+Epoch 06 | Val Loss: 0.1856 | F1: 0.677 | Prec: 0.69 | Rec: 0.66
+Epoch 07 | Val Loss: 0.1823 | F1: 0.595 | Prec: 0.80 | Rec: 0.47
+Epoch 08 | Val Loss: 0.1797 | F1: 0.649 | Prec: 0.74 | Rec: 0.58
+Epoch 09 | Val Loss: 0.1787 | F1: 0.574 | Prec: 0.84 | Rec: 0.43
+Epoch 10 | Val Loss: 0.1717 | F1: 0.594 | Prec: 0.82 | Rec: 0.46
+Epoch 11 | Val Loss: 0.1733 | F1: 0.628 | Prec: 0.79 | Rec: 0.52
+Epoch 12 | Val Loss: 0.1887 | F1: 0.705 | Prec: 0.67 | Rec: 0.74
+Epoch 13 | Val Loss: 0.1703 | F1: 0.671 | Prec: 0.74 | Rec: 0.61
+Epoch 14 | Val Loss: 0.1619 | F1: 0.617 | Prec: 0.83 | Rec: 0.49
+Epoch 15 | Val Loss: 0.1724 | F1: 0.670 | Prec: 0.72 | Rec: 0.63
+Epoch 16 | Val Loss: 0.1612 | F1: 0.629 | Prec: 0.82 | Rec: 0.51
+Epoch 17 | Val Loss: 0.1633 | F1: 0.677 | Prec: 0.72 | Rec: 0.64
+Epoch 18 | Val Loss: 0.1699 | F1: 0.687 | Prec: 0.71 | Rec: 0.66
+Epoch 19 | Val Loss: 0.1697 | F1: 0.658 | Prec: 0.74 | Rec: 0.59
+Epoch 20 | Val Loss: 0.1677 | F1: 0.623 | Prec: 0.81 | Rec: 0.51
+Epoch 21 | Val Loss: 0.1635 | F1: 0.634 | Prec: 0.77 | Rec: 0.54
+Epoch 22 | Val Loss: 0.1649 | F1: 0.661 | Prec: 0.74 | Rec: 0.60
+Epoch 23 | Val Loss: 0.1850 | F1: 0.679 | Prec: 0.70 | Rec: 0.66
+Epoch 24 | Val Loss: 0.1759 | F1: 0.685 | Prec: 0.71 | Rec: 0.66
+Epoch 25 | Val Loss: 0.1800 | F1: 0.714 | Prec: 0.66 | Rec: 0.77
+Epoch 26 | Val Loss: 0.2041 | F1: 0.634 | Prec: 0.77 | Rec: 0.54
+
+Early stopping triggered at epoch 26
+
+Testing on hold-out set...
+Calibrated T = 1.4240
+Final Test -> F1: 0.652 | Precision: 0.90 | Recall: 0.51
+Recommended Threshold (FPR ≤ 5%): 0.5067 → TPR: 0.501, FPR: 0.049
+============================================================
+THRESHOLD OPTIMIZATION REPORT
+============================================================
+Area Under ROC Curve (ROC-AUC): 0.7773
+Recommended Threshold (Youden's J): 0.5029
+Recommended Threshold (Maximize F1):  0.4455 -> Max F1: 0.7188
+------------------------------------------------------------
+
+Classification Report using default threshold (0.500):
+              precision    recall  f1-score   support
+
+         0.0      0.646     0.940     0.766       365
+         1.0      0.900     0.512     0.652       385
+
+    accuracy                          0.720       750
+   macro avg      0.773     0.726     0.709       750
+weighted avg      0.776     0.720     0.707       750
+
+
+Classification Report using optimized F1 threshold (0.445):
+              precision    recall  f1-score   support
+
+         0.0      0.708     0.663     0.685       365
+         1.0      0.699     0.740     0.719       385
+
+    accuracy                          0.703       750
+   macro avg      0.703     0.702     0.702       750
+weighted avg      0.703     0.703     0.702       750
+
+
+Classification Report using minimised FPR threshold (0.5067):
+              precision    recall  f1-score   support
+
+         0.0      0.644     0.951     0.768       365
+         1.0      0.915     0.501     0.648       385
+
+    accuracy                          0.720       750
+   macro avg      0.779     0.726     0.708       750
+weighted avg      0.783     0.720     0.706       750
+
+============================================================
+Best Threshold -> 0.44549375772476196
+Historical false-positive alert timesteps: 0 / 780

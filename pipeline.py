@@ -45,7 +45,7 @@ class DatasetConfig:
     n_recordings: int = 800
     num_params: int = 5
     base_time_len: int = 2048
-    window_sizes: list[int] = field(default_factory=lambda: [64,128, 192,256])
+    window_sizes: list[int] = field(default_factory=lambda: [64,128,192,256])
     dt: float = 0.1
     seed: int = 42
     sde_constants: dict = None
@@ -54,7 +54,7 @@ import pandas as pd
 import numpy as np
 from scipy.signal import detrend
 
-def causal_smooth(raw_data, smooth_window=128):
+def causal_smooth(raw_data, smooth_window=6):
     """
     Applies pure causal (trailing) smoothing to preserve variance shifts
     and mean step-changes while dampening high-frequency observational noise.
@@ -197,7 +197,51 @@ def calculate_observation_mappings(df: pd.DataFrame, baseline_years: int = 10) -
             scales[gen_key] = 1.0
             
     return baselines, scales
-   
+
+def engineer_ocean_features(temp: np.ndarray, salt: np.ndarray, 
+                                ssh: np.ndarray, u: np.ndarray, v: np.ndarray):
+        """
+        Transforms raw telemetry into physically informative features.
+        Returns array of shape (5, T).
+        """
+        # 1. Potential Density (approximate Linearized Equation of State)
+        # rho = rho0 * (1 - alpha*(T-T0) + beta*(S-S0))
+        rho0 = 1025.0
+        alpha = 2.5e-4  # Thermal expansion coeff
+        beta = 7.5e-4   # Haline contraction coeff
+        # ──────────────────────────────────────────────────────────────────────
+        # NEW: Isolate velocity anomalies to neutralize absolute baseline shifts
+        # ──────────────────────────────────────────────────────────────────────
+        u_series = pd.Series(u)
+        u_anom = (u_series - u_series.rolling(window=36, min_periods=1).mean()).values
+        v_series = pd.Series(v)
+        v_anom = (v_series - v_series.rolling(window=36, min_periods=1).mean()).values
+        # ──────────────────────────────────────────────────────────────────────
+        # Center around mean T/S for better scaling
+        rho = rho0 * (1 - alpha * (temp - np.mean(temp)) + beta * (salt - np.mean(salt)))
+        
+        # 2. Kinetic Energy (KE = 0.5 * (u^2 + v^2))
+        # Higher values indicate more energetic/unstable flow
+        ke = 0.5 * (u_anom**2 + v_anom**2)
+        
+        # 3. SSH Anomaly (Deviation from long-term mean)
+        # Bifurcations often show up as persistent anomalies rather than absolute values
+        ssh_anom = ssh - np.mean(ssh)
+        
+        # 4. Velocity Magnitude (Speed)
+        speed = np.sqrt(u_anom**2 + v_anom**2)
+        
+        # 5. Instability Proxy (Standard Deviation of SSH)
+        # Calculating a rolling window variability as a proxy for potential regime shifts
+        # (Using a simple 12-month rolling window)
+        window = 12
+        ssh_variability = pd.Series(ssh).rolling(window=window, min_periods=3).std().fillna(0).values
+        
+        # Stack vertically -> shape (5, T)
+        features = np.vstack((rho, ke, ssh_anom, speed, ssh_variability))
+        
+        return features
+
 # ──────────────────────────────────────────────────────────────────────────────
 # Core Redesigned Signal Generator
 # ──────────────────────────────────────────────────────────────────────────────
@@ -352,51 +396,8 @@ class OceanStateGenerator:
         u_curr = baselines['u_curr'] + (raw_ucurr_anom * scales['u_curr'])
         v_curr = baselines['v_curr'] + (raw_vcurr_anom * scales['v_curr'])
 
-        return self.engineer_ocean_features(temp, salt, ssh, u_curr,v_curr)
+        return engineer_ocean_features(temp, salt, ssh, u_curr,v_curr)
 
-    def engineer_ocean_features(self,temp: np.ndarray, salt: np.ndarray, 
-                                ssh: np.ndarray, u: np.ndarray, v: np.ndarray):
-        """
-        Transforms raw telemetry into physically informative features.
-        Returns array of shape (5, T).
-        """
-        # 1. Potential Density (approximate Linearized Equation of State)
-        # rho = rho0 * (1 - alpha*(T-T0) + beta*(S-S0))
-        rho0 = 1025.0
-        alpha = 2.5e-4  # Thermal expansion coeff
-        beta = 7.5e-4   # Haline contraction coeff
-        # ──────────────────────────────────────────────────────────────────────
-        # NEW: Isolate velocity anomalies to neutralize absolute baseline shifts
-        # ──────────────────────────────────────────────────────────────────────
-        u_series = pd.Series(u)
-        u_anom = (u_series - u_series.rolling(window=36, min_periods=1).mean()).values
-        v_series = pd.Series(v)
-        v_anom = (v_series - v_series.rolling(window=36, min_periods=1).mean()).values
-        # ──────────────────────────────────────────────────────────────────────
-        # Center around mean T/S for better scaling
-        rho = rho0 * (1 - alpha * (temp - np.mean(temp)) + beta * (salt - np.mean(salt)))
-        
-        # 2. Kinetic Energy (KE = 0.5 * (u^2 + v^2))
-        # Higher values indicate more energetic/unstable flow
-        ke = 0.5 * (u_anom**2 + v_anom**2)
-        
-        # 3. SSH Anomaly (Deviation from long-term mean)
-        # Bifurcations often show up as persistent anomalies rather than absolute values
-        ssh_anom = ssh - np.mean(ssh)
-        
-        # 4. Velocity Magnitude (Speed)
-        speed = np.sqrt(u_anom**2 + v_anom**2)
-        
-        # 5. Instability Proxy (Standard Deviation of SSH)
-        # Calculating a rolling window variability as a proxy for potential regime shifts
-        # (Using a simple 12-month rolling window)
-        window = 12
-        ssh_variability = pd.Series(ssh).rolling(window=window, min_periods=3).std().fillna(0).values
-        
-        # Stack vertically -> shape (5, T)
-        features = np.vstack((rho, ke, ssh_anom, speed, ssh_variability))
-        
-        return features
 
     def crop_window(self, data: np.ndarray, is_positive: bool, bif_center: int):
         """Randomly samples 64, 128, 256, or 512 windows to prevent positional bias."""
@@ -434,7 +435,6 @@ class OceanStateGenerator:
         # Transpose to (2048, 5) for the processing function, then back to (5, 2048)
         processed_data_full = causal_smooth(
             data_full, 
-            smooth_window=128
         )
         # ──────────────────────────────────────────────────────────────────────
         
@@ -641,21 +641,19 @@ class BifurcationNet(nn.Module):
         
         return p_bif_pred, t_bif_pred
 
-    def mc_forward(
-        self, x: torch.Tensor, pad_mask: torch.Tensor = None, n_samples: int = 30
-    ) -> Tuple[torch.Tensor, torch.Tensor]:
-        """
-        Monte Carlo Dropout inference. Returns mean probability and
-        epistemic uncertainty (std) across n_samples stochastic passes.
-        """
-        self.train()  # activates Dropout layers
+    def mc_forward(self, x, pad_mask=None, n_samples=30):
+        self.train()
+        # Re-freeze any BatchNorm layers so they use running stats, not batch stats
+        for m in self.modules():
+            if isinstance(m, (nn.BatchNorm1d, nn.BatchNorm2d)):
+                m.eval()
         with torch.no_grad():
             logit_samples = torch.stack(
                 [self.forward(x, pad_mask)[0] for _ in range(n_samples)]
-            )  # shape: (n_samples, B)
+            )
         self.eval()
         probs = torch.sigmoid(logit_samples)
-        return probs.mean(dim=0), probs.std(dim=0)  # (B,), (B,)
+        return probs.mean(dim=0), probs.std(dim=0)
 
 class TemperatureScaler(nn.Module):
     def __init__(self):
@@ -1243,7 +1241,7 @@ if __name__ == "__main__":
         best_thresholds[f"ensemble_{i+1}"] = float(best_thresh)
     
         # Verify on the historical input — should produce no sustained alerts
-        hist_features = gen.engineer_ocean_features(
+        hist_features = engineer_ocean_features(
             df['temperature'].values, df['salinity'].values,
             df['ssh'].values, df['u_velocity'].values, df['v_velocity'].values
         )  # shape (5, T_hist)

@@ -3,7 +3,7 @@ import torch
 import numpy as np
 import pandas as pd
 # ─── 1. IMPORT YOUR MODEL ARCHITECTURE ───────────────────────────────────────
-from pipeline import BifurcationNet, DatasetConfig, ChannelWiseScaler, TemperatureScaler
+from pipeline import BifurcationNet, DatasetConfig, ChannelWiseScaler, TemperatureScaler,causal_smooth,engineer_ocean_features
 # ─────────────────────────────────────────────────────────────────────────────
 import ruptures as rpt
 import matplotlib.pyplot as plt
@@ -11,25 +11,6 @@ import matplotlib.patches as mpatches
 import pickle
 from scipy.stats import linregress
 import json
-
-def causal_smooth(raw_data, smooth_window=128):
-    """
-    Applies pure causal (trailing) smoothing to preserve variance shifts
-    and mean step-changes while dampening high-frequency observational noise.
-    
-    Parameters:
-    - raw_data: numpy array of shape (num_channels, total_timesteps)
-    - smooth_window: Number of months for the trailing moving average
-    """
-    smoothed = np.empty_like(raw_data)
-    for i in range(raw_data.shape[0]):
-        smoothed[i] = (
-            pd.Series(raw_data[i])
-            .rolling(window=smooth_window, min_periods=1)
-            .mean()
-            .values
-        )
-    return smoothed
 
 
 def load_and_preprocess_csv(csv_path: str) -> tuple:
@@ -71,55 +52,9 @@ def load_and_preprocess_csv(csv_path: str) -> tuple:
             raw_stream[channel][mask] = np.interp(x, xp, fp) # Also fix in raw
 
     # 3. Process (Detrend/Smooth)
-    processed_stream = causal_smooth(data_stream,smooth_window=128)
+    processed_stream = causal_smooth(data_stream)
     
     return raw_stream, processed_stream
-
-
-def engineer_ocean_features(temp: np.ndarray, salt: np.ndarray, 
-                            ssh: np.ndarray, u: np.ndarray, v: np.ndarray):
-    """
-    Transforms raw telemetry into physically informative features.
-    Returns array of shape (5, T).
-    """
-    # 1. Potential Density (approximate Linearized Equation of State)
-    # rho = rho0 * (1 - alpha*(T-T0) + beta*(S-S0))
-    rho0 = 1025.0
-    alpha = 2.5e-4  # Thermal expansion coeff
-    beta = 7.5e-4   # Haline contraction coeff
-    # ──────────────────────────────────────────────────────────────────────
-    # NEW: Isolate velocity anomalies to neutralize absolute baseline shifts
-    # ──────────────────────────────────────────────────────────────────────
-    u_series = pd.Series(u)
-    u_anom = (u_series - u_series.rolling(window=36, min_periods=1).mean()).values
-    v_series = pd.Series(v)
-    v_anom = (v_series - v_series.rolling(window=36, min_periods=1).mean()).values
-    # ──────────────────────────────────────────────────────────────────────
-    # Center around mean T/S for better scaling
-    rho = rho0 * (1 - alpha * (temp - np.mean(temp)) + beta * (salt - np.mean(salt)))
-    
-    # 2. Kinetic Energy (KE = 0.5 * (u^2 + v^2))
-    # Higher values indicate more energetic/unstable flow
-    ke = 0.5 * (u_anom**2 + v_anom**2)
-    
-    # 3. SSH Anomaly (Deviation from long-term mean)
-    # Bifurcations often show up as persistent anomalies rather than absolute values
-    ssh_anom = ssh - np.mean(ssh)
-    
-    # 4. Velocity Magnitude (Speed)
-    speed = np.sqrt(u_anom**2 + v_anom**2)
-    
-    # 5. Instability Proxy (Standard Deviation of SSH)
-    # Calculating a rolling window variability as a proxy for potential regime shifts
-    # (Using a simple 12-month rolling window)
-    window = 12
-    ssh_variability = pd.Series(ssh).rolling(window=window, min_periods=3).std().fillna(0).values
-    
-    # Stack vertically -> shape (5, T)
-    features = np.vstack((rho, ke, ssh_anom, speed, ssh_variability))
-    
-    return features
-
 
 def run_changepoint_analysis(raw_stream, n_breakpoints=1, model_type="rbf"):
     """
@@ -243,7 +178,7 @@ def run_real_world_inference(model, raw_stream, processed_stream,ensemble, ts,wi
                              prob_threshold=0.85, channel_names=None):
     
     if channel_names is None:
-        channel_names = ['Density (rho)', 'Kinetic Energy', 'SSH Anomaly', 'Speed', 'SSH Variability', 'Density Lag-1 AC (CSD)']
+        channel_names = ['Density (rho)', 'Kinetic Energy', 'SSH Anomaly', 'Speed', 'SSH Variability']
 
     model.eval()
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -322,7 +257,9 @@ if __name__ == "__main__":
             null_alerts = json.load(fp)
         try:
             if null_alerts[f"ensemble_{i+1}"] > 0:
+                print("=" * 60)
                 print(f"null alerts raised during training, skipping inference for ensemble {i+1}")
+                print("=" * 60)
                 continue
         except KeyError as e:
             print(e)
@@ -386,7 +323,7 @@ if __name__ == "__main__":
                 ts=ts,
                 window_size=128,
                 prob_threshold=best_thresholds[f"ensemble_{i+1}"],
-                ensemble=i+1
+                ensemble=i+1,
             )
         except KeyError as e:
             print(e)
