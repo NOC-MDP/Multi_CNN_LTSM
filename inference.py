@@ -55,7 +55,7 @@ def load_and_preprocess_csv(csv_path: str) -> tuple:
     
     return raw_stream, processed_stream
 
-def run_changepoint_analysis(raw_stream, n_breakpoints=1, model_type="rbf"):
+def run_changepoint_analysis(raw_stream, model_type="rbf",penalty_value=10):
     """
     Runs offline changepoint detection on the full multivariate stream.
     
@@ -72,41 +72,45 @@ def run_changepoint_analysis(raw_stream, n_breakpoints=1, model_type="rbf"):
     # ruptures expects shape (T, P) — transpose from (P, T)
     signal = raw_stream.T  # (T, P)
 
-    # Pelt search with penalty (automatic n_breakpoints via penalty)
-    # We use Binseg for exact n_breakpoints control
-    algo = rpt.Binseg(model=model_type, min_size=20, jump=5).fit(signal)
-    breakpoints = algo.predict(n_bkps=n_breakpoints)
-
-    # breakpoints returns list of END indices of each segment; last is always T
-    # so the transition is the first element
-    transition_t = breakpoints[0]
+    # Pelt search with penalty
+    algo = rpt.Pelt(model=model_type, min_size=20, jump=5).fit(signal)
+    # The critical part: Use 'pen' (penalty) instead of 'n_bkps'
+    # A higher penalty = fewer change points detected.
+    # A lower penalty = more change points detected.
+    predicted_bkps = algo.predict(pen=penalty_value)
 
     # Compute a simple confidence metric: ratio of between-segment variance
     # to total variance across all channels
     T = signal.shape[0]
-    pre  = signal[:transition_t]
-    post = signal[transition_t:]
-
-    total_var = np.var(signal, axis=0).mean()
-    between_var = (
-        np.var(np.vstack([
-            np.full((len(pre),  signal.shape[1]), pre.mean(axis=0)),
-            np.full((len(post), signal.shape[1]), post.mean(axis=0))
-        ]), axis=0).mean()
-    )
-    confidence = float(np.clip(between_var / (total_var + 1e-8), 0, 1))
+    confidences = []
+    pre_list = []
+    post_list = []
+    for bkps in predicted_bkps:
+        pre  = signal[:bkps]
+        post = signal[bkps:]
+    
+        total_var = np.var(signal, axis=0).mean()
+        between_var = (
+            np.var(np.vstack([
+                np.full((len(pre),  signal.shape[1]), pre.mean(axis=0)),
+                np.full((len(post), signal.shape[1]), post.mean(axis=0))
+            ]), axis=0).mean()
+        )
+        confidences.append(float(np.clip(between_var / (total_var + 1e-8), 0, 1)))
+        pre_list.append(pre.mean(axis=0).tolist())
+        post_list.append(post.mean(axis=0).tolist())
 
     print(f"📊 Changepoint Analysis Complete")
-    print(f"    Method          : Binary Segmentation ({model_type})")
-    print(f"    Breakpoint at   : timestep {transition_t}")
-    print(f"    Confidence score: {confidence:.3f}  (between/total variance ratio)")
+    print(f"    Method PELT Algorithm       :  ({model_type})")
+    print(f"    Predicted Breakpoints at   : timestep {predicted_bkps}")
+    print(f"    Confidence scores: {confidences}  (between/total variance ratio)")
 
     return {
-        "breakpoint_timestep": transition_t,
-        "confidence": confidence,
+        "breakpoint_timesteps": predicted_bkps,
+        "confidences": confidences,
         "model_type": model_type,
-        "pre_segment_mean":  pre.mean(axis=0).tolist(),
-        "post_segment_mean": post.mean(axis=0).tolist(),
+        "pre_segment_mean":  pre_list,
+        "post_segment_mean": post_list,
     }
 
 
@@ -135,8 +139,8 @@ def _plot_inference_result(raw_stream, processed_stream, event, cpa_result, chan
 
         # --- Changepoint result ---
         if cpa_result is not None:
-            ax.axvline(cpa_result["breakpoint_timestep"],
-                       color='forestgreen', linewidth=1.8, linestyle=':')
+            for bkps in cpa_result["breakpoint_timesteps"]:
+                ax.axvline(bkps,color='forestgreen', linewidth=1.8, linestyle=':')
 
         # Legend on top panel only
         if i == 0:
@@ -151,8 +155,8 @@ def _plot_inference_result(raw_stream, processed_stream, event, cpa_result, chan
             if cpa_result is not None:
                 handles.append(
                     plt.Line2D([0], [0], color='forestgreen', linewidth=1.8, linestyle=':',
-                               label=f'CPA breakpoint  conf={cpa_result["confidence"]:.2f}  '
-                                     f't={cpa_result["breakpoint_timestep"]}')
+                               label=f'CPA breakpoint  conf={cpa_result["confidences"][0]:.2f}  '
+                                     f't={cpa_result["breakpoint_timesteps"][0]}')
                 )
             if handles:
                 ax.legend(handles=handles, loc='upper left', fontsize=8)
@@ -160,7 +164,7 @@ def _plot_inference_result(raw_stream, processed_stream, event, cpa_result, chan
     # Agreement annotation below the top panel
     if event is not None and cpa_result is not None:
         ml_t   = event["estimated_bifurcation_timestep"]
-        cpa_t  = cpa_result["breakpoint_timestep"]
+        cpa_t  = cpa_result["breakpoint_timesteps"][0]
         delta  = abs(ml_t - cpa_t)
         agree  = "✅ Methods agree" if delta < 0.05 * T else "⚠️  Methods diverge"
         axes[1].set_title(f"{agree}  |  ML: t={ml_t}  CPA: t={cpa_t}  |  Δ={delta} steps",
