@@ -404,7 +404,9 @@ if __name__ == "__main__":
 
     # 10 year lines +/-
     ax.axvline(120, color='blue', linewidth=1.0, linestyle='--',alpha=0.5)
-    ax.axvline(-120, color='blue', linewidth=1.0, linestyle='--',alpha=0.6)
+    ax.axvline(-120, color='blue', linewidth=1.0, linestyle='--',alpha=0.5)
+    ax.axvline(60, color='red', linewidth=1.0, linestyle='-',alpha=0.25)
+    ax.axvline(-60, color='red', linewidth=1.0, linestyle='-',alpha=0.25)
     # 7. Customize axis labels and titles using LaTeX formatting
     ax.set_xlabel('Timestep Offset')
     ax.set_ylabel('Ensembles')
@@ -414,7 +416,7 @@ if __name__ == "__main__":
     ax.grid(axis='x', linestyle=':', alpha=0.6)
     
     # 9. Center the view properly around the zero line
-    max_val = max(list(deltas.values())) + 1
+    max_val = np.max(np.abs(list(deltas.values())) + 10)
     ax.set_xlim(-max_val, max_val)
     
     # Adjust layout and save the visualization

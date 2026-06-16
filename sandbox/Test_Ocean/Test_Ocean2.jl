@@ -22,7 +22,7 @@
 
 using Oceananigans
 using Oceananigans.Units
-
+using Random
 using CairoMakie
 using CUDA
 using Printf
@@ -30,6 +30,82 @@ using Random
 using SeawaterPolynomials.TEOS10: TEOS10EquationOfState
 
 Random.seed!(1969) # for reproducible results
+# Zonal Wind Stress (τx) - Handles Tipping Points & Distractors
+@inline function wind_stress_forcing(x, y, t, p)
+    τ₀ = p.tau_base         
+    τ_current = τ₀
+    t_years = t / 365days 
+
+    # --- POSITIVE CASES (Bifurcations) ---
+    if p.scenario == 1      # BIFURCATION_COLLAPSE
+        ramp = 1.0 / (1.0 + exp(-(t_years - 20.0) / 2.0))
+        τ_current = τ₀ * (1.0 - 0.8 * ramp) 
+        
+    elseif p.scenario == 2  # VARIANCE (Critical Slowing Down precursor)
+        ramp = 1.0 / (1.0 + exp(-(t_years - 20.0) / 4.0))
+        # Drop mean slightly, inject massive high-frequency noise variation
+        τ_current = τ₀ * (1.0 - 0.3 * ramp) + (0.01 + 0.08 * ramp) * randn()
+        
+    elseif p.scenario == 3  # HOPF (Emergent Limit Cycle / Oscillation)
+        ramp = 1.0 / (1.0 + exp(-(t_years - 20.0) / 2.0))
+        amplitude = 0.15 * ramp
+        τ_current = τ₀ + amplitude * sin(2π * t_years / 0.5) # 6-month cycle growth
+
+    # --- NEGATIVE CASES (Hard Distractors / Nulls) ---
+    elseif p.scenario == 4  # STORM (Sudden transient shock)
+        event_center = 15.0 
+        if abs(t_years - event_center) < (10days / 365days)
+            τ_current += 0.3 * randn() 
+        end
+        
+    elseif p.scenario == 5  # EDDY (Temporary localized mean shift / blocking)
+        event_center = 25.0
+        if 0.0 < (t_years - event_center) < (90days / 365days)
+            τ_current += 0.08 
+        end
+        
+    elseif p.scenario == 6  # SEASONAL (Cyclical baseline variance)
+        Base_seasonal = 0.03 * sin(2π * t_years / 1.0)
+        τ_current += Base_seasonal
+        
+    elseif p.scenario == 7  # NEAR_MISS (Perilous drop that recovers)
+        approach_c = 15.0 
+        recovery_c = 25.0 
+        near_miss_ramp = (
+            1.0 / (1.0 + exp(-(t_years - approach_c) / 1.5)) - 
+            1.0 / (1.0 + exp(-(t_years - recovery_c) / 1.5))
+        )
+        near_miss_ramp = clamp(near_miss_ramp, 0.0, 1.0)
+        τ_current = τ₀ * (1.0 - 0.70 * near_miss_ramp) # Dips close to collapse but resets
+    end
+    # Smooth startup protection: Ramps up wind from 0 to full over the first 5 days
+    startup_ramp = min(1.0, t / 5days)
+    # Map back to the spatial double-gyre profile across the basin
+    return -τ_current * cos(π * y / 4000kilometers) * startup_ramp
+end
+
+# Sea Surface Temperature Flux - Incorporates SSP370 Global Warming Trend
+@inline function ssp370_temperature_flux(x, y, t, p)
+    t_years = t / 365days
+    # Background baseline differential solar heating
+    base_flux = -1e-5 * cos(π * y / 256kilometers) 
+    # Continuous climate forcing amplification (Negative flux in Oceananigans injects heat)
+    warming_anomaly = p.warming_rate_per_year * t_years
+    startup_ramp = min(1.0, t / 5days)
+    return base_flux - warming_anomaly * startup_ramp
+end
+
+# Salinity Surface Flux - Incorporates Hydrological Cycle Intensification (E - P)
+@inline function ssp370_salinity_flux(x, y, t, p)
+    t_years = t / 365days
+    # Base Evaporation-Precipitation spatial footprint
+    base_ep_flux = p.base_evap * sin(π * y / 256kilometers) 
+    # SSP370 forcing amplifies moisture transport (wet gets wetter, dry gets drier)
+    ssp370_amplification = 1.0 + (p.salinity_trend_rate * t_years)
+    startup_ramp = min(1.0, t / 5days)
+    return base_ep_flux * ssp370_amplification * startup_ramp
+end
+
 
 # ## The grid
 #
@@ -39,11 +115,11 @@ Random.seed!(1969) # for reproducible results
 # maintains relatively constant vertical spacing in the mixed layer, which
 # is desirable from a numerical standpoint:
 
-Nx = Ny = 128    # number of points in each of horizontal directions
+Nx = Ny = 256    # number of points in each of horizontal directions
 Nz = 64          # number of points in the vertical direction
 
-Lx = Ly = 128    # (m) domain horizontal extents
-Lz = 64          # (m) domain depth
+Lx = Ly = 256000    # (m) domain horizontal extents
+Lz = 512          # (m) domain depth
 
 refinement = 1.2 # controls spacing near surface (higher means finer spaced)
 stretching = 12  # controls rate of stretching at bottom
@@ -76,6 +152,22 @@ scatter!(ax, zspacings(grid, Center()))
 
 current_figure() #hide
 fig
+scenario_id = 6
+# Define a clean helper for uniform randomization
+randuniform(low, high) = low + (high - low) * rand()
+base_wind = 0.1 * randuniform(0.8, 1.2) # Baseline wind stress varies between 0.08 and 0.12
+p = (
+        scenario = scenario_id,
+        tau_base = base_wind/1025.0, #≈ 9.75e-5 m²/s² kinematic stress
+        
+        # SSP370 Climate Forcing Variables
+        warming_rate_per_year = 5e-7 * randuniform(0.8, 1.2), 
+        base_slr_velocity     = (0.015 / 365days) * randuniform(0.7, 1.3), # ~1.5cm base rise per year
+        slr_acceleration      = 1e-11,
+        base_evap             = 1e-5 * randuniform(0.9, 1.1),
+        salinity_trend_rate   = 0.006 * randuniform(0.8, 1.2) # ~0.6% amplification/year
+    )
+
 
 # ## Buoyancy that depends on temperature and salinity
 #
@@ -90,10 +182,10 @@ buoyancy = SeawaterBuoyancy(; equation_of_state)
 # We calculate the surface temperature flux associated with surface cooling of
 # 200 W m⁻², reference density `ρₒ`, and heat capacity `cᴾ`,
 
-Q = 200   # W m⁻², surface _heat_ flux
-cᴾ = 3991 # J K⁻¹ kg⁻¹, typical heat capacity for seawater
+# Q = 200   # W m⁻², surface _heat_ flux
+# cᴾ = 3991 # J K⁻¹ kg⁻¹, typical heat capacity for seawater
 
-Jᵀ = Q / (ρₒ * cᴾ) # K m s⁻¹, surface _temperature_ flux
+# Jᵀ = Q / (ρₒ * cᴾ) # K m s⁻¹, surface _temperature_ flux
 
 # Finally, we impose a temperature gradient `dTdz` both initially (see "Initial conditions"
 # section below) and at the bottom of the domain, culminating in the boundary conditions on
@@ -101,8 +193,8 @@ Jᵀ = Q / (ρₒ * cᴾ) # K m s⁻¹, surface _temperature_ flux
 
 dTdz = 0.01 # K m⁻¹
 
-T_bcs = FieldBoundaryConditions(top = FluxBoundaryCondition(Jᵀ),
-                                bottom = GradientBoundaryCondition(dTdz))
+T_bcs = FieldBoundaryConditions(top = FluxBoundaryCondition(ssp370_temperature_flux,
+        parameters=p),bottom = GradientBoundaryCondition(dTdz))
 
 # Note that a positive temperature flux at the surface of the ocean
 # implies cooling. This is because a positive temperature flux implies
@@ -120,26 +212,26 @@ cᴰ = 2e-3 # dimensionless drag coefficient
 
 # The boundary conditions on `u` are thus
 
-u_bcs = FieldBoundaryConditions(top = FluxBoundaryCondition(τx))
+u_bcs = FieldBoundaryConditions(top = FluxBoundaryCondition(wind_stress_forcing, parameters=p))
 
 # For salinity, `S`, we impose an evaporative flux of the form
 
-@inline Jˢ(x, y, t, S, evaporation_rate) = - evaporation_rate * S # [salinity unit] m s⁻¹
-nothing #hide
+# @inline Jˢ(x, y, t, S, evaporation_rate) = - evaporation_rate * S # [salinity unit] m s⁻¹
+# nothing #hide
 
-# where `S` is salinity. We use an evaporation rate of 1 millimeter per hour,
+# # where `S` is salinity. We use an evaporation rate of 1 millimeter per hour,
 
-evaporation_rate = 1e-3 / hour # m s⁻¹
+# evaporation_rate = 1e-3 / hour # m s⁻¹
 
-# We build the `Flux` evaporation `BoundaryCondition` with the function `Jˢ`,
-# indicating that `Jˢ` depends on salinity `S` and passing
-# the parameter `evaporation_rate`,
+# # We build the `Flux` evaporation `BoundaryCondition` with the function `Jˢ`,
+# # indicating that `Jˢ` depends on salinity `S` and passing
+# # the parameter `evaporation_rate`,
 
-evaporation_bc = FluxBoundaryCondition(Jˢ, field_dependencies=:S, parameters=evaporation_rate)
+# evaporation_bc = FluxBoundaryCondition(Jˢ, field_dependencies=:S, parameters=evaporation_rate)
 
 # The full salinity boundary conditions are
 
-S_bcs = FieldBoundaryConditions(top=evaporation_bc)
+S_bcs = FieldBoundaryConditions(top = FluxBoundaryCondition(ssp370_salinity_flux, parameters=p))
 
 # ## Model instantiation
 #
@@ -196,7 +288,7 @@ set!(model, u=uᵢ, w=uᵢ, T=Tᵢ, S=35)
 # We set-up a simulation with an initial time-step of 10 seconds
 # that stops at 2 hours, with adaptive time-stepping and progress printing.
 
-simulation = Simulation(model, Δt=10, stop_time=2hours)
+simulation = Simulation(model, Δt=10, stop_time=30days)
 
 # The `TimeStepWizard` helps ensure stable time-stepping
 # with a Courant-Freidrichs-Lewy (CFL) number of 0.7.

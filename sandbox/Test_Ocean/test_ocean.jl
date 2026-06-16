@@ -198,9 +198,11 @@ function run_ensemble_member(scenario_id::Int, run_id::Int; use_gpu::Bool=false)
     # visc = (scenario_id == 5 || base_wind > 0.11) ? 1e2 : 4e3
 
     # Instantiate the Hydrostatic Fluid Core Model 
-    model = HydrostaticFreeSurfaceModel(grid; buoyancy,
+    model = NonhydrostaticModel(grid; buoyancy,
                                         advection = WENO(order=7),
                                         tracers = (:T, :S),
+                                        coriolis = FPlane(f=1e-4),
+                                        closure = DynamicSmagorinsky(),
                                         boundary_conditions = (u=u_bcs, T=T_bcs, S=S_bcs))
 
     ## Random noise damped at top and bottom
