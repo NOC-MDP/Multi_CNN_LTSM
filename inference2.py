@@ -275,8 +275,11 @@ def run_real_world_inference(model, raw_stream, processed_stream,ensemble, ts,wi
     # 2. Get the first event for plotting
     first_event = results[0] if results else None
     
-    # 3. Plotting
-    results[0]["delta"] =_plot_inference_result(raw_stream, processed_stream, first_event, cpa_result, channel_names, window_size,ensemble)
+
+    delta =_plot_inference_result(raw_stream, processed_stream, first_event, cpa_result, channel_names, window_size,ensemble)
+
+    if results:
+        results[0]["delta"] = delta
     
     # After the loop, print the probability profile:
     all_probs = np.array(all_probs)
@@ -380,7 +383,8 @@ if __name__ == "__main__":
                 ensemble=i+1,
                 elbow = elbow
             )
-        deltas[f"e_{i+1}"] = results[0]["delta"]
+        if results:
+            deltas[f"e_{i+1}"] = results[0]["delta"]
         # --- 5. EXPORT INFERENCE REPORT ---
         print("\n----------------────────────────────────")
         print(f"INFERENCE COMPLETE. Total Triggers: {len(results)}")
@@ -416,8 +420,9 @@ if __name__ == "__main__":
     ax.grid(axis='x', linestyle=':', alpha=0.6)
     
     # 9. Center the view properly around the zero line
-    max_val = np.max(np.abs(list(deltas.values())) + 10)
-    ax.set_xlim(-max_val, max_val)
+    max_val = np.max(list(deltas.values())) + 10
+    min_val = np.min(list(deltas.values())) - 10
+    ax.set_xlim(min_val, max_val)
     
     # Adjust layout and save the visualization
     plt.tight_layout()

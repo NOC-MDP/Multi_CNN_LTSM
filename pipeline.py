@@ -1158,131 +1158,136 @@ if __name__ == "__main__":
         rng = np.random.default_rng(cfg.seed)
         batch_size = 64
         epochs = 50
+        wait_for_zero_nulls = True
+        counter = 0
+        while (wait_for_zero_nulls and counter < 5):
+            counter = counter + 1
+            # 1. Generate Dataset
+            print("Generating synthetic dataset...")
+            gen = OceanStateGenerator(cfg, rng)
+            recordings = [gen.build_recording(f"rec_{i:04d}", is_positive=(i % 2 == 0),baselines=baselines,scales=scales) 
+                          for i in range(cfg.n_recordings)]
         
-        # 1. Generate Dataset
-        print("Generating synthetic dataset...")
-        gen = OceanStateGenerator(cfg, rng)
-        recordings = [gen.build_recording(f"rec_{i:04d}", is_positive=(i % 2 == 0),baselines=baselines,scales=scales) 
-                      for i in range(cfg.n_recordings)]
-    
-        # 2. Split Data (using Subsets)
-        full_dataset = OceanBifurcationDataset(recordings)
-        train_set, val_set, test_set = random_split(
-            full_dataset, 
-            [0.7, 0.15, 0.15],
-            generator=torch.Generator().manual_seed(cfg.seed)
-        )
-    
-        # 3. Fit Scaler ONLY on Training Subset Indices
-        print("Fitting scaler on training subset...")
-        # Access the specific recordings that belong to the training split
-        train_recs = [recordings[i] for i in train_set.indices]
+            # 2. Split Data (using Subsets)
+            full_dataset = OceanBifurcationDataset(recordings)
+            train_set, val_set, test_set = random_split(
+                full_dataset, 
+                [0.7, 0.15, 0.15],
+                generator=torch.Generator().manual_seed(cfg.seed)
+            )
         
-        scaler = ChannelWiseScaler()
-        scaler.fit(train_recs)
-        scaler.save(f"scalers/synthetic_channel_scaler_{i+1}.pkl")
-        # # ──────────────────────────────────────────────────────────────────────
-        # # DIAGNOSTIC: EXPOSE SCALER TRAINING ORDER
-        # # ──────────────────────────────────────────────────────────────────────
-        # print("🔮 [SCALER] Internal Means Shape:", scaler.means.shape)
-        # print("🔮 [SCALER] Trained Mean Values:\n", scaler.means)
-        # # ──────────────────────────────────────────────────────────────
-    
-        # 4. Transform ALL data using the Train-fitted scaler
-        # Note: We do this after splitting to keep the original split indices valid
-        for rec in recordings:
-            rec.data = scaler.transform(rec.data)
-    
-        # 5. Initialize Loaders
-        train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True, collate_fn=variable_length_collate_fn)
-        val_loader = DataLoader(val_set, batch_size=batch_size, shuffle=False, collate_fn=variable_length_collate_fn)
-        test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=False, collate_fn=variable_length_collate_fn)
-    
-        # 6. Initialize Model & Optimizer
-        model = BifurcationNet(num_params=cfg.num_params).to(device)
-        optimizer = optim.AdamW(model.parameters(), lr=2e-4, weight_decay=1e-3)
-        scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=epochs,eta_min=1e-6)
-        criterion_cls = FocalLoss(gamma=2.0)
-    
-        # 7. Training Loop
-        print("\nStarting Training...")
-        history = {
-            'train_loss': [],
-            'val_time_loss': [],
-            'val_loss': [],
-            'f1': [],
-            'prec': [],
-            'rec': [],
-            'v_bce': []
-        }
-        best_val_loss = float('inf')
-        # Define your patience here:
-        patience = 10
-        patience_counter = 0
-        
-        for epoch in range(epochs):
-            tr_loss, tr_bce, tr_time, tr_acc = train_epoch(model, train_loader, optimizer, device,criterion_cls)
-            scheduler.step()
+            # 3. Fit Scaler ONLY on Training Subset Indices
+            print("Fitting scaler on training subset...")
+            # Access the specific recordings that belong to the training split
+            train_recs = [recordings[i] for i in train_set.indices]
             
-            # Unpack the 7 return values from the new evaluate signature
-            val_res = evaluate(model, val_loader, device,criterion_cls)
-            v_loss, v_bce, t_loss, v_prec, v_rec, v_f1, _ = val_res
-            # Store metrics
-            history['train_loss'].append(tr_loss)
-            history['val_time_loss'].append(t_loss)
-            history['val_loss'].append(v_loss)
-            history['f1'].append(v_f1)
-            history['prec'].append(v_prec)
-            history['rec'].append(v_rec)
-            history['v_bce'].append(v_bce)
-            print(f"Epoch {epoch+1:02d} | Val Loss: {v_loss:.4f} | Val Time Loss: {t_loss:.4f} | Val Bce: {v_bce:.4f} | F1: {v_f1:.3f} | Prec: {v_prec:.2f} | Rec: {v_rec:.2f}")
+            scaler = ChannelWiseScaler()
+            scaler.fit(train_recs)
+            scaler.save(f"scalers/synthetic_channel_scaler_{i+1}.pkl")
+            # # ──────────────────────────────────────────────────────────────────────
+            # # DIAGNOSTIC: EXPOSE SCALER TRAINING ORDER
+            # # ──────────────────────────────────────────────────────────────────────
+            # print("🔮 [SCALER] Internal Means Shape:", scaler.means.shape)
+            # print("🔮 [SCALER] Trained Mean Values:\n", scaler.means)
+            # # ──────────────────────────────────────────────────────────────
+        
+            # 4. Transform ALL data using the Train-fitted scaler
+            # Note: We do this after splitting to keep the original split indices valid
+            for rec in recordings:
+                rec.data = scaler.transform(rec.data)
+        
+            # 5. Initialize Loaders
+            train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True, collate_fn=variable_length_collate_fn)
+            val_loader = DataLoader(val_set, batch_size=batch_size, shuffle=False, collate_fn=variable_length_collate_fn)
+            test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=False, collate_fn=variable_length_collate_fn)
+        
+            # 6. Initialize Model & Optimizer
+            model = BifurcationNet(num_params=cfg.num_params).to(device)
+            optimizer = optim.AdamW(model.parameters(), lr=2e-4, weight_decay=1e-3)
+            scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=epochs,eta_min=1e-6)
+            criterion_cls = FocalLoss(gamma=2.0)
+        
+            # 7. Training Loop
+            print("\nStarting Training...")
+            history = {
+                'train_loss': [],
+                'val_time_loss': [],
+                'val_loss': [],
+                'f1': [],
+                'prec': [],
+                'rec': [],
+                'v_bce': []
+            }
+            best_val_loss = float('inf')
+            # Define your patience here:
+            patience = 10
+            patience_counter = 0
             
-            # Save best model logic:
-            if v_loss < best_val_loss:
-                best_val_loss = v_loss
-                torch.save(model.state_dict(), f"models/best_bifurcation_model_{i+1}.pth")
-                patience_counter = 0  # reset
-            else:
-                patience_counter += 1
-                if patience_counter >= patience:
-                    print(f"\nEarly stopping triggered at epoch {epoch+1}")
-                    break
-    
-        # 8. Final Test
-        print("\nTesting on hold-out set...")
-        try:
-            model.load_state_dict(torch.load(f"models/best_bifurcation_model_{i+1}.pth",weights_only=True))
-        except FileNotFoundError as e: 
-            print(f"[Errno 2] No such file or directory: '{e}'")
-            print("ml model not found, skipping this hold out test")
-            continue
-
-        ts = TemperatureScaler().fit(model, val_loader, device)
-        torch.save({'temperature': ts.temperature.item()}, f"scalers/temperature_scaler_{i+1}.pt")
-        test_res = evaluate(model, test_loader, device,criterion_cls)
-        _, _, _, t_prec, t_rec, t_f1, t_time_err = test_res
+            for epoch in range(epochs):
+                tr_loss, tr_bce, tr_time, tr_acc = train_epoch(model, train_loader, optimizer, device,criterion_cls)
+                scheduler.step()
+                
+                # Unpack the 7 return values from the new evaluate signature
+                val_res = evaluate(model, val_loader, device,criterion_cls)
+                v_loss, v_bce, t_loss, v_prec, v_rec, v_f1, _ = val_res
+                # Store metrics
+                history['train_loss'].append(tr_loss)
+                history['val_time_loss'].append(t_loss)
+                history['val_loss'].append(v_loss)
+                history['f1'].append(v_f1)
+                history['prec'].append(v_prec)
+                history['rec'].append(v_rec)
+                history['v_bce'].append(v_bce)
+                print(f"Epoch {epoch+1:02d} | Val Loss: {v_loss:.4f} | Val Time Loss: {t_loss:.4f} | Val Bce: {v_bce:.4f} | F1: {v_f1:.3f} | Prec: {v_prec:.2f} | Rec: {v_rec:.2f}")
+                
+                # Save best model logic:
+                if v_loss < best_val_loss:
+                    best_val_loss = v_loss
+                    torch.save(model.state_dict(), f"models/best_bifurcation_model_{i+1}.pth")
+                    patience_counter = 0  # reset
+                else:
+                    patience_counter += 1
+                    if patience_counter >= patience:
+                        print(f"\nEarly stopping triggered at epoch {epoch+1}")
+                        break
         
-        print(f"Final Test -> F1: {t_f1:.3f} | Precision: {t_prec:.2f} | Recall: {t_rec:.2f}")
-        plot_training_curves(history,plot_path=f"curves/training_curves_{i+1}.png")
+            # 8. Final Test
+            print("\nTesting on hold-out set...")
+            try:
+                model.load_state_dict(torch.load(f"models/best_bifurcation_model_{i+1}.pth",weights_only=True))
+            except FileNotFoundError as e: 
+                print(f"[Errno 2] No such file or directory: '{e}'")
+                print("ml model not found, skipping this hold out test")
+                continue
     
-        best_thresh = evaluate_and_plot_curves(model, test_loader, device,scaler=ts, plot_path=f"curves/roc_curve_{i+1}.png")
-        print(f"Best Threshold -> {best_thresh}")
-        best_thresholds[f"ensemble_{i+1}"] = float(best_thresh)
-    
-        # Verify on the historical input — should produce no sustained alerts
-        hist_features = engineer_ocean_features(
-            df['temperature'].values, df['salinity'].values,
-            df['ssh'].values, df['u_velocity'].values, df['v_velocity'].values
-        )  # shape (5, T_hist)
+            ts = TemperatureScaler().fit(model, val_loader, device)
+            torch.save({'temperature': ts.temperature.item()}, f"scalers/temperature_scaler_{i+1}.pt")
+            test_res = evaluate(model, test_loader, device,criterion_cls)
+            _, _, _, t_prec, t_rec, t_f1, t_time_err = test_res
+            
+            print(f"Final Test -> F1: {t_f1:.3f} | Precision: {t_prec:.2f} | Recall: {t_rec:.2f}")
+            plot_training_curves(history,plot_path=f"curves/training_curves_{i+1}.png")
         
-        inference_result = run_inference_on_series(
-            model, ts, scaler, hist_features,
-            window_size=128, step=1, device=device
-        )
-        n_alerts = inference_result["alert"].sum()
-        print(f"Historical false-positive alert timesteps: {n_alerts} / {hist_features.shape[1]}")
-        null_alerts[f"ensemble_{i+1}"] = int(n_alerts)
-
+            best_thresh = evaluate_and_plot_curves(model, test_loader, device,scaler=ts, plot_path=f"curves/roc_curve_{i+1}.png")
+            print(f"Best Threshold -> {best_thresh}")
+            best_thresholds[f"ensemble_{i+1}"] = float(best_thresh)
+        
+            # Verify on the historical input — should produce no sustained alerts
+            hist_features = engineer_ocean_features(
+                df['temperature'].values, df['salinity'].values,
+                df['ssh'].values, df['u_velocity'].values, df['v_velocity'].values
+            )  # shape (5, T_hist)
+            
+            inference_result = run_inference_on_series(
+                model, ts, scaler, hist_features,
+                window_size=128, step=1, device=device
+            )
+            n_alerts = inference_result["alert"].sum()
+            print(f"Historical false-positive alert timesteps: {n_alerts} / {hist_features.shape[1]}")
+            null_alerts[f"ensemble_{i+1}"] = int(n_alerts)
+            if n_alerts == 0:
+                wait_for_zero_nulls = False
+    
         with open('best_thresholds.json', 'w') as fp:
             json.dump(best_thresholds, fp)
     

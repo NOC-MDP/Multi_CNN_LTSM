@@ -1,9 +1,12 @@
 Initializing model topology...
 Trained model weights successfully loaded into memory.
 Loading telemetry data from: ensembles/CANARI_SSP370_1_LON_-56.506_LAT_60.819.csv
-Deploying model... (Threshold: 0.436997652053833)
-⚠️ Bifurcation Found! Window: [492:620] | Prob: 0.4376 ± 0.0134 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [756:884] | Prob: 0.4402 ± 0.0121 | Timing: 0.5 ± 0.0
+Deploying model... (Threshold: 0.4536813497543335)
+⚠️ Bifurcation Found! Window: [300:428] | Prob: 0.4557 ± 0.0202 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [438:566] | Prob: 0.4565 ± 0.0202 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [570:698] | Prob: 0.4992 ± 0.0195 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [720:848] | Prob: 0.4567 ± 0.0130 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [852:980] | Prob: 0.4707 ± 0.0199 | Timing: 0.5 ± 0.0
 📊 Changepoint Analysis Complete
     Method PELT Algorithm       :  (rbf)
     Predicted Breakpoints at   : timestep [555]
@@ -13,34 +16,34 @@ Deploying model... (Threshold: 0.436997652053833)
 /home/users/thopri/PROMOTE/LatentTCN/inference2.py:216: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
   plt.savefig(f"results/bifurcation_inference_{ensemble}.png", dpi=150, bbox_inches='tight')
 Plot saved to bifurcation_inference.png
-Max probability seen  : 0.4739 at t=552
-Mean probability      : 0.4200
-% windows above 0.45  : 8.7%
-% windows above 0.50  : 0.0%
-% windows above thresh: 20.1%
+Max probability seen  : 0.5073 at t=528
+Mean probability      : 0.4571
+% windows above 0.45  : 60.4%
+% windows above 0.50  : 4.0%
+% windows above thresh: 56.4%
 
 ----------------────────────────────────
-INFERENCE COMPLETE. Total Triggers: 2
+INFERENCE COMPLETE. Total Triggers: 5
 ----------------────────────────────────
 Detailed logs saved to 'detected_ocean_bifurcations_1.csv'.
 Initializing model topology...
 Trained model weights successfully loaded into memory.
 Loading telemetry data from: ensembles/CANARI_SSP370_2_LON_-56.506_LAT_60.819.csv
-Deploying model... (Threshold: 0.45187434554100037)
-⚠️ Bifurcation Found! Window: [354:482] | Prob: 0.4605 ± 0.0151 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [486:614] | Prob: 0.4860 ± 0.0160 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [636:764] | Prob: 0.4534 ± 0.0141 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [768:896] | Prob: 0.4999 ± 0.0132 | Timing: 0.5 ± 0.0
+Deploying model... (Threshold: 0.46974244713783264)
+⚠️ Bifurcation Found! Window: [372:500] | Prob: 0.4726 ± 0.0170 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [504:632] | Prob: 0.5070 ± 0.0147 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [642:770] | Prob: 0.4716 ± 0.0139 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [774:902] | Prob: 0.5065 ± 0.0174 | Timing: 0.5 ± 0.0
 📊 Changepoint Analysis Complete
     Method PELT Algorithm       :  (rbf)
     Predicted Breakpoints at   : timestep [285, 750]
     Confidence scores: [0.07032681427660518, 0.06792834193878111]  (between/total variance ratio)
 Plot saved to bifurcation_inference.png
-Max probability seen  : 0.5185 at t=714
-Mean probability      : 0.4328
-% windows above 0.45  : 52.3%
-% windows above 0.50  : 9.4%
-% windows above thresh: 51.7%
+Max probability seen  : 0.5424 at t=726
+Mean probability      : 0.4606
+% windows above 0.45  : 60.4%
+% windows above 0.50  : 21.5%
+% windows above thresh: 45.0%
 
 ----------------────────────────────────
 INFERENCE COMPLETE. Total Triggers: 4
@@ -52,84 +55,143 @@ null alerts raised during training, skipping inference for ensemble 3
 Initializing model topology...
 Trained model weights successfully loaded into memory.
 Loading telemetry data from: ensembles/CANARI_SSP370_4_LON_-56.506_LAT_60.819.csv
-Deploying model... (Threshold: 0.46176958084106445)
-⚠️ Bifurcation Found! Window: [390:518] | Prob: 0.4634 ± 0.0109 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [528:656] | Prob: 0.4709 ± 0.0151 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [660:788] | Prob: 0.4742 ± 0.0135 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [792:920] | Prob: 0.4920 ± 0.0123 | Timing: 0.5 ± 0.0
+Deploying model... (Threshold: 0.4484046995639801)
+⚠️ Bifurcation Found! Window: [450:578] | Prob: 0.4508 ± 0.0104 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [648:776] | Prob: 0.4486 ± 0.0121 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [780:908] | Prob: 0.4713 ± 0.0086 | Timing: 0.5 ± 0.0
 📊 Changepoint Analysis Complete
     Method PELT Algorithm       :  (rbf)
     Predicted Breakpoints at   : timestep [365, 895]
     Confidence scores: [0.0727085118644521, 0.0827085479994456]  (between/total variance ratio)
 Plot saved to bifurcation_inference.png
-Max probability seen  : 0.5185 at t=888
-Mean probability      : 0.4412
-% windows above 0.45  : 62.4%
-% windows above 0.50  : 8.1%
-% windows above thresh: 52.3%
+Max probability seen  : 0.5276 at t=888
+Mean probability      : 0.4330
+% windows above 0.45  : 24.2%
+% windows above 0.50  : 4.7%
+% windows above thresh: 28.9%
+
+----------------────────────────────────
+INFERENCE COMPLETE. Total Triggers: 3
+----------------────────────────────────
+Detailed logs saved to 'detected_ocean_bifurcations_4.csv'.
+Initializing model topology...
+Trained model weights successfully loaded into memory.
+Loading telemetry data from: ensembles/CANARI_SSP370_5_LON_-56.506_LAT_60.819.csv
+Deploying model... (Threshold: 0.4473942518234253)
+⚠️ Bifurcation Found! Window: [408:536] | Prob: 0.4489 ± 0.0149 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [540:668] | Prob: 0.4596 ± 0.0131 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [672:800] | Prob: 0.4899 ± 0.0132 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [804:932] | Prob: 0.4641 ± 0.0140 | Timing: 0.5 ± 0.0
+📊 Changepoint Analysis Complete
+    Method PELT Algorithm       :  (rbf)
+    Predicted Breakpoints at   : timestep [230, 675, 975]
+    Confidence scores: [0.0760289141400251, 0.12658901387088028, 0.06279580160228888]  (between/total variance ratio)
+/home/users/thopri/PROMOTE/LatentTCN/inference2.py:215: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/users/thopri/PROMOTE/LatentTCN/inference2.py:216: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
+  plt.savefig(f"results/bifurcation_inference_{ensemble}.png", dpi=150, bbox_inches='tight')
+Plot saved to bifurcation_inference.png
+Max probability seen  : 0.5158 at t=888
+Mean probability      : 0.4209
+% windows above 0.45  : 49.7%
+% windows above 0.50  : 2.0%
+% windows above thresh: 53.0%
 
 ----------------────────────────────────
 INFERENCE COMPLETE. Total Triggers: 4
 ----------------────────────────────────
-Detailed logs saved to 'detected_ocean_bifurcations_4.csv'.
-============================================================
-null alerts raised during training, skipping inference for ensemble 5
-============================================================
-'ensemble_6'
-Could not locate model weights at 'models/best_bifurcation_model_6.pth', skipping inference
+Detailed logs saved to 'detected_ocean_bifurcations_5.csv'.
+Initializing model topology...
+Trained model weights successfully loaded into memory.
+Loading telemetry data from: ensembles/CANARI_SSP370_6_LON_-56.506_LAT_60.819.csv
+Deploying model... (Threshold: 0.45211488008499146)
+📊 Changepoint Analysis Complete
+    Method PELT Algorithm       :  (rbf)
+    Predicted Breakpoints at   : timestep [185, 555]
+    Confidence scores: [0.07396873991214499, 0.1118504948913483]  (between/total variance ratio)
+Plot saved to bifurcation_inference.png
+Max probability seen  : 0.4311 at t=870
+Mean probability      : 0.3970
+% windows above 0.45  : 0.0%
+% windows above 0.50  : 0.0%
+% windows above thresh: 0.0%
+
+----------------────────────────────────
+INFERENCE COMPLETE. Total Triggers: 0
+----------------────────────────────────
 ============================================================
 null alerts raised during training, skipping inference for ensemble 7
 ============================================================
 Initializing model topology...
 Trained model weights successfully loaded into memory.
 Loading telemetry data from: ensembles/CANARI_SSP370_8_LON_-56.506_LAT_60.819.csv
-Deploying model... (Threshold: 0.46321046352386475)
-⚠️ Bifurcation Found! Window: [324:452] | Prob: 0.4633 ± 0.0153 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [456:584] | Prob: 0.5302 ± 0.0233 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [588:716] | Prob: 0.5186 ± 0.0193 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [720:848] | Prob: 0.5233 ± 0.0183 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [852:980] | Prob: 0.5739 ± 0.0231 | Timing: 0.5 ± 0.0
+Deploying model... (Threshold: 0.4584943950176239)
+⚠️ Bifurcation Found! Window: [348:476] | Prob: 0.4642 ± 0.0129 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [480:608] | Prob: 0.4809 ± 0.0162 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [612:740] | Prob: 0.4972 ± 0.0167 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [744:872] | Prob: 0.4722 ± 0.0197 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [876:1004] | Prob: 0.5040 ± 0.0179 | Timing: 0.5 ± 0.0
 📊 Changepoint Analysis Complete
     Method PELT Algorithm       :  (rbf)
     Predicted Breakpoints at   : timestep [340, 715]
     Confidence scores: [0.07145200437995673, 0.065630429406482]  (between/total variance ratio)
-/home/users/thopri/PROMOTE/LatentTCN/inference2.py:215: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
-  plt.tight_layout()
-/home/users/thopri/PROMOTE/LatentTCN/inference2.py:216: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
-  plt.savefig(f"results/bifurcation_inference_{ensemble}.png", dpi=150, bbox_inches='tight')
 Plot saved to bifurcation_inference.png
-Max probability seen  : 0.5806 at t=840
-Mean probability      : 0.4783
-% windows above 0.45  : 65.8%
-% windows above 0.50  : 59.1%
-% windows above thresh: 63.8%
+Max probability seen  : 0.5429 at t=810
+Mean probability      : 0.4541
+% windows above 0.45  : 62.4%
+% windows above 0.50  : 15.4%
+% windows above thresh: 61.1%
 
 ----------------────────────────────────
 INFERENCE COMPLETE. Total Triggers: 5
 ----------------────────────────────────
 Detailed logs saved to 'detected_ocean_bifurcations_8.csv'.
-============================================================
-null alerts raised during training, skipping inference for ensemble 9
-============================================================
+Initializing model topology...
+Trained model weights successfully loaded into memory.
+Loading telemetry data from: ensembles/CANARI_SSP370_9_LON_-56.506_LAT_60.819.csv
+Deploying model... (Threshold: 0.46306419372558594)
+⚠️ Bifurcation Found! Window: [432:560] | Prob: 0.4700 ± 0.0131 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [564:692] | Prob: 0.4985 ± 0.0143 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [696:824] | Prob: 0.5210 ± 0.0140 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [828:956] | Prob: 0.5114 ± 0.0166 | Timing: 0.5 ± 0.0
+📊 Changepoint Analysis Complete
+    Method PELT Algorithm       :  (rbf)
+    Predicted Breakpoints at   : timestep [255, 535, 870]
+    Confidence scores: [0.06052199240588674, 0.10663310312208839, 0.06624394611902437]  (between/total variance ratio)
+/home/users/thopri/PROMOTE/LatentTCN/inference2.py:215: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/users/thopri/PROMOTE/LatentTCN/inference2.py:216: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
+  plt.savefig(f"results/bifurcation_inference_{ensemble}.png", dpi=150, bbox_inches='tight')
+Plot saved to bifurcation_inference.png
+Max probability seen  : 0.5216 at t=744
+Mean probability      : 0.4687
+% windows above 0.45  : 63.8%
+% windows above 0.50  : 28.9%
+% windows above thresh: 51.7%
+
+----------------────────────────────────
+INFERENCE COMPLETE. Total Triggers: 4
+----------------────────────────────────
+Detailed logs saved to 'detected_ocean_bifurcations_9.csv'.
 Initializing model topology...
 Trained model weights successfully loaded into memory.
 Loading telemetry data from: ensembles/CANARI_SSP370_10_LON_-56.506_LAT_60.819.csv
-Deploying model... (Threshold: 0.4511354863643646)
-⚠️ Bifurcation Found! Window: [246:374] | Prob: 0.4567 ± 0.0178 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [396:524] | Prob: 0.4569 ± 0.0213 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [528:656] | Prob: 0.4788 ± 0.0188 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [660:788] | Prob: 0.5200 ± 0.0234 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [792:920] | Prob: 0.5315 ± 0.0224 | Timing: 0.5 ± 0.0
+Deploying model... (Threshold: 0.44772788882255554)
+⚠️ Bifurcation Found! Window: [246:374] | Prob: 0.4484 ± 0.0206 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [408:536] | Prob: 0.4502 ± 0.0180 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [540:668] | Prob: 0.4514 ± 0.0153 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [672:800] | Prob: 0.4698 ± 0.0180 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [804:932] | Prob: 0.4897 ± 0.0162 | Timing: 0.5 ± 0.0
 📊 Changepoint Analysis Complete
     Method PELT Algorithm       :  (rbf)
     Predicted Breakpoints at   : timestep [175, 640]
     Confidence scores: [0.06431747256315501, 0.11698119389887002]  (between/total variance ratio)
 Plot saved to bifurcation_inference.png
-Max probability seen  : 0.6635 at t=876
-Mean probability      : 0.4644
-% windows above 0.45  : 71.1%
-% windows above 0.50  : 30.2%
-% windows above thresh: 70.5%
+Max probability seen  : 0.5204 at t=876
+Mean probability      : 0.4491
+% windows above 0.45  : 49.0%
+% windows above 0.50  : 7.4%
+% windows above thresh: 54.4%
 
 ----------------────────────────────────
 INFERENCE COMPLETE. Total Triggers: 5
@@ -138,13 +200,12 @@ Detailed logs saved to 'detected_ocean_bifurcations_10.csv'.
 Initializing model topology...
 Trained model weights successfully loaded into memory.
 Loading telemetry data from: ensembles/CANARI_SSP370_11_LON_-56.506_LAT_60.819.csv
-Deploying model... (Threshold: 0.4420824944972992)
-⚠️ Bifurcation Found! Window: [228:356] | Prob: 0.4503 ± 0.0194 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [360:488] | Prob: 0.5020 ± 0.0238 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [492:620] | Prob: 0.5111 ± 0.0157 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [624:752] | Prob: 0.5147 ± 0.0171 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [756:884] | Prob: 0.5471 ± 0.0176 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [888:1016] | Prob: 0.5008 ± 0.0146 | Timing: 0.5 ± 0.0
+Deploying model... (Threshold: 0.446370929479599)
+⚠️ Bifurcation Found! Window: [288:416] | Prob: 0.4521 ± 0.0198 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [426:554] | Prob: 0.4467 ± 0.0173 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [558:686] | Prob: 0.4918 ± 0.0169 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [690:818] | Prob: 0.5447 ± 0.0199 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [822:950] | Prob: 0.5558 ± 0.0192 | Timing: 0.5 ± 0.0
 📊 Changepoint Analysis Complete
     Method PELT Algorithm       :  (rbf)
     Predicted Breakpoints at   : timestep [330, 725]
@@ -154,24 +215,24 @@ Deploying model... (Threshold: 0.4420824944972992)
 /home/users/thopri/PROMOTE/LatentTCN/inference2.py:216: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
   plt.savefig(f"results/bifurcation_inference_{ensemble}.png", dpi=150, bbox_inches='tight')
 Plot saved to bifurcation_inference.png
-Max probability seen  : 0.5735 at t=768
-Mean probability      : 0.4862
-% windows above 0.45  : 73.2%
-% windows above 0.50  : 43.6%
-% windows above thresh: 74.5%
+Max probability seen  : 0.6103 at t=744
+Mean probability      : 0.4546
+% windows above 0.45  : 57.7%
+% windows above 0.50  : 30.2%
+% windows above thresh: 61.7%
 
 ----------------────────────────────────
-INFERENCE COMPLETE. Total Triggers: 6
+INFERENCE COMPLETE. Total Triggers: 5
 ----------------────────────────────────
 Detailed logs saved to 'detected_ocean_bifurcations_11.csv'.
 Initializing model topology...
 Trained model weights successfully loaded into memory.
 Loading telemetry data from: ensembles/CANARI_SSP370_12_LON_-56.506_LAT_60.819.csv
-Deploying model... (Threshold: 0.4563809633255005)
-⚠️ Bifurcation Found! Window: [456:584] | Prob: 0.4607 ± 0.0215 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [588:716] | Prob: 0.4709 ± 0.0172 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [720:848] | Prob: 0.4734 ± 0.0215 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [864:992] | Prob: 0.4608 ± 0.0209 | Timing: 0.5 ± 0.0
+Deploying model... (Threshold: 0.45689496397972107)
+⚠️ Bifurcation Found! Window: [468:596] | Prob: 0.4627 ± 0.0150 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [600:728] | Prob: 0.4641 ± 0.0174 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [732:860] | Prob: 0.4891 ± 0.0125 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [864:992] | Prob: 0.4815 ± 0.0140 | Timing: 0.5 ± 0.0
 📊 Changepoint Analysis Complete
     Method PELT Algorithm       :  (rbf)
     Predicted Breakpoints at   : timestep [210, 560]
@@ -181,11 +242,11 @@ Deploying model... (Threshold: 0.4563809633255005)
 /home/users/thopri/PROMOTE/LatentTCN/inference2.py:216: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
   plt.savefig(f"results/bifurcation_inference_{ensemble}.png", dpi=150, bbox_inches='tight')
 Plot saved to bifurcation_inference.png
-Max probability seen  : 0.5116 at t=552
-Mean probability      : 0.4406
-% windows above 0.45  : 42.3%
-% windows above 0.50  : 0.7%
-% windows above thresh: 32.9%
+Max probability seen  : 0.5088 at t=558
+Mean probability      : 0.4412
+% windows above 0.45  : 48.3%
+% windows above 0.50  : 3.4%
+% windows above thresh: 47.7%
 
 ----------------────────────────────────
 INFERENCE COMPLETE. Total Triggers: 4
@@ -194,26 +255,28 @@ Detailed logs saved to 'detected_ocean_bifurcations_12.csv'.
 Initializing model topology...
 Trained model weights successfully loaded into memory.
 Loading telemetry data from: ensembles/CANARI_SSP370_13_LON_-56.506_LAT_60.819.csv
-Deploying model... (Threshold: 0.43626344203948975)
-⚠️ Bifurcation Found! Window: [300:428] | Prob: 0.4392 ± 0.0126 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [432:560] | Prob: 0.4373 ± 0.0153 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [564:692] | Prob: 0.4636 ± 0.0153 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [696:824] | Prob: 0.5201 ± 0.0157 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [828:956] | Prob: 0.4821 ± 0.0130 | Timing: 0.5 ± 0.0
+Deploying model... (Threshold: 0.4378063678741455)
+⚠️ Bifurcation Found! Window: [336:464] | Prob: 0.4405 ± 0.0143 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [492:620] | Prob: 0.4419 ± 0.0161 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [624:752] | Prob: 0.4510 ± 0.0145 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [756:884] | Prob: 0.5106 ± 0.0144 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [888:1016] | Prob: 0.4455 ± 0.0154 | Timing: 0.5 ± 0.0
 📊 Changepoint Analysis Complete
     Method PELT Algorithm       :  (rbf)
     Predicted Breakpoints at   : timestep [605]
-    Confidence scores: [0.10936073740632703]  (between/total variance ratio)
+    Confidence scores: [0.1091156478028986]  (between/total variance ratio)
+/home/users/thopri/PROMOTE/LatentTCN/inference2.py:162: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`). Consider using `matplotlib.pyplot.close()`.
+  fig, axes = plt.subplots(n_channels, 1, figsize=(14, 2.5 * n_channels), sharex=True)
 /home/users/thopri/PROMOTE/LatentTCN/inference2.py:215: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
   plt.tight_layout()
 /home/users/thopri/PROMOTE/LatentTCN/inference2.py:216: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
   plt.savefig(f"results/bifurcation_inference_{ensemble}.png", dpi=150, bbox_inches='tight')
 Plot saved to bifurcation_inference.png
-Max probability seen  : 0.5622 at t=750
-Mean probability      : 0.4450
-% windows above 0.45  : 48.3%
-% windows above 0.50  : 14.8%
-% windows above thresh: 62.4%
+Max probability seen  : 0.5373 at t=726
+Mean probability      : 0.4387
+% windows above 0.45  : 37.6%
+% windows above 0.50  : 6.0%
+% windows above thresh: 51.0%
 
 ----------------────────────────────────
 INFERENCE COMPLETE. Total Triggers: 5
@@ -222,146 +285,222 @@ Detailed logs saved to 'detected_ocean_bifurcations_13.csv'.
 Initializing model topology...
 Trained model weights successfully loaded into memory.
 Loading telemetry data from: ensembles/CANARI_SSP370_14_LON_-56.506_LAT_60.819.csv
-Deploying model... (Threshold: 0.4564199447631836)
-⚠️ Bifurcation Found! Window: [408:536] | Prob: 0.4641 ± 0.0176 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [540:668] | Prob: 0.4755 ± 0.0174 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [672:800] | Prob: 0.4959 ± 0.0206 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [804:932] | Prob: 0.4997 ± 0.0161 | Timing: 0.5 ± 0.0
+Deploying model... (Threshold: 0.4468030631542206)
+⚠️ Bifurcation Found! Window: [348:476] | Prob: 0.4509 ± 0.0099 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [480:608] | Prob: 0.4821 ± 0.0121 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [612:740] | Prob: 0.4629 ± 0.0133 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [744:872] | Prob: 0.5380 ± 0.0143 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [876:1004] | Prob: 0.5056 ± 0.0141 | Timing: 0.5 ± 0.0
 📊 Changepoint Analysis Complete
     Method PELT Algorithm       :  (rbf)
     Predicted Breakpoints at   : timestep [285, 740]
     Confidence scores: [0.0599096873289332, 0.13732770473410924]  (between/total variance ratio)
 Plot saved to bifurcation_inference.png
-Max probability seen  : 0.5271 at t=762
-Mean probability      : 0.4587
-% windows above 0.45  : 59.1%
-% windows above 0.50  : 16.8%
-% windows above thresh: 53.7%
+Max probability seen  : 0.5517 at t=738
+Mean probability      : 0.4625
+% windows above 0.45  : 57.7%
+% windows above 0.50  : 17.4%
+% windows above thresh: 59.1%
 
 ----------------────────────────────────
-INFERENCE COMPLETE. Total Triggers: 4
+INFERENCE COMPLETE. Total Triggers: 5
 ----------------────────────────────────
 Detailed logs saved to 'detected_ocean_bifurcations_14.csv'.
 Initializing model topology...
 Trained model weights successfully loaded into memory.
 Loading telemetry data from: ensembles/CANARI_SSP370_15_LON_-56.506_LAT_60.819.csv
-Deploying model... (Threshold: 0.4697985351085663)
-⚠️ Bifurcation Found! Window: [396:524] | Prob: 0.4707 ± 0.0127 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [528:656] | Prob: 0.5103 ± 0.0140 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [660:788] | Prob: 0.4973 ± 0.0125 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [792:920] | Prob: 0.4978 ± 0.0070 | Timing: 0.5 ± 0.0
+Deploying model... (Threshold: 0.4581822156906128)
+⚠️ Bifurcation Found! Window: [498:626] | Prob: 0.4637 ± 0.0170 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [678:806] | Prob: 0.4603 ± 0.0168 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [822:950] | Prob: 0.4585 ± 0.0212 | Timing: 0.5 ± 0.0
 📊 Changepoint Analysis Complete
     Method PELT Algorithm       :  (rbf)
     Predicted Breakpoints at   : timestep [200, 500]
     Confidence scores: [0.061718473611889056, 0.0948907827127476]  (between/total variance ratio)
-/home/users/thopri/PROMOTE/LatentTCN/inference2.py:215: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
-  plt.tight_layout()
-/home/users/thopri/PROMOTE/LatentTCN/inference2.py:216: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
-  plt.savefig(f"results/bifurcation_inference_{ensemble}.png", dpi=150, bbox_inches='tight')
 Plot saved to bifurcation_inference.png
-Max probability seen  : 0.5231 at t=576
-Mean probability      : 0.4695
-% windows above 0.45  : 80.5%
-% windows above 0.50  : 25.5%
-% windows above thresh: 55.7%
+Max probability seen  : 0.4794 at t=576
+Mean probability      : 0.4271
+% windows above 0.45  : 36.9%
+% windows above 0.50  : 0.0%
+% windows above thresh: 24.2%
 
 ----------------────────────────────────
-INFERENCE COMPLETE. Total Triggers: 4
+INFERENCE COMPLETE. Total Triggers: 3
 ----------------────────────────────────
 Detailed logs saved to 'detected_ocean_bifurcations_15.csv'.
-============================================================
-null alerts raised during training, skipping inference for ensemble 16
-============================================================
-============================================================
-null alerts raised during training, skipping inference for ensemble 17
-============================================================
-============================================================
-null alerts raised during training, skipping inference for ensemble 18
-============================================================
-============================================================
-null alerts raised during training, skipping inference for ensemble 19
-============================================================
 Initializing model topology...
 Trained model weights successfully loaded into memory.
-Loading telemetry data from: ensembles/CANARI_SSP370_20_LON_-56.506_LAT_60.819.csv
-Deploying model... (Threshold: 0.4431467354297638)
-⚠️ Bifurcation Found! Window: [210:338] | Prob: 0.4433 ± 0.0116 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [390:518] | Prob: 0.4457 ± 0.0126 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [522:650] | Prob: 0.5169 ± 0.0157 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [654:782] | Prob: 0.5583 ± 0.0205 | Timing: 0.6 ± 0.0
-⚠️ Bifurcation Found! Window: [786:914] | Prob: 0.5240 ± 0.0187 | Timing: 0.5 ± 0.0
+Loading telemetry data from: ensembles/CANARI_SSP370_16_LON_-56.506_LAT_60.819.csv
+Deploying model... (Threshold: 0.4366626739501953)
+⚠️ Bifurcation Found! Window: [306:434] | Prob: 0.4449 ± 0.0183 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [444:572] | Prob: 0.4416 ± 0.0172 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [576:704] | Prob: 0.4807 ± 0.0166 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [708:836] | Prob: 0.4764 ± 0.0193 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [840:968] | Prob: 0.5098 ± 0.0177 | Timing: 0.5 ± 0.0
 📊 Changepoint Analysis Complete
     Method PELT Algorithm       :  (rbf)
-    Predicted Breakpoints at   : timestep [505]
-    Confidence scores: [0.08164606463807578]  (between/total variance ratio)
-/home/users/thopri/PROMOTE/LatentTCN/inference2.py:162: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`). Consider using `matplotlib.pyplot.close()`.
-  fig, axes = plt.subplots(n_channels, 1, figsize=(14, 2.5 * n_channels), sharex=True)
-/home/users/thopri/PROMOTE/LatentTCN/inference2.py:215: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
-  plt.tight_layout()
-/home/users/thopri/PROMOTE/LatentTCN/inference2.py:216: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
-  plt.savefig(f"results/bifurcation_inference_{ensemble}.png", dpi=150, bbox_inches='tight')
+    Predicted Breakpoints at   : timestep [220, 630]
+    Confidence scores: [0.05697413215269992, 0.08988623730559654]  (between/total variance ratio)
 Plot saved to bifurcation_inference.png
-Max probability seen  : 0.6165 at t=588
-Mean probability      : 0.4760
-% windows above 0.45  : 68.5%
-% windows above 0.50  : 42.3%
-% windows above thresh: 71.1%
+Max probability seen  : 0.5366 at t=864
+Mean probability      : 0.4462
+% windows above 0.45  : 53.7%
+% windows above 0.50  : 14.8%
+% windows above thresh: 63.8%
 
 ----------------────────────────────────
 INFERENCE COMPLETE. Total Triggers: 5
 ----------------────────────────────────
-Detailed logs saved to 'detected_ocean_bifurcations_20.csv'.
+Detailed logs saved to 'detected_ocean_bifurcations_16.csv'.
+Initializing model topology...
+Trained model weights successfully loaded into memory.
+Loading telemetry data from: ensembles/CANARI_SSP370_17_LON_-56.506_LAT_60.819.csv
+Deploying model... (Threshold: 0.4406408369541168)
+⚠️ Bifurcation Found! Window: [276:404] | Prob: 0.4498 ± 0.0129 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [420:548] | Prob: 0.4500 ± 0.0142 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [552:680] | Prob: 0.5077 ± 0.0154 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [684:812] | Prob: 0.5328 ± 0.0157 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [816:944] | Prob: 0.5137 ± 0.0176 | Timing: 0.5 ± 0.0
+📊 Changepoint Analysis Complete
+    Method PELT Algorithm       :  (rbf)
+    Predicted Breakpoints at   : timestep [195, 580]
+    Confidence scores: [0.06479668016718095, 0.09144152612131017]  (between/total variance ratio)
+Plot saved to bifurcation_inference.png
+Max probability seen  : 0.5405 at t=618
+Mean probability      : 0.4396
+% windows above 0.45  : 53.7%
+% windows above 0.50  : 30.2%
+% windows above thresh: 59.1%
+
+----------------────────────────────────
+INFERENCE COMPLETE. Total Triggers: 5
+----------------────────────────────────
+Detailed logs saved to 'detected_ocean_bifurcations_17.csv'.
 ============================================================
-null alerts raised during training, skipping inference for ensemble 21
+null alerts raised during training, skipping inference for ensemble 18
 ============================================================
 Initializing model topology...
 Trained model weights successfully loaded into memory.
+Loading telemetry data from: ensembles/CANARI_SSP370_19_LON_-56.506_LAT_60.819.csv
+Deploying model... (Threshold: 0.4371492862701416)
+⚠️ Bifurcation Found! Window: [252:380] | Prob: 0.4383 ± 0.0146 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [384:512] | Prob: 0.4958 ± 0.0119 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [516:644] | Prob: 0.4672 ± 0.0129 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [648:776] | Prob: 0.4858 ± 0.0171 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [780:908] | Prob: 0.4793 ± 0.0191 | Timing: 0.5 ± 0.0
+📊 Changepoint Analysis Complete
+    Method PELT Algorithm       :  (rbf)
+    Predicted Breakpoints at   : timestep [245, 855]
+    Confidence scores: [0.0708094816525875, 0.06872124997744167]  (between/total variance ratio)
+Plot saved to bifurcation_inference.png
+Max probability seen  : 0.5136 at t=672
+Mean probability      : 0.4476
+% windows above 0.45  : 65.8%
+% windows above 0.50  : 5.4%
+% windows above thresh: 69.8%
+
+----------------────────────────────────
+INFERENCE COMPLETE. Total Triggers: 5
+----------------────────────────────────
+Detailed logs saved to 'detected_ocean_bifurcations_19.csv'.
+Initializing model topology...
+Trained model weights successfully loaded into memory.
+Loading telemetry data from: ensembles/CANARI_SSP370_20_LON_-56.506_LAT_60.819.csv
+Deploying model... (Threshold: 0.46201908588409424)
+⚠️ Bifurcation Found! Window: [420:548] | Prob: 0.4683 ± 0.0189 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [552:680] | Prob: 0.5395 ± 0.0156 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [684:812] | Prob: 0.5646 ± 0.0197 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [816:944] | Prob: 0.5220 ± 0.0143 | Timing: 0.5 ± 0.0
+📊 Changepoint Analysis Complete
+    Method PELT Algorithm       :  (rbf)
+    Predicted Breakpoints at   : timestep [505]
+    Confidence scores: [0.08164606463807578]  (between/total variance ratio)
+/home/users/thopri/PROMOTE/LatentTCN/inference2.py:215: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/users/thopri/PROMOTE/LatentTCN/inference2.py:216: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
+  plt.savefig(f"results/bifurcation_inference_{ensemble}.png", dpi=150, bbox_inches='tight')
+Plot saved to bifurcation_inference.png
+Max probability seen  : 0.5915 at t=588
+Mean probability      : 0.4605
+% windows above 0.45  : 57.7%
+% windows above 0.50  : 41.6%
+% windows above thresh: 49.7%
+
+----------------────────────────────────
+INFERENCE COMPLETE. Total Triggers: 4
+----------------────────────────────────
+Detailed logs saved to 'detected_ocean_bifurcations_20.csv'.
+Initializing model topology...
+Trained model weights successfully loaded into memory.
+Loading telemetry data from: ensembles/CANARI_SSP370_21_LON_-56.506_LAT_60.819.csv
+Deploying model... (Threshold: 0.45386436581611633)
+⚠️ Bifurcation Found! Window: [324:452] | Prob: 0.4551 ± 0.0138 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [456:584] | Prob: 0.5009 ± 0.0186 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [588:716] | Prob: 0.5060 ± 0.0172 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [720:848] | Prob: 0.5526 ± 0.0186 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [852:980] | Prob: 0.4946 ± 0.0209 | Timing: 0.5 ± 0.0
+📊 Changepoint Analysis Complete
+    Method PELT Algorithm       :  (rbf)
+    Predicted Breakpoints at   : timestep [390]
+    Confidence scores: [0.08479806335922033]  (between/total variance ratio)
+/home/users/thopri/PROMOTE/LatentTCN/inference2.py:215: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/users/thopri/PROMOTE/LatentTCN/inference2.py:216: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
+  plt.savefig(f"results/bifurcation_inference_{ensemble}.png", dpi=150, bbox_inches='tight')
+Plot saved to bifurcation_inference.png
+Max probability seen  : 0.5650 at t=690
+Mean probability      : 0.4643
+% windows above 0.45  : 63.8%
+% windows above 0.50  : 44.3%
+% windows above thresh: 63.8%
+
+----------------────────────────────────
+INFERENCE COMPLETE. Total Triggers: 5
+----------------────────────────────────
+Detailed logs saved to 'detected_ocean_bifurcations_21.csv'.
+Initializing model topology...
+Trained model weights successfully loaded into memory.
 Loading telemetry data from: ensembles/CANARI_SSP370_22_LON_-56.506_LAT_60.819.csv
-Deploying model... (Threshold: 0.455570250749588)
-⚠️ Bifurcation Found! Window: [342:470] | Prob: 0.4608 ± 0.0144 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [474:602] | Prob: 0.4749 ± 0.0128 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [606:734] | Prob: 0.5011 ± 0.0129 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [738:866] | Prob: 0.4727 ± 0.0139 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [870:998] | Prob: 0.5078 ± 0.0144 | Timing: 0.5 ± 0.0
+Deploying model... (Threshold: 0.45638447999954224)
+⚠️ Bifurcation Found! Window: [330:458] | Prob: 0.4584 ± 0.0190 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [462:590] | Prob: 0.4591 ± 0.0160 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [594:722] | Prob: 0.4793 ± 0.0174 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [792:920] | Prob: 0.4584 ± 0.0146 | Timing: 0.5 ± 0.0
 📊 Changepoint Analysis Complete
     Method PELT Algorithm       :  (rbf)
     Predicted Breakpoints at   : timestep [270, 585]
     Confidence scores: [0.04395768844849626, 0.07031127401077482]  (between/total variance ratio)
 Plot saved to bifurcation_inference.png
-Max probability seen  : 0.5132 at t=822
-Mean probability      : 0.4536
-% windows above 0.45  : 62.4%
-% windows above 0.50  : 14.1%
-% windows above thresh: 61.7%
+Max probability seen  : 0.4854 at t=420
+Mean probability      : 0.4512
+% windows above 0.45  : 59.7%
+% windows above 0.50  : 0.0%
+% windows above thresh: 53.7%
 
 ----------------────────────────────────
-INFERENCE COMPLETE. Total Triggers: 5
+INFERENCE COMPLETE. Total Triggers: 4
 ----------------────────────────────────
 Detailed logs saved to 'detected_ocean_bifurcations_22.csv'.
 Initializing model topology...
 Trained model weights successfully loaded into memory.
 Loading telemetry data from: ensembles/CANARI_SSP370_23_LON_-56.506_LAT_60.819.csv
-Deploying model... (Threshold: 0.429475873708725)
-⚠️ Bifurcation Found! Window: [150:278] | Prob: 0.4326 ± 0.0269 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [282:410] | Prob: 0.4492 ± 0.0251 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [414:542] | Prob: 0.4563 ± 0.0232 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [546:674] | Prob: 0.4728 ± 0.0231 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [678:806] | Prob: 0.4808 ± 0.0255 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [810:938] | Prob: 0.4814 ± 0.0287 | Timing: 0.5 ± 0.0
+Deploying model... (Threshold: 0.43326130509376526)
+⚠️ Bifurcation Found! Window: [180:308] | Prob: 0.4385 ± 0.0141 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [360:488] | Prob: 0.4334 ± 0.0127 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [492:620] | Prob: 0.4449 ± 0.0146 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [624:752] | Prob: 0.5140 ± 0.0154 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [756:884] | Prob: 0.4925 ± 0.0121 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [888:1016] | Prob: 0.4941 ± 0.0100 | Timing: 0.5 ± 0.0
 📊 Changepoint Analysis Complete
     Method PELT Algorithm       :  (rbf)
     Predicted Breakpoints at   : timestep [170, 570]
     Confidence scores: [0.04907334635653047, 0.06401369377824175]  (between/total variance ratio)
-/home/users/thopri/PROMOTE/LatentTCN/inference2.py:215: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
-  plt.tight_layout()
-/home/users/thopri/PROMOTE/LatentTCN/inference2.py:216: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
-  plt.savefig(f"results/bifurcation_inference_{ensemble}.png", dpi=150, bbox_inches='tight')
 Plot saved to bifurcation_inference.png
-Max probability seen  : 0.5191 at t=636
-Mean probability      : 0.4566
-% windows above 0.45  : 63.8%
-% windows above 0.50  : 4.0%
-% windows above thresh: 81.2%
+Max probability seen  : 0.5253 at t=636
+Mean probability      : 0.4468
+% windows above 0.45  : 53.7%
+% windows above 0.50  : 16.8%
+% windows above thresh: 67.1%
 
 ----------------────────────────────────
 INFERENCE COMPLETE. Total Triggers: 6
@@ -370,93 +509,113 @@ Detailed logs saved to 'detected_ocean_bifurcations_23.csv'.
 Initializing model topology...
 Trained model weights successfully loaded into memory.
 Loading telemetry data from: ensembles/CANARI_SSP370_24_LON_-56.506_LAT_60.819.csv
-Deploying model... (Threshold: 0.44451406598091125)
-⚠️ Bifurcation Found! Window: [306:434] | Prob: 0.4454 ± 0.0159 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [438:566] | Prob: 0.5135 ± 0.0141 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [570:698] | Prob: 0.5188 ± 0.0176 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [702:830] | Prob: 0.5147 ± 0.0135 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [834:962] | Prob: 0.4965 ± 0.0140 | Timing: 0.5 ± 0.0
+Deploying model... (Threshold: 0.42107242345809937)
+⚠️ Bifurcation Found! Window: [192:320] | Prob: 0.4253 ± 0.0206 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [324:452] | Prob: 0.4668 ± 0.0207 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [456:584] | Prob: 0.5347 ± 0.0229 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [588:716] | Prob: 0.5209 ± 0.0197 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [720:848] | Prob: 0.5229 ± 0.0193 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [852:980] | Prob: 0.5328 ± 0.0272 | Timing: 0.5 ± 0.0
 📊 Changepoint Analysis Complete
     Method PELT Algorithm       :  (rbf)
     Predicted Breakpoints at   : timestep [355, 665]
-    Confidence scores: [0.09158314433319158, 0.0728642906120875]  (between/total variance ratio)
+    Confidence scores: [0.09083088066844126, 0.0726382087041776]  (between/total variance ratio)
 /home/users/thopri/PROMOTE/LatentTCN/inference2.py:215: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
   plt.tight_layout()
 /home/users/thopri/PROMOTE/LatentTCN/inference2.py:216: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
   plt.savefig(f"results/bifurcation_inference_{ensemble}.png", dpi=150, bbox_inches='tight')
 Plot saved to bifurcation_inference.png
-Max probability seen  : 0.5678 at t=492
-Mean probability      : 0.4399
-% windows above 0.45  : 64.4%
-% windows above 0.50  : 47.0%
-% windows above thresh: 65.8%
+Max probability seen  : 0.5601 at t=486
+Mean probability      : 0.4703
+% windows above 0.45  : 67.1%
+% windows above 0.50  : 47.7%
+% windows above thresh: 71.1%
+
+----------------────────────────────────
+INFERENCE COMPLETE. Total Triggers: 6
+----------------────────────────────────
+Detailed logs saved to 'detected_ocean_bifurcations_24.csv'.
+Initializing model topology...
+Trained model weights successfully loaded into memory.
+Loading telemetry data from: ensembles/CANARI_SSP370_25_LON_-56.506_LAT_60.819.csv
+Deploying model... (Threshold: 0.4582563042640686)
+⚠️ Bifurcation Found! Window: [360:488] | Prob: 0.4634 ± 0.0127 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [492:620] | Prob: 0.5571 ± 0.0183 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [624:752] | Prob: 0.4940 ± 0.0138 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [756:884] | Prob: 0.5694 ± 0.0234 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [888:1016] | Prob: 0.5522 ± 0.0187 | Timing: 0.5 ± 0.0
+📊 Changepoint Analysis Complete
+    Method PELT Algorithm       :  (rbf)
+    Predicted Breakpoints at   : timestep [305, 680]
+    Confidence scores: [0.054746542431328135, 0.09472571066895644]  (between/total variance ratio)
+Plot saved to bifurcation_inference.png
+Max probability seen  : 0.5952 at t=672
+Mean probability      : 0.4559
+% windows above 0.45  : 65.1%
+% windows above 0.50  : 53.0%
+% windows above thresh: 59.7%
 
 ----------------────────────────────────
 INFERENCE COMPLETE. Total Triggers: 5
 ----------------────────────────────────
-Detailed logs saved to 'detected_ocean_bifurcations_24.csv'.
-============================================================
-null alerts raised during training, skipping inference for ensemble 25
-============================================================
+Detailed logs saved to 'detected_ocean_bifurcations_25.csv'.
 Initializing model topology...
 Trained model weights successfully loaded into memory.
 Loading telemetry data from: ensembles/CANARI_SSP370_26_LON_-56.506_LAT_60.819.csv
-Deploying model... (Threshold: 0.4266747534275055)
-⚠️ Bifurcation Found! Window: [252:380] | Prob: 0.4279 ± 0.0162 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [384:512] | Prob: 0.4483 ± 0.0122 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [516:644] | Prob: 0.4490 ± 0.0121 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [648:776] | Prob: 0.4565 ± 0.0110 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [780:908] | Prob: 0.4767 ± 0.0145 | Timing: 0.5 ± 0.0
+Deploying model... (Threshold: 0.4496179223060608)
+⚠️ Bifurcation Found! Window: [300:428] | Prob: 0.4503 ± 0.0143 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [624:752] | Prob: 0.4566 ± 0.0201 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [756:884] | Prob: 0.4610 ± 0.0143 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [888:1016] | Prob: 0.4552 ± 0.0172 | Timing: 0.5 ± 0.0
 📊 Changepoint Analysis Complete
     Method PELT Algorithm       :  (rbf)
     Predicted Breakpoints at   : timestep [260, 580]
     Confidence scores: [0.07352513993676503, 0.08960616208475182]  (between/total variance ratio)
 Plot saved to bifurcation_inference.png
-Max probability seen  : 0.4917 at t=702
-Mean probability      : 0.4311
-% windows above 0.45  : 52.3%
+Max probability seen  : 0.4705 at t=708
+Mean probability      : 0.4346
+% windows above 0.45  : 20.8%
 % windows above 0.50  : 0.0%
-% windows above thresh: 71.8%
+% windows above thresh: 20.8%
 
 ----------------────────────────────────
-INFERENCE COMPLETE. Total Triggers: 5
+INFERENCE COMPLETE. Total Triggers: 4
 ----------------────────────────────────
 Detailed logs saved to 'detected_ocean_bifurcations_26.csv'.
 Initializing model topology...
 Trained model weights successfully loaded into memory.
 Loading telemetry data from: ensembles/CANARI_SSP370_27_LON_-56.506_LAT_60.819.csv
-Deploying model... (Threshold: 0.4300500154495239)
-⚠️ Bifurcation Found! Window: [132:260] | Prob: 0.4651 ± 0.0197 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [264:392] | Prob: 0.4552 ± 0.0171 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [396:524] | Prob: 0.4592 ± 0.0172 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [528:656] | Prob: 0.4692 ± 0.0170 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [660:788] | Prob: 0.4682 ± 0.0180 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [792:920] | Prob: 0.4617 ± 0.0178 | Timing: 0.5 ± 0.0
+Deploying model... (Threshold: 0.4660942554473877)
+⚠️ Bifurcation Found! Window: [540:668] | Prob: 0.4721 ± 0.0194 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [744:872] | Prob: 0.4718 ± 0.0176 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [876:1004] | Prob: 0.4703 ± 0.0145 | Timing: 0.5 ± 0.0
 📊 Changepoint Analysis Complete
     Method PELT Algorithm       :  (rbf)
     Predicted Breakpoints at   : timestep [120, 630]
     Confidence scores: [0.04609498774422192, 0.11271913934836154]  (between/total variance ratio)
+/home/users/thopri/PROMOTE/LatentTCN/inference2.py:215: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/users/thopri/PROMOTE/LatentTCN/inference2.py:216: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
+  plt.savefig(f"results/bifurcation_inference_{ensemble}.png", dpi=150, bbox_inches='tight')
 Plot saved to bifurcation_inference.png
-Max probability seen  : 0.5075 at t=570
-Mean probability      : 0.4595
-% windows above 0.45  : 83.9%
-% windows above 0.50  : 2.0%
-% windows above thresh: 91.3%
+Max probability seen  : 0.4987 at t=570
+Mean probability      : 0.4504
+% windows above 0.45  : 50.3%
+% windows above 0.50  : 0.0%
+% windows above thresh: 25.5%
 
 ----------------────────────────────────
-INFERENCE COMPLETE. Total Triggers: 6
+INFERENCE COMPLETE. Total Triggers: 3
 ----------------────────────────────────
 Detailed logs saved to 'detected_ocean_bifurcations_27.csv'.
 Initializing model topology...
 Trained model weights successfully loaded into memory.
 Loading telemetry data from: ensembles/CANARI_SSP370_28_LON_-56.506_LAT_60.819.csv
-Deploying model... (Threshold: 0.45075616240501404)
-⚠️ Bifurcation Found! Window: [132:260] | Prob: 0.4592 ± 0.0188 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [264:392] | Prob: 0.4562 ± 0.0230 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [396:524] | Prob: 0.4541 ± 0.0174 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [528:656] | Prob: 0.4886 ± 0.0168 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [660:788] | Prob: 0.5329 ± 0.0214 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [792:920] | Prob: 0.5128 ± 0.0180 | Timing: 0.5 ± 0.0
+Deploying model... (Threshold: 0.4561329185962677)
+⚠️ Bifurcation Found! Window: [444:572] | Prob: 0.4617 ± 0.0144 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [576:704] | Prob: 0.4947 ± 0.0223 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [708:836] | Prob: 0.5296 ± 0.0172 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [840:968] | Prob: 0.4980 ± 0.0177 | Timing: 0.5 ± 0.0
 📊 Changepoint Analysis Complete
     Method PELT Algorithm       :  (rbf)
     Predicted Breakpoints at   : timestep [175, 610]
@@ -466,22 +625,24 @@ Deploying model... (Threshold: 0.45075616240501404)
 /home/users/thopri/PROMOTE/LatentTCN/inference2.py:216: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
   plt.savefig(f"results/bifurcation_inference_{ensemble}.png", dpi=150, bbox_inches='tight')
 Plot saved to bifurcation_inference.png
-Max probability seen  : 0.5485 at t=684
-Mean probability      : 0.4767
-% windows above 0.45  : 80.5%
-% windows above 0.50  : 32.9%
-% windows above thresh: 77.9%
+Max probability seen  : 0.5455 at t=684
+Mean probability      : 0.4646
+% windows above 0.45  : 53.0%
+% windows above 0.50  : 18.1%
+% windows above thresh: 44.3%
 
 ----------------────────────────────────
-INFERENCE COMPLETE. Total Triggers: 6
+INFERENCE COMPLETE. Total Triggers: 4
 ----------------────────────────────────
 Detailed logs saved to 'detected_ocean_bifurcations_28.csv'.
 Initializing model topology...
 Trained model weights successfully loaded into memory.
 Loading telemetry data from: ensembles/CANARI_SSP370_29_LON_-56.506_LAT_60.819.csv
-Deploying model... (Threshold: 0.4565099775791168)
-⚠️ Bifurcation Found! Window: [408:536] | Prob: 0.4565 ± 0.0152 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [786:914] | Prob: 0.4640 ± 0.0189 | Timing: 0.5 ± 0.0
+Deploying model... (Threshold: 0.4674072265625)
+⚠️ Bifurcation Found! Window: [372:500] | Prob: 0.4715 ± 0.0178 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [504:632] | Prob: 0.4806 ± 0.0211 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [696:824] | Prob: 0.4677 ± 0.0188 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [828:956] | Prob: 0.4843 ± 0.0189 | Timing: 0.5 ± 0.0
 📊 Changepoint Analysis Complete
     Method PELT Algorithm       :  (rbf)
     Predicted Breakpoints at   : timestep [440, 675, 855]
@@ -491,91 +652,87 @@ Deploying model... (Threshold: 0.4565099775791168)
 /home/users/thopri/PROMOTE/LatentTCN/inference2.py:216: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
   plt.savefig(f"results/bifurcation_inference_{ensemble}.png", dpi=150, bbox_inches='tight')
 Plot saved to bifurcation_inference.png
-Max probability seen  : 0.4691 at t=444
-Mean probability      : 0.4324
-% windows above 0.45  : 26.2%
-% windows above 0.50  : 0.0%
-% windows above thresh: 15.4%
+Max probability seen  : 0.5014 at t=420
+Mean probability      : 0.4599
+% windows above 0.45  : 63.8%
+% windows above 0.50  : 0.7%
+% windows above thresh: 45.0%
 
 ----------------────────────────────────
-INFERENCE COMPLETE. Total Triggers: 2
+INFERENCE COMPLETE. Total Triggers: 4
 ----------------────────────────────────
 Detailed logs saved to 'detected_ocean_bifurcations_29.csv'.
 Initializing model topology...
 Trained model weights successfully loaded into memory.
 Loading telemetry data from: ensembles/CANARI_SSP370_30_LON_-56.506_LAT_60.819.csv
-Deploying model... (Threshold: 0.45746222138404846)
-⚠️ Bifurcation Found! Window: [252:380] | Prob: 0.4684 ± 0.0119 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [384:512] | Prob: 0.4811 ± 0.0151 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [516:644] | Prob: 0.4780 ± 0.0089 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [648:776] | Prob: 0.5960 ± 0.0175 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [780:908] | Prob: 0.5018 ± 0.0111 | Timing: 0.5 ± 0.0
+Deploying model... (Threshold: 0.44331979751586914)
+⚠️ Bifurcation Found! Window: [276:404] | Prob: 0.4437 ± 0.0144 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [540:668] | Prob: 0.4434 ± 0.0168 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [672:800] | Prob: 0.5787 ± 0.0196 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [804:932] | Prob: 0.5223 ± 0.0173 | Timing: 0.5 ± 0.0
 📊 Changepoint Analysis Complete
     Method PELT Algorithm       :  (rbf)
     Predicted Breakpoints at   : timestep [235, 665]
-    Confidence scores: [0.04944296445328721, 0.07873400234693004]  (between/total variance ratio)
+    Confidence scores: [0.050058838552852834, 0.07924368395891393]  (between/total variance ratio)
 Plot saved to bifurcation_inference.png
-Max probability seen  : 0.5987 at t=660
-Mean probability      : 0.4674
-% windows above 0.45  : 72.5%
-% windows above 0.50  : 33.6%
-% windows above thresh: 69.1%
+Max probability seen  : 0.5973 at t=660
+Mean probability      : 0.4479
+% windows above 0.45  : 41.6%
+% windows above 0.50  : 36.2%
+% windows above thresh: 45.0%
 
 ----------------────────────────────────
-INFERENCE COMPLETE. Total Triggers: 5
+INFERENCE COMPLETE. Total Triggers: 4
 ----------------────────────────────────
 Detailed logs saved to 'detected_ocean_bifurcations_30.csv'.
 Initializing model topology...
 Trained model weights successfully loaded into memory.
 Loading telemetry data from: ensembles/CANARI_SSP370_31_LON_-56.506_LAT_60.819.csv
-Deploying model... (Threshold: 0.4605024755001068)
-⚠️ Bifurcation Found! Window: [486:614] | Prob: 0.4665 ± 0.0168 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [618:746] | Prob: 0.5181 ± 0.0120 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [750:878] | Prob: 0.5102 ± 0.0138 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [882:1010] | Prob: 0.4915 ± 0.0151 | Timing: 0.5 ± 0.0
+Deploying model... (Threshold: 0.43648454546928406)
+⚠️ Bifurcation Found! Window: [312:440] | Prob: 0.4417 ± 0.0145 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [480:608] | Prob: 0.4365 ± 0.0174 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [612:740] | Prob: 0.4886 ± 0.0140 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [744:872] | Prob: 0.4932 ± 0.0150 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [876:1004] | Prob: 0.4686 ± 0.0095 | Timing: 0.5 ± 0.0
 📊 Changepoint Analysis Complete
     Method PELT Algorithm       :  (rbf)
     Predicted Breakpoints at   : timestep [175, 630]
     Confidence scores: [0.06332156168833292, 0.07938453927651208]  (between/total variance ratio)
-/home/users/thopri/PROMOTE/LatentTCN/inference2.py:215: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
-  plt.tight_layout()
-/home/users/thopri/PROMOTE/LatentTCN/inference2.py:216: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
-  plt.savefig(f"results/bifurcation_inference_{ensemble}.png", dpi=150, bbox_inches='tight')
 Plot saved to bifurcation_inference.png
-Max probability seen  : 0.5331 at t=642
-Mean probability      : 0.4425
-% windows above 0.45  : 51.7%
-% windows above 0.50  : 25.5%
-% windows above thresh: 42.3%
+Max probability seen  : 0.5123 at t=732
+Mean probability      : 0.4305
+% windows above 0.45  : 40.9%
+% windows above 0.50  : 6.7%
+% windows above thresh: 47.7%
 
 ----------------────────────────────────
-INFERENCE COMPLETE. Total Triggers: 4
+INFERENCE COMPLETE. Total Triggers: 5
 ----------------────────────────────────
 Detailed logs saved to 'detected_ocean_bifurcations_31.csv'.
 Initializing model topology...
 Trained model weights successfully loaded into memory.
 Loading telemetry data from: ensembles/CANARI_SSP370_32_LON_-56.506_LAT_60.819.csv
-Deploying model... (Threshold: 0.4702461361885071)
-⚠️ Bifurcation Found! Window: [156:284] | Prob: 0.4710 ± 0.0238 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [288:416] | Prob: 0.5318 ± 0.0309 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [420:548] | Prob: 0.5031 ± 0.0313 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [552:680] | Prob: 0.5207 ± 0.0239 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [684:812] | Prob: 0.5476 ± 0.0197 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [816:944] | Prob: 0.4804 ± 0.0259 | Timing: 0.5 ± 0.0
+Deploying model... (Threshold: 0.45046326518058777)
+⚠️ Bifurcation Found! Window: [204:332] | Prob: 0.4593 ± 0.0172 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [336:464] | Prob: 0.4891 ± 0.0154 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [468:596] | Prob: 0.4756 ± 0.0147 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [600:728] | Prob: 0.5436 ± 0.0194 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [732:860] | Prob: 0.5237 ± 0.0143 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [864:992] | Prob: 0.5208 ± 0.0143 | Timing: 0.5 ± 0.0
 📊 Changepoint Analysis Complete
     Method PELT Algorithm       :  (rbf)
     Predicted Breakpoints at   : timestep [235, 775]
-    Confidence scores: [0.07440858342250911, 0.10780057159894814]  (between/total variance ratio)
+    Confidence scores: [0.0740684629689035, 0.10787476641799716]  (between/total variance ratio)
 /home/users/thopri/PROMOTE/LatentTCN/inference2.py:215: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
   plt.tight_layout()
 /home/users/thopri/PROMOTE/LatentTCN/inference2.py:216: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
   plt.savefig(f"results/bifurcation_inference_{ensemble}.png", dpi=150, bbox_inches='tight')
 Plot saved to bifurcation_inference.png
-Max probability seen  : 0.5836 at t=636
-Mean probability      : 0.4976
-% windows above 0.45  : 85.2%
-% windows above 0.50  : 53.7%
-% windows above thresh: 81.2%
+Max probability seen  : 0.5649 at t=588
+Mean probability      : 0.4696
+% windows above 0.45  : 77.2%
+% windows above 0.50  : 45.0%
+% windows above thresh: 77.2%
 
 ----------------────────────────────────
 INFERENCE COMPLETE. Total Triggers: 6
@@ -587,30 +744,24 @@ null alerts raised during training, skipping inference for ensemble 33
 Initializing model topology...
 Trained model weights successfully loaded into memory.
 Loading telemetry data from: ensembles/CANARI_SSP370_34_LON_-56.506_LAT_60.819.csv
-Deploying model... (Threshold: 0.46302446722984314)
-⚠️ Bifurcation Found! Window: [222:350] | Prob: 0.4635 ± 0.0098 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [354:482] | Prob: 0.4699 ± 0.0103 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [486:614] | Prob: 0.4769 ± 0.0134 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [618:746] | Prob: 0.5068 ± 0.0098 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [750:878] | Prob: 0.4689 ± 0.0123 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [882:1010] | Prob: 0.5344 ± 0.0159 | Timing: 0.5 ± 0.0
+Deploying model... (Threshold: 0.4592134356498718)
+⚠️ Bifurcation Found! Window: [360:488] | Prob: 0.4612 ± 0.0164 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [540:668] | Prob: 0.4642 ± 0.0182 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [672:800] | Prob: 0.4632 ± 0.0226 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [804:932] | Prob: 0.5025 ± 0.0209 | Timing: 0.5 ± 0.0
 📊 Changepoint Analysis Complete
     Method PELT Algorithm       :  (rbf)
     Predicted Breakpoints at   : timestep [330, 655]
     Confidence scores: [0.07350958212883658, 0.09963784046126169]  (between/total variance ratio)
-/home/users/thopri/PROMOTE/LatentTCN/inference2.py:215: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
-  plt.tight_layout()
-/home/users/thopri/PROMOTE/LatentTCN/inference2.py:216: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
-  plt.savefig(f"results/bifurcation_inference_{ensemble}.png", dpi=150, bbox_inches='tight')
 Plot saved to bifurcation_inference.png
-Max probability seen  : 0.5519 at t=864
-Mean probability      : 0.4654
-% windows above 0.45  : 69.8%
-% windows above 0.50  : 12.1%
-% windows above thresh: 61.7%
+Max probability seen  : 0.5439 at t=888
+Mean probability      : 0.4462
+% windows above 0.45  : 43.6%
+% windows above 0.50  : 8.1%
+% windows above thresh: 29.5%
 
 ----------------────────────────────────
-INFERENCE COMPLETE. Total Triggers: 6
+INFERENCE COMPLETE. Total Triggers: 4
 ----------------────────────────────────
 Detailed logs saved to 'detected_ocean_bifurcations_34.csv'.
 ============================================================
@@ -619,38 +770,40 @@ null alerts raised during training, skipping inference for ensemble 35
 Initializing model topology...
 Trained model weights successfully loaded into memory.
 Loading telemetry data from: ensembles/CANARI_SSP370_36_LON_-56.506_LAT_60.819.csv
-Deploying model... (Threshold: 0.45717674493789673)
-⚠️ Bifurcation Found! Window: [180:308] | Prob: 0.4579 ± 0.0180 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [312:440] | Prob: 0.4604 ± 0.0136 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [444:572] | Prob: 0.5030 ± 0.0187 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [576:704] | Prob: 0.5383 ± 0.0193 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [708:836] | Prob: 0.5141 ± 0.0186 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [840:968] | Prob: 0.5768 ± 0.0219 | Timing: 0.5 ± 0.0
+Deploying model... (Threshold: 0.46148374676704407)
+⚠️ Bifurcation Found! Window: [360:488] | Prob: 0.4628 ± 0.0105 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [504:632] | Prob: 0.4655 ± 0.0147 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [636:764] | Prob: 0.5156 ± 0.0142 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [768:896] | Prob: 0.5404 ± 0.0145 | Timing: 0.5 ± 0.0
 📊 Changepoint Analysis Complete
     Method PELT Algorithm       :  (rbf)
     Predicted Breakpoints at   : timestep [185, 450, 845]
-    Confidence scores: [0.05597021883977713, 0.11144440234570868, 0.10695030881030285]  (between/total variance ratio)
+    Confidence scores: [0.056495644220321856, 0.11199028958021037, 0.10719455730801422]  (between/total variance ratio)
+/home/users/thopri/PROMOTE/LatentTCN/inference2.py:215: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/users/thopri/PROMOTE/LatentTCN/inference2.py:216: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
+  plt.savefig(f"results/bifurcation_inference_{ensemble}.png", dpi=150, bbox_inches='tight')
 Plot saved to bifurcation_inference.png
-Max probability seen  : 0.6037 at t=876
-Mean probability      : 0.4840
-% windows above 0.45  : 79.9%
-% windows above 0.50  : 57.0%
-% windows above thresh: 78.5%
+Max probability seen  : 0.5951 at t=816
+Mean probability      : 0.4652
+% windows above 0.45  : 59.7%
+% windows above 0.50  : 31.5%
+% windows above thresh: 58.4%
 
 ----------------────────────────────────
-INFERENCE COMPLETE. Total Triggers: 6
+INFERENCE COMPLETE. Total Triggers: 4
 ----------------────────────────────────
 Detailed logs saved to 'detected_ocean_bifurcations_36.csv'.
 Initializing model topology...
 Trained model weights successfully loaded into memory.
 Loading telemetry data from: ensembles/CANARI_SSP370_37_LON_-56.506_LAT_60.819.csv
-Deploying model... (Threshold: 0.4493071138858795)
-⚠️ Bifurcation Found! Window: [162:290] | Prob: 0.4494 ± 0.0179 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [294:422] | Prob: 0.4547 ± 0.0119 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [426:554] | Prob: 0.4726 ± 0.0132 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [582:710] | Prob: 0.4514 ± 0.0103 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [714:842] | Prob: 0.4880 ± 0.0165 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [846:974] | Prob: 0.5040 ± 0.0164 | Timing: 0.5 ± 0.0
+Deploying model... (Threshold: 0.46688681840896606)
+⚠️ Bifurcation Found! Window: [168:296] | Prob: 0.4782 ± 0.0207 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [312:440] | Prob: 0.4734 ± 0.0156 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [444:572] | Prob: 0.4724 ± 0.0200 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [600:728] | Prob: 0.4688 ± 0.0189 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [732:860] | Prob: 0.4945 ± 0.0175 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [864:992] | Prob: 0.5122 ± 0.0160 | Timing: 0.5 ± 0.0
 📊 Changepoint Analysis Complete
     Method PELT Algorithm       :  (rbf)
     Predicted Breakpoints at   : timestep [220, 690]
@@ -660,11 +813,11 @@ Deploying model... (Threshold: 0.4493071138858795)
 /home/users/thopri/PROMOTE/LatentTCN/inference2.py:216: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
   plt.savefig(f"results/bifurcation_inference_{ensemble}.png", dpi=150, bbox_inches='tight')
 Plot saved to bifurcation_inference.png
-Max probability seen  : 0.5356 at t=756
-Mean probability      : 0.4505
-% windows above 0.45  : 73.8%
-% windows above 0.50  : 14.1%
-% windows above thresh: 75.2%
+Max probability seen  : 0.5381 at t=762
+Mean probability      : 0.4693
+% windows above 0.45  : 83.9%
+% windows above 0.50  : 18.8%
+% windows above thresh: 59.1%
 
 ----------------────────────────────────
 INFERENCE COMPLETE. Total Triggers: 6
@@ -673,11 +826,12 @@ Detailed logs saved to 'detected_ocean_bifurcations_37.csv'.
 Initializing model topology...
 Trained model weights successfully loaded into memory.
 Loading telemetry data from: ensembles/CANARI_SSP370_38_LON_-56.506_LAT_60.819.csv
-Deploying model... (Threshold: 0.48425745964050293)
-⚠️ Bifurcation Found! Window: [486:614] | Prob: 0.4869 ± 0.0215 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [618:746] | Prob: 0.5028 ± 0.0169 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [750:878] | Prob: 0.5075 ± 0.0187 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [882:1010] | Prob: 0.5556 ± 0.0270 | Timing: 0.5 ± 0.0
+Deploying model... (Threshold: 0.44944509863853455)
+⚠️ Bifurcation Found! Window: [348:476] | Prob: 0.4514 ± 0.0124 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [480:608] | Prob: 0.4632 ± 0.0171 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [612:740] | Prob: 0.4868 ± 0.0184 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [744:872] | Prob: 0.4908 ± 0.0159 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [876:1004] | Prob: 0.5000 ± 0.0178 | Timing: 0.5 ± 0.0
 📊 Changepoint Analysis Complete
     Method PELT Algorithm       :  (rbf)
     Predicted Breakpoints at   : timestep [365, 695]
@@ -687,24 +841,25 @@ Deploying model... (Threshold: 0.48425745964050293)
 /home/users/thopri/PROMOTE/LatentTCN/inference2.py:216: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
   plt.savefig(f"results/bifurcation_inference_{ensemble}.png", dpi=150, bbox_inches='tight')
 Plot saved to bifurcation_inference.png
-Max probability seen  : 0.5596 at t=888
-Mean probability      : 0.4568
-% windows above 0.45  : 55.0%
-% windows above 0.50  : 35.6%
-% windows above thresh: 44.3%
+Max probability seen  : 0.5186 at t=882
+Mean probability      : 0.4480
+% windows above 0.45  : 56.4%
+% windows above 0.50  : 11.4%
+% windows above thresh: 56.4%
 
 ----------------────────────────────────
-INFERENCE COMPLETE. Total Triggers: 4
+INFERENCE COMPLETE. Total Triggers: 5
 ----------------────────────────────────
 Detailed logs saved to 'detected_ocean_bifurcations_38.csv'.
 Initializing model topology...
 Trained model weights successfully loaded into memory.
 Loading telemetry data from: ensembles/CANARI_SSP370_39_LON_-56.506_LAT_60.819.csv
-Deploying model... (Threshold: 0.47603172063827515)
-⚠️ Bifurcation Found! Window: [426:554] | Prob: 0.4772 ± 0.0173 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [612:740] | Prob: 0.4762 ± 0.0127 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [744:872] | Prob: 0.5183 ± 0.0164 | Timing: 0.5 ± 0.0
-⚠️ Bifurcation Found! Window: [876:1004] | Prob: 0.5153 ± 0.0166 | Timing: 0.5 ± 0.0
+Deploying model... (Threshold: 0.4471902847290039)
+⚠️ Bifurcation Found! Window: [360:488] | Prob: 0.4498 ± 0.0147 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [492:620] | Prob: 0.4492 ± 0.0155 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [624:752] | Prob: 0.4982 ± 0.0167 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [756:884] | Prob: 0.5372 ± 0.0192 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [888:1016] | Prob: 0.5088 ± 0.0218 | Timing: 0.5 ± 0.0
 📊 Changepoint Analysis Complete
     Method PELT Algorithm       :  (rbf)
     Predicted Breakpoints at   : timestep [615]
@@ -714,17 +869,41 @@ Deploying model... (Threshold: 0.47603172063827515)
 /home/users/thopri/PROMOTE/LatentTCN/inference2.py:216: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
   plt.savefig(f"results/bifurcation_inference_{ensemble}.png", dpi=150, bbox_inches='tight')
 Plot saved to bifurcation_inference.png
-Max probability seen  : 0.5258 at t=732
-Mean probability      : 0.4629
-% windows above 0.45  : 72.5%
-% windows above 0.50  : 17.4%
-% windows above thresh: 36.2%
+Max probability seen  : 0.5436 at t=762
+Mean probability      : 0.4580
+% windows above 0.45  : 53.0%
+% windows above 0.50  : 26.2%
+% windows above thresh: 55.7%
+
+----------------────────────────────────
+INFERENCE COMPLETE. Total Triggers: 5
+----------------────────────────────────
+Detailed logs saved to 'detected_ocean_bifurcations_39.csv'.
+Initializing model topology...
+Trained model weights successfully loaded into memory.
+Loading telemetry data from: ensembles/CANARI_SSP370_40_LON_-56.506_LAT_60.819.csv
+Deploying model... (Threshold: 0.4446864426136017)
+⚠️ Bifurcation Found! Window: [420:548] | Prob: 0.4554 ± 0.0150 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [552:680] | Prob: 0.4875 ± 0.0176 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [684:812] | Prob: 0.5739 ± 0.0244 | Timing: 0.5 ± 0.0
+⚠️ Bifurcation Found! Window: [816:944] | Prob: 0.5834 ± 0.0185 | Timing: 0.5 ± 0.0
+📊 Changepoint Analysis Complete
+    Method PELT Algorithm       :  (rbf)
+    Predicted Breakpoints at   : timestep [205, 500, 920]
+    Confidence scores: [0.0428514881369429, 0.08429699504812836, 0.06241943432959154]  (between/total variance ratio)
+/home/users/thopri/PROMOTE/LatentTCN/inference2.py:215: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/users/thopri/PROMOTE/LatentTCN/inference2.py:216: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
+  plt.savefig(f"results/bifurcation_inference_{ensemble}.png", dpi=150, bbox_inches='tight')
+Plot saved to bifurcation_inference.png
+Max probability seen  : 0.6040 at t=888
+Mean probability      : 0.4591
+% windows above 0.45  : 52.3%
+% windows above 0.50  : 38.9%
+% windows above thresh: 53.0%
 
 ----------------────────────────────────
 INFERENCE COMPLETE. Total Triggers: 4
 ----------------────────────────────────
-Detailed logs saved to 'detected_ocean_bifurcations_39.csv'.
-============================================================
-null alerts raised during training, skipping inference for ensemble 40
-============================================================
+Detailed logs saved to 'detected_ocean_bifurcations_40.csv'.
 saved delta barchart plot
