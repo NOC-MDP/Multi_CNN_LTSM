@@ -685,6 +685,7 @@ class BifurcationNet(nn.Module):
         
         # 5. Attention Pooling & Dual Heads
         self.attn_weights = nn.Linear(d_model, 1)
+        self.timing_attn = nn.Linear(d_model, 1)       # NEW: Dedicated timing localization head
         # FIX 1: pre-head dropout gate — this is what MC sampling actually draws from.
         # Without this, the attention-pooled context is nearly identical across all
         # n_samples because the upstream dropout noise is averaged out over T timesteps.
@@ -692,16 +693,6 @@ class BifurcationNet(nn.Module):
 
         self.detection_head = nn.Linear(d_model, 1)
 
-        # FIX 2: give the timing head its own dedicated MLP so it has a gradient
-        # path that doesn't fully compete with the detection head.
-        # A single shared linear was collapsing to the dataset mean.
-        self.timing_head = nn.Sequential(
-            nn.Linear(d_model, d_model // 2),
-            nn.GELU(),
-            nn.Dropout(dropout),          # additional stochasticity for MC sampling
-            nn.Linear(d_model // 2, 1),
-            nn.Sigmoid()                  # constrain to [0, 1] if timing is normalised
-        )
         # Sets default initial probability prediction down around ~0.15
         nn.init.constant_(self.detection_head.bias, -1.5)
 
@@ -729,22 +720,40 @@ class BifurcationNet(nn.Module):
         # Pass both masks to enforce strict temporal causality
         x = self.transformer(x, mask=causal_mask, src_key_padding_mask=pad_mask)
         
-        # 5. Attention Pooling over the time dimension
-        attn_scores = self.attn_weights(x)  # Shape: (B, T, 1)
-        
+        # ──────────────────────────────────────────────────────────────────────
+        # TASK 1: CLASSIFICATION (Global Context Vector)
+        # ──────────────────────────────────────────────────────────────────────
+        attn_scores = self.attn_weights(x)  # (B, T, 1)
         if pad_mask is not None:
-            # Force the attention weights of padded tokens to -inf 
-            # so their Softmax contribution drops to absolute zero
             attn_scores = attn_scores.masked_fill(pad_mask.unsqueeze(-1), float('-inf'))
             
-        weights = F.softmax(attn_scores, dim=1)  # Shape: (B, T, 1)
-        context = torch.sum(weights * x, dim=1)  # Shape: (B, d_model)
-        
+        weights = F.softmax(attn_scores, dim=1)
+        context = torch.sum(weights * x, dim=1)
         context = self.pre_head_dropout(context)
-        # 6. Extract predictions from your dual heads
-        p_bif_pred = self.detection_head(context).squeeze(-1)  # 🔄 (B, 1) -> (B,)
-        t_bif_pred = self.timing_head(context).squeeze(-1)     # 🔄 (B, 1) -> (B,)
+        p_bif_pred = self.detection_head(context).squeeze(-1)
         
+        # ──────────────────────────────────────────────────────────────────────
+        # TASK 2: TIMING REGRESSION (Soft-Argmax over Sequence Positions)
+        # ──────────────────────────────────────────────────────────────────────
+        t_attn_scores = self.timing_attn(x)  # (B, T, 1)
+        if pad_mask is not None:
+            t_attn_scores = t_attn_scores.masked_fill(pad_mask.unsqueeze(-1), float('-inf'))
+            
+        t_weights = F.softmax(t_attn_scores, dim=1).squeeze(-1)  # (B, T)
+        
+        # Generate raw sequence index grid [0, 1, ..., T-1]
+        indices = torch.arange(T_len, dtype=torch.float32, device=x.device).view(1, T_len) # (1, T)
+        
+        # Expected index = Sum(probability_t * index_t)
+        expected_index = torch.sum(t_weights * indices, dim=1)  # (B,)
+        
+        if pad_mask is not None:
+            # Dynamic normalization matching original unpadded window size
+            actual_lengths = (~pad_mask).sum(dim=1).float()  # (B,)
+            t_bif_pred = expected_index / actual_lengths
+        else:
+            t_bif_pred = expected_index / float(T_len)
+            
         return p_bif_pred, t_bif_pred
 
     def mc_forward(self, x, pad_mask=None, n_samples=30):
@@ -1267,7 +1276,7 @@ if __name__ == "__main__":
         print("=" * 60)
     
         # --- Configuration ---
-        cfg = DatasetConfig(n_recordings=5000, num_params=5,sde_constants=sde_constants) 
+        cfg = DatasetConfig(n_recordings=10000, num_params=5,sde_constants=sde_constants) 
         thresholds[f"ensemble_{i+1}"] = {}
         null_alerts[f"ensemble_{i+1}"] = {}
         batch_size = 64

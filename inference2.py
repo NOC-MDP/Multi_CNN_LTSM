@@ -336,7 +336,7 @@ def run_real_world_ensemble_inference(raw_ocean, processed_ocean, ensemble_idx, 
 
 if __name__ == "__main__":
     ensemble_st = 1
-    ensemble_end = 22
+    ensemble_end = 1
     n_folds = 5
     threshold_type = "Youden" # "f1" | "Youden" | "min_fpr"
     deltas = {}
